@@ -1,0 +1,1 @@
+export const img = [{id:1,imgUrl:"src\assets\Group 8.png"},{id:2,imgUrl:"src\assets\Group 10.png"},{id:3,imgUrl:"src\assets\Group 12.png"},{id:4,imgUrl:"src\assets\Group 13.png"},{id:5,imgUrl:"src\assets\Group 9.png"}];
