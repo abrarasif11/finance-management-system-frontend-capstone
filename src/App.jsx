@@ -8,7 +8,7 @@ function App() {
 
 
   return (
-      <div className='mx-auto' >
+      <div className='' >
         <RouterProvider router={router} />
      </div>
   )
