@@ -9,19 +9,20 @@ const Header = () => {
   //   logOut(navigate);
   // };
   const menuItems = (
-    <React.Fragment>
-      <li className="font-medium font-poppins text-white">
-        <Link to="/appointment">Pricing</Link>
-      </li>
-      <li className="font-medium font-poppins text-white">
-        <Link to="/service">About Us</Link>
-      </li>
-      <li className="font-medium font-poppins text-white">
-        <Link to="/testimonial">Contact Us</Link>
-      </li>
-      <li className="font-medium font-poppins text-white">
-        <Link to="/login">Login</Link>
-      </li>
+    <>
+        <li className="font-medium font-poppins text-center text-white">
+          <Link to="/appointment">Pricing</Link>
+        </li>
+        <li className="font-medium font-poppins text-white">
+          <Link to="/service">About Us</Link>
+        </li>
+        <li className="font-medium font-poppins text-white">
+          <Link to="/testimonial">Contact Us</Link>
+        </li>
+        <li className="font-medium btn-hidden px-2 py-0 bg-[#DFE2E7]  rounded-badge font-poppins text-black">
+          <Link to="/login">Login</Link>
+        </li>
+      
       {/* {isAdmin && (
         <li className="font-medium font-poppins text-white"
         >
@@ -65,7 +66,7 @@ const Header = () => {
 
         </div>
       )} */}
-    </React.Fragment>
+    </>
   );
 
   return (
@@ -105,12 +106,12 @@ const Header = () => {
           </Link>
         </div>
       </div>
-      
-     
-      <div className="navbar-center hidden lg:flex">
+
+
+      <div className=" navbar-start hidden lg:flex">
         <ul className="menu menu-horizontal p-0">{menuItems}</ul>
       </div>
-      
+
     </div>
   );
 };

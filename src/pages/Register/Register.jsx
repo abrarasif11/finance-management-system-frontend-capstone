@@ -66,7 +66,7 @@ const Register = () => {
                                 <div className="mt-4 mb-2 sm:mb-4">
                                     <button
                                         type="submit"
-                                        className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded shadow-md hover:bg-yellow-400 hover:text-black bg-[#3D3CF9]  focus:shadow-outline focus:outline-none"
+                                        className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded-badge shadow-md hover:bg-[#DFE2E7] hover:text-black bg-[#3D3CF9]  focus:shadow-outline focus:outline-none"
                                     >
                                         Register
                                     </button>

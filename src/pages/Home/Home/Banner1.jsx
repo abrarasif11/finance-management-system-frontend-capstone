@@ -1,3 +1,4 @@
+import BannerImg from "../BannerImg/BannerImg";
 
 const Banner1 = () => {
     return (
@@ -13,11 +14,13 @@ const Banner1 = () => {
                         </p>
                         <div className="flex flex-col space-y-4 sm:items-center sm:justify-center sm:flex-row sm:space-y-0 sm:space-x-4 lg:justify-start">
                             <a rel="noopener noreferrer" href="#" className="px-9 py-3 text-lg font-semibold rounded-badge bg-[#3D3CF9] text-white">Log In</a>
-                            <a rel="noopener noreferrer" href="#" className="px-9 py-3 bg-[#DFE2E7] text-lg rounded-badge font-semibold rounded border-gray-100">Get In Touch</a>
+                            <a rel="noopener noreferrer" href="#" className="px-9 py-3 bg-[#DFE2E7] text-lg rounded-badge font-semibold  border-gray-100">Get In Touch</a>
                         </div>
                     </div>
-                    <div className="flex items-center justify-center p-6 mt-8 lg:mt-0 h-96 sm:h-80 lg:h-96 xl:h-112 2xl:h-128">
-                        <img src="/src/assets/photo-1434626881859-194d67b2b86f.png" alt="" className="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128" />
+                    <div className="ml-20 ">
+
+                        <BannerImg/>
+                        {/* <img src="/src/assets/photo-1434626881859-194d67b2b86f.png" alt="" className="object-contain h-72 sm:h-80 lg:h-96 xl:h-112 2xl:h-128" /> */}
                     </div>
                 </div>
             </section>

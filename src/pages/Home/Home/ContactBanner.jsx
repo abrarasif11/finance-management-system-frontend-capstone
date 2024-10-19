@@ -16,7 +16,7 @@ const ContactBanner = () => {
                     <input id="email" type="email" placeholder="Email Address" className="w-full p-3 rounded bg-gray-100" />
                 </div>
                 <div>
-                    <select className="select select-bordered w-full max-w-xl">
+                    <select className="select bg-[#F3f4f6]  select-bordered w-full max-w-xl">
                         <option disabled selected>Select Interest </option>
                         <option>Normal Apple</option>
                         <option>Normal Orange</option>
@@ -24,7 +24,7 @@ const ContactBanner = () => {
                     </select>
                 </div>
                 <div>
-                    <textarea id="message" rows="3" className="w-full p-3 rounded dark:bg-gray-800"></textarea>
+                    <textarea id="message" rows="3" className="w-full p-3 rounded bg-[#F3f4f6]"></textarea>
                 </div>
                 <button type="submit" className="w-full tracking font-poppins uppercase  px-7 py-3 text-lg font-semibold rounded-badge bg-[#3D3CF9] text-white">Get Started</button>
             </form>

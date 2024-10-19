@@ -20,7 +20,7 @@ const Footer = () => {
 									</svg>
 								</a>
 							</div>
-					<div className="grid grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
+					<div className="grid font-poppins grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
 						<div className="space-y-3">
 							<h3 className="  text-white font-semibold text-lg">Use cases</h3>
 							<ul className="space-y-1">
