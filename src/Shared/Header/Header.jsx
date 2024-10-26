@@ -19,7 +19,7 @@ const Header = () => {
         <li className="font-medium font-poppins text-white">
           <Link to="/testimonial">Contact Us</Link>
         </li>
-        <li className="font-medium btn-hidden px-2 py-0 bg-[#DFE2E7]  rounded-badge font-poppins text-black">
+        <li className="font-medium btn-hidden px-2 py-0 bg-[#EF4E5D]  rounded-badge font-poppins text-white">
           <Link to="/login">Login</Link>
         </li>
       
@@ -70,7 +70,7 @@ const Header = () => {
   );
 
   return (
-    <div className="navbar bg-[#3D3CF9] flex justify-between">
+    <div className="navbar bg-[#21304E] flex justify-between">
       <div className="navbar-start">
         <div className="dropdown">
           <label tabIndex={0} className="btn text-white btn-ghost lg:hidden">

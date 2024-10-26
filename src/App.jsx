@@ -8,7 +8,7 @@ function App() {
 
 
   return (
-      <div className='mx-auto' >
+      <div className='mx-auto poppins-regular' >
         <RouterProvider router={router} />
      </div>
   )

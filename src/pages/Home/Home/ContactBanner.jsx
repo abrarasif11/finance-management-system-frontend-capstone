@@ -26,7 +26,7 @@ const ContactBanner = () => {
                 <div>
                     <textarea id="message" rows="3" className="w-full p-3 rounded bg-[#F3f4f6]"></textarea>
                 </div>
-                <button type="submit" className="w-full tracking font-poppins uppercase  px-7 py-3 text-lg font-semibold rounded-badge bg-[#3D3CF9] text-white">Get Started</button>
+                <button type="submit" className="w-full tracking font-poppins uppercase  px-7 py-3 text-lg font-semibold rounded-badge bg-[#EF4E5D] text-white">Get Started</button>
             </form>
         </div>
     );
