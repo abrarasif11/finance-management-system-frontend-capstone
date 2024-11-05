@@ -22,24 +22,24 @@ const Footer = () => {
 							</div>
 					<div className="grid font-poppins grid-cols-2 text-sm gap-x-3 gap-y-8 lg:w-2/3 sm:grid-cols-4">
 						<div className="space-y-3">
-							<h3 className="  text-white hover:text-[#EF4E5D] font-semibold text-lg">Use cases</h3>
+							<h3 className="  text-white  font-semibold text-lg">Use cases</h3>
 							<ul className="space-y-1">
-								<li>
-									<a rel="noopener noreferrer" href="#">UI design</a>
+								<li className="hover:text-[#EF4E5D]">
+									<a  rel="noopener noreferrer" href="#">UI design</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Wire framing</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Diagramming</a>
-								</li>
-								<li>
+								</li >
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Brainstorming</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Online whiteboard</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Team collaboration</a>
 								</li>
 							</ul>
@@ -47,25 +47,25 @@ const Footer = () => {
 						<div className="space-y-3">
 							<h3 className="  text-white font-semibold text-lg">Explore</h3>
 							<ul className="space-y-1">
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Design</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Prototyping</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Development features</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Design systems</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Collaboration features</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Design process</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Fig Jam</a>
 								</li>
 							</ul>
@@ -73,25 +73,25 @@ const Footer = () => {
 						<div className="space-y-3">
 							<h3 className=" text-white font-semibold text-lg">Resources</h3>
 							<ul className="space-y-1">
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Blog</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Best practices</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Colors</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Color wheel</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Support</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Developers</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Resource library</a>
 								</li>
 							</ul>
@@ -102,7 +102,7 @@ const Footer = () => {
 						</div>
 					</div>
 				</div>
-				<div className="py-6 text-sm text-center dark:text-gray-400">© 2025 Finance Management System. All rights reserved.</div>
+				<div className="py-6 text-sm text-center hover:text-[#EF4E5D] dark:text-gray-400">© 2025 Finance Management System. All rights reserved.</div>
 			</footer>
 
 		</div>
