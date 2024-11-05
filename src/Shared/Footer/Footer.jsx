@@ -73,25 +73,25 @@ const Footer = () => {
 						<div className="space-y-3">
 							<h3 className=" text-white font-semibold text-lg">Resources</h3>
 							<ul className="space-y-1">
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Blog</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Best practices</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Colors</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Color wheel</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Support</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Developers</a>
 								</li>
-								<li>
+								<li className="hover:text-[#EF4E5D]">
 									<a rel="noopener noreferrer" href="#">Resource library</a>
 								</li>
 							</ul>
@@ -102,7 +102,7 @@ const Footer = () => {
 						</div>
 					</div>
 				</div>
-				<div className="py-6 text-sm text-center dark:text-gray-400">© 2025 Finance Management System. All rights reserved.</div>
+				<div className="py-6 text-sm text-center hover:text-[#EF4E5D] dark:text-gray-400">© 2025 Finance Management System. All rights reserved.</div>
 			</footer>
 
 		</div>
