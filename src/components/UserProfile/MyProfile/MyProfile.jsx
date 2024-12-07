@@ -14,12 +14,14 @@ const MyProfile = () => {
         />
         <div>
           <h2 className="text-lg font-semibold">Leroy Jenkins</h2>
-          <h2 className="text-sm font-semibold">Leroy Jenkins</h2>
-          <h2 className="text-sm font-semibold">Leroy Jenkins</h2>
+          <h2 className="text-sm font-semibold">Profile Type : General </h2>
+          <h2 className="text-sm font-semibold">Register Date : </h2>
         </div>
       </div>
       <div>
-        <button className="p-2">
+        <button className="p-2"
+        htmlFor="order-modal"
+        >
         <FaEdit />
         </button>
       </div>
@@ -28,3 +30,7 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
+<label 
+ 
+onClick={() => setSingleCategories(singleItem)}
+>Order Now</label>
