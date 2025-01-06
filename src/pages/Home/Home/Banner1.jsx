@@ -4,7 +4,7 @@ import BannerImg from "../BannerImg/BannerImg";
 const Banner1 = () => {
     return (
         <div>
-            <section className="dark:bg-gray-800 text-[#21304E]">
+            <section className="bg-gray-800 text-[#21304E]">
                 <div className="container flex flex-col-reverse justify-between p-6 mx-auto sm:py-12 lg:py-24 lg:flex-row lg:justify-between">
                     <div className="flex flex-col justify-center p-6 text-center rounded-sm lg:max-w-md xl:max-w-lg lg:text-left">
                         <h1 className="text-5xl font-semibold ">Ac mattis
