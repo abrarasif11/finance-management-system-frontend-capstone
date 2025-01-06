@@ -1,7 +1,32 @@
 import { Link } from "react-router-dom";
 
 const Login = () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const form = event.target;
+    const email = form.email.value;
+    const password = form.password.value;
     
+
+    const user = {
+      email, 
+      password,
+    };
+    console.log(user);
+    const response = await fetch(
+      "https://api-financial-management-system.vercel.app/api/v1/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify(user),
+      }
+    ).then((res) => res.json());
+    console.log(response);
+    const logUser = JSON.stringify(response.user);
+    localStorage.setItem("user", logUser);
+  };
     return (
         <div className="relative">
         <img
@@ -27,8 +52,7 @@ const Login = () => {
               <div className="w-full font-poppins max-w-xl xl:px-8 xl:w-5/12">
                 <div className="bg-[#DFE2E7] text-[#21304E] rounded shadow-2xl p-7 sm:p-10">
   
-                  <form >
-  
+                  <form onSubmit={handleSubmit}>
                     <h3 className='text-4xl font-semibold mb-5'>Log In Here</h3>
                     <div className="mb-1  sm:mb-2">
                       <label

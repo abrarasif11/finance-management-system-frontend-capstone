@@ -19,7 +19,7 @@ const Header = () => {
         <li className="font-medium font-poppins text-white">
           <Link to="/testimonial">Contact Us</Link>
         </li>
-        <li className="font-medium btn-hidden px-2 py-0 bg-[#EF4E5D]  rounded-badge font-poppins text-white">
+        <li className="font-medium  btn-hidden px-2 py-0 bg-[#EF4E5D]  rounded-badge font-poppins text-white">
           <Link to="/login">Login</Link>
         </li>
       
@@ -91,7 +91,7 @@ const Header = () => {
           </label>
           <ul
             tabIndex={1}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-[#3D3CF9] rounded-box w-52"
+            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-[#21304E] rounded-box w-52"
           >
             {menuItems}
           </ul>
