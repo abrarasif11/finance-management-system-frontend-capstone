@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import { useUser } from "../../contexts/AuthContext";
 
 const Address = () => {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen(true);

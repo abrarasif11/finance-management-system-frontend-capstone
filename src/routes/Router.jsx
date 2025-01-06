@@ -25,7 +25,7 @@ import UserProfile from "../components/UserProfile/UserProfile";
           element : <Register/>
         },
         {
-          path : '/profile',
+          path : '/profile/:email',
           element : <UserProfile/>
         },
       ]
