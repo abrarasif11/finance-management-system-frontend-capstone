@@ -1,71 +1,55 @@
-import { Link } from "react-router-dom";
-import React from 'react';
+import { Link, useNavigate } from "react-router-dom";
+import React, { useContext } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { FaUserCircle } from "react-icons/fa";
 
 const Header = () => {
-  // const { user, logOut } = useContext(AuthContext);
-  // const [isAdmin] = useAdmin(user?.email)
-  // const navigate = useNavigate();
-  // const handleLogOut = () => {
-  //   logOut(navigate);
-  // };
+  const { user, logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogOut = () => {
+    logout();
+    navigate("/login"); // Redirect to login after logout
+  };
+
   const menuItems = (
     <>
-        <li className="font-medium font-poppins text-center text-white">
-          <Link to="/appointment">Pricing</Link>
-        </li>
-        <li className="font-medium font-poppins text-white">
-          <Link to="/service">About Us</Link>
-        </li>
-        <li className="font-medium font-poppins text-white">
-          <Link to="/testimonial">Contact Us</Link>
-        </li>
-        <li className="font-medium  btn-hidden px-2 py-0 bg-[#EF4E5D]  rounded-badge font-poppins text-white">
+      <li className="font-medium font-poppins text-center text-white">
+        <Link to="/appointment">Pricing</Link>
+      </li>
+      <li className="font-medium font-poppins text-white">
+        <Link to="/service">About Us</Link>
+      </li>
+      <li className="font-medium font-poppins text-white">
+        <Link to="/testimonial">Contact Us</Link>
+      </li>
+      {!user ? (
+        <li className="font-medium btn-hidden px-2 py-0 bg-[#EF4E5D] rounded-badge font-poppins text-white">
           <Link to="/login">Login</Link>
-        </li>
-      
-      {/* {isAdmin && (
-        <li className="font-medium font-poppins text-white"
-        >
-          <Link
-            to="/dashboard" >
-            Dashboard
-          </Link>
-        </li>
-      )}
-      {user?.uid ? (
-        <li
-          className="font-medium font-poppins text-white"
-          onClick={handleLogOut}
-        >
-          <button>Logout</button>
         </li>
       ) : (
-        <li className="font-medium font-poppins text-white">
-          <Link to="/login">Login</Link>
-        </li>
-      )}
-      {user?.uid && (
-        <div
-          className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
-          data-tip={user?.displayName}
-        >
-          <label tabIndex={0}>
-            {
-
-              user?.photoURL ?
+        <>
+          <li className="font-medium font-poppins text-white">
+            <button onClick={handleLogOut}>Logout</button>
+          </li>
+          <div
+            className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
+            data-tip={user.displayName || "Profile"}
+          >
+            <label tabIndex={0}>
+              {user.photoURL ? (
                 <img
-                  className="w-[36px] h-[36px] rounded-full mr-5"
-                  src={user?.photoURL}
-                  alt=""
+                  className="w-[36px] h-[36px] rounded-full"
+                  src={user.photoURL}
+                  alt="Profile"
                 />
-                :
-                <FaUserCircle className=" w-[30px] mt-1 mr-2 h-[40px]"></FaUserCircle>
-            }
-
-          </label>
-
-        </div>
-      )} */}
+              ) : (
+                <FaUserCircle className="w-[30px] h-[30px] text-white" />
+              )}
+            </label>
+          </div>
+        </>
+      )}
     </>
   );
 
@@ -96,8 +80,7 @@ const Header = () => {
             {menuItems}
           </ul>
         </div>
-        <div className="flex  items-center">
-
+        <div className="flex items-center">
           <Link
             to="/"
             className="btn btn-ghost text-white font-poppins font-semibold normal-case text-2xl"
@@ -107,11 +90,9 @@ const Header = () => {
         </div>
       </div>
 
-
-      <div className=" navbar-start hidden lg:flex">
+      <div className="navbar-start hidden lg:flex">
         <ul className="menu menu-horizontal p-0">{menuItems}</ul>
       </div>
-
     </div>
   );
 };

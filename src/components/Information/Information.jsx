@@ -1,8 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import { useUser } from "../../contexts/AuthContext";
 
 const Information = () => {
+  const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
 
   const handleOpen = () => setIsOpen(true);
@@ -27,7 +29,7 @@ const Information = () => {
               </label>
               <br />
               <label htmlFor="username" className="text-sm ">
-                Asif
+                {user.user.first_name}
               </label>
             </div>
             <div className="col-span-full sm:col-span-3">
@@ -36,7 +38,7 @@ const Information = () => {
               </label>
               <br />
               <label htmlFor="username" className="text-sm ">
-                Abrar
+                {user.user.last_name}
               </label>
             </div>
             <div className="col-span-full sm:col-span-3">
@@ -45,7 +47,7 @@ const Information = () => {
               </label>
               <br />
               <label htmlFor="username" className="text-sm">
-                abrar@gmail.com
+                {user.user.email}
               </label>
             </div>
             <div className="col-span-full sm:col-span-3">
@@ -54,7 +56,7 @@ const Information = () => {
               </label>
               <br />
               <label htmlFor="username" className="text-sm">
-                01696969699
+                {user.user.phone_number}
               </label>
             </div>
             <div className="col-span-full sm:col-span-3">
