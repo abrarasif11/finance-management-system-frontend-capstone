@@ -23,33 +23,6 @@ const Header = () => {
       <li className="font-medium font-poppins text-white">
         <Link to="/testimonial">Contact Us</Link>
       </li>
-      {!user ? (
-        <li className="font-medium btn-hidden px-2 py-0 bg-[#EF4E5D] rounded-badge font-poppins text-white">
-          <Link to="/login">Login</Link>
-        </li>
-      ) : (
-        <>
-          <li className="font-medium font-poppins text-white">
-            <button onClick={handleLogOut}>Logout</button>
-          </li>
-          <div
-            className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
-            data-tip={user.displayName || "Profile"}
-          >
-            <label tabIndex={0}>
-              {user.photoURL ? (
-                <img
-                  className="w-[36px] h-[36px] rounded-full"
-                  src={user.photoURL}
-                  alt="Profile"
-                />
-              ) : (
-                <FaUserCircle className="w-[30px] h-[30px] text-white" />
-              )}
-            </label>
-          </div>
-        </>
-      )}
     </>
   );
 
@@ -90,8 +63,59 @@ const Header = () => {
         </div>
       </div>
 
-      <div className="navbar-start hidden lg:flex">
+      <div className="navbar-start hidden lg:flex lg:justify-between">
         <ul className="menu menu-horizontal p-0">{menuItems}</ul>
+        {!user ? (
+          <Link
+            to="/login"
+            className="font-medium btn-hidden px-5 py-2  bg-[#EF4E5D] hover:bg-[#ef3648] rounded-badge font-poppins text-white"
+          >
+            Login
+          </Link>
+        ) : (
+          <>
+            <div
+              className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
+              data-tip={user.displayName || "Profile"}
+            >
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="m-1 flex items-center"
+                >
+                  <label tabIndex={0}>
+                    {user.photoURL ? (
+                      <img
+                        className="w-[36px] h-[36px] rounded-full"
+                        src={user.photoURL}
+                        alt="Profile"
+                      />
+                    ) : (
+                      <FaUserCircle className="w-[30px] h-[30px] text-white" />
+                    )}
+                  </label>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                >
+                  <li className="font-medium font-poppins text-black">
+                    <Link to={"/dashboard/expenses"}>Dashboard</Link>
+                  </li>
+                  <li>
+                    <button
+                      className="font-medium font-poppins text-black"
+                      onClick={handleLogOut}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
