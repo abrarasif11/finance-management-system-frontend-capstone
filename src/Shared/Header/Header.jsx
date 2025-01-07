@@ -15,7 +15,7 @@ const Header = () => {
   const menuItems = (
     <>
       <li className="font-medium font-poppins text-center text-white">
-        <Link to="/appointment">Pricing</Link>
+        <Link to="/pricing">Pricing</Link>
       </li>
       <li className="font-medium font-poppins text-white">
         <Link to="/service">About Us</Link>
