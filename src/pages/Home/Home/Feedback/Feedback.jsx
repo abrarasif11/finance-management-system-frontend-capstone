@@ -85,7 +85,7 @@ const Feedback = () => {
                                                 </div>
                                                 <div>
                                                     <h4 className="font-bold">{feedback.name}</h4>
-                                                    <span className="text-xs dark:text-gray-400">2 days ago</span>
+                                                    <span className="text-xs text-[#21304E]">2 days ago</span>
                                                 </div>
                                             </div>
                                             <div className="flex items-center space-x-2 dark:text-yellow-500">
@@ -95,7 +95,7 @@ const Feedback = () => {
                                                 <span className="text-xl font-bold">4.5</span>
                                             </div>
                                         </div>
-                                        <div className="p-4 space-y-2 text-sm dark:text-gray-400">
+                                        <div className="p-4 space-y-2 text-sm text-[#21304E]">
                                             <p>{feedback.review}</p>
                                             
                                         </div>
