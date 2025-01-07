@@ -40,4 +40,4 @@ const MyProfile = () => {
 };
 
 export default MyProfile;
-<label onClick={() => setSingleCategories(singleItem)}>Order Now</label>;
+

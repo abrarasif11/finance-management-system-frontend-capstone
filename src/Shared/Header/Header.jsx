@@ -74,28 +74,45 @@ const Header = () => {
           </Link>
         ) : (
           <>
-            <button
-              className="font-medium font-poppins text-white"
-              onClick={handleLogOut}
-            >
-              Logout
-            </button>
-
             <div
               className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
               data-tip={user.displayName || "Profile"}
             >
-              <label tabIndex={0}>
-                {user.photoURL ? (
-                  <img
-                    className="w-[36px] h-[36px] rounded-full"
-                    src={user.photoURL}
-                    alt="Profile"
-                  />
-                ) : (
-                  <FaUserCircle className="w-[30px] h-[30px] text-white" />
-                )}
-              </label>
+              <div className="dropdown dropdown-end">
+                <div
+                  tabIndex={0}
+                  role="button"
+                  className="m-1 flex items-center"
+                >
+                  <label tabIndex={0}>
+                    {user.photoURL ? (
+                      <img
+                        className="w-[36px] h-[36px] rounded-full"
+                        src={user.photoURL}
+                        alt="Profile"
+                      />
+                    ) : (
+                      <FaUserCircle className="w-[30px] h-[30px] text-white" />
+                    )}
+                  </label>
+                </div>
+                <ul
+                  tabIndex={0}
+                  className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                >
+                  <li className="font-medium font-poppins text-black">
+                    <Link to={"/dashboard/expenses"}>Dashboard</Link>
+                  </li>
+                  <li>
+                    <button
+                      className="font-medium font-poppins text-black"
+                      onClick={handleLogOut}
+                    >
+                      Logout
+                    </button>
+                  </li>
+                </ul>
+              </div>
             </div>
           </>
         )}
