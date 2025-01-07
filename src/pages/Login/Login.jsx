@@ -20,7 +20,7 @@ const Login = () => {
       const res = await login(email, password);
       console.log("Response:", res);
       if (res === 200) {
-        navigate(`/profile/${email}`);
+        navigate(`/profile`);
         toast.success("Logged in successfully!");
       }
     } catch (error) {
