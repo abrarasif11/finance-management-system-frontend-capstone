@@ -7,6 +7,7 @@ import Home from "../pages/Home/Home/Home";
 import Login from "../pages/Login/Login"
 import Register from "../pages/Register/Register";
 import UserProfile from "../components/UserProfile/UserProfile";
+import Pricing from "../pages/Pricing/Pricing";
  export const router = createBrowserRouter([
     {
       path: "/",
@@ -15,6 +16,11 @@ import UserProfile from "../components/UserProfile/UserProfile";
         {
             path: '/',
             element: <Home/>
+        },
+        {
+            path: '/pricing',
+            loader : () => fetch('https://api-financial-management-system.vercel.app/api/v1/financial-services'),
+            element: <Pricing/>
         },
         {
           path : '/login',
