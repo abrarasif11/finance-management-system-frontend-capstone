@@ -19,6 +19,7 @@ import Pricing from "../pages/Pricing/Pricing";
         },
         {
             path: '/pricing',
+            loader : () => fetch('https://api-financial-management-system.vercel.app/api/v1/financial-services'),
             element: <Pricing/>
         },
         {
