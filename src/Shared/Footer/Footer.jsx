@@ -1,7 +1,8 @@
 const Footer = () => {
 	return (
 		<div>
-			<footer className="px-4 divide-y bg-[#21304E] text-white">
+			<hr className="w-56" />
+			<footer className="px-4 divide-y bg-black text-white">
 				<div className="container flex flex-col justify-between py-10 mx-auto space-y-8 lg:flex-row lg:space-y-0">
 					<div className="flex justify-start space-x-3">
 								<a rel="noopener noreferrer" href="#" title="Facebook" className="flex items-center p-1">
@@ -24,22 +25,22 @@ const Footer = () => {
 						<div className="space-y-3">
 							<h3 className="  text-white  font-semibold text-lg">Use cases</h3>
 							<ul className="space-y-1">
-								<li className="hover:text-[#EF4E5D]">
+								<li className="hover:text-[#3EAC91]">
 									<a  rel="noopener noreferrer" href="#">UI design</a>
 								</li>
-								<li className="hover:text-[#EF4E5D]">
+								<li className="hover:text-[#3EAC91]">
 									<a rel="noopener noreferrer" href="#">Wire framing</a>
 								</li>
-								<li className="hover:text-[#EF4E5D]">
+								<li className="hover:text-[#3EAC91]">
 									<a rel="noopener noreferrer" href="#">Diagramming</a>
 								</li >
-								<li className="hover:text-[#EF4E5D]">
+								<li className="hover:text-[#3EAC91]">
 									<a rel="noopener noreferrer" href="#">Brainstorming</a>
 								</li>
-								<li className="hover:text-[#EF4E5D]">
+								<li className="hover:text-[#3EAC91]">
 									<a rel="noopener noreferrer" href="#">Online whiteboard</a>
 								</li>
-								<li className="hover:text-[#EF4E5D]">
+								<li className="hover:text-[#3EAC91]">
 									<a rel="noopener noreferrer" href="#">Team collaboration</a>
 								</li>
 							</ul>
