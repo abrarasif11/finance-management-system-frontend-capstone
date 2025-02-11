@@ -29,33 +29,6 @@ const Header = () => {
       <li className="font-medium font-poppins text-white">
         <Link to="/testimonial">Contact Us</Link>
       </li>
-      {!user ? (
-        <li className="font-medium btn-hidden px-2 py-0 bg-[#EF4E5D] rounded-badge font-poppins text-white">
-          <Link to="/login">Login</Link>
-        </li>
-      ) : (
-        <>
-          <li className="font-medium font-poppins text-white">
-            <button onClick={handleLogOut}>Logout</button>
-          </li>
-          <div
-            className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
-            data-tip={user.displayName || "Profile"}
-          >
-            <label tabIndex={0}>
-              {user.photoURL ? (
-                <img
-                  className="w-[36px] h-[36px] rounded-full"
-                  src={user.photoURL}
-                  alt="Profile"
-                />
-              ) : (
-                <FaUserCircle className="w-[30px] h-[30px] text-white" />
-              )}
-            </label>
-          </div>
-        </>
-      )}
     </>
   );
 
