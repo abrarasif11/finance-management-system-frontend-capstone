@@ -1,9 +1,15 @@
 import { Link, useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
-import { FaUserCircle } from "react-icons/fa";
-
+import { useState } from "react";
+import { navItems } from "../../components/constants/index";
+import { Menu, X } from "lucide-react";
 const Header = () => {
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+
+  const toggleNavbar = () => {
+    setMobileDrawerOpen(!mobileDrawerOpen);
+  };
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
 
@@ -27,97 +33,63 @@ const Header = () => {
   );
 
   return (
-    <div className="navbar bg-[#21304E] flex justify-between">
-      <div className="navbar-start">
-        <div className="dropdown">
-          <label tabIndex={0} className="btn text-white btn-ghost lg:hidden">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
-            </svg>
-          </label>
-          <ul
-            tabIndex={1}
-            className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-[#21304E] rounded-box w-52"
-          >
-            {menuItems}
+    <nav className="sticky top-0 z-50   py-3 backdrop-blur-lg border-[#1A2C2A]">
+      <div className="container px-4 mx-auto relative lg:text-sm">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center flex-shrink-0">
+            {/* <img className="h-10 w-10 mr-2" src={logo} alt="Logo" /> */}
+            <a href="/">
+            <span className="text-xl text-[#3EAC91] tracking-tight">FMS</span>
+            </a>
+          </div>
+          <ul className="hidden lg:flex ml-14 space-x-12">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <a href={item.href}>{item.label}</a>
+              </li>
+            ))}
           </ul>
-        </div>
-        <div className="flex items-center">
-          <Link
-            to="/"
-            className="btn btn-ghost text-white font-poppins font-semibold normal-case text-2xl"
-          >
-            FMS
-          </Link>
-        </div>
-      </div>
-
-      <div className="navbar-start hidden lg:flex lg:justify-between">
-        <ul className="menu menu-horizontal p-0">{menuItems}</ul>
-        {!user ? (
-          <Link
-            to="/login"
-            className="font-medium btn-hidden px-5 py-2  bg-[#EF4E5D] hover:bg-[#ef3648] rounded-badge font-poppins text-white"
-          >
-            Login
-          </Link>
-        ) : (
-          <>
-            <div
-              className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
-              data-tip={user.displayName || "Profile"}
+          <div className="hidden lg:flex justify-center space-x-12 items-center">
+            <a href="/login"  className="py-2 px-3 border bg-[#3EAC91]  rounded-md">
+              Sign In
+            </a>
+            {/* <a
+              href="/register"
+              className="bg-[#3EAC91] py-2 px-3 rounded-md"
             >
-              <div className="dropdown dropdown-end">
-                <div
-                  tabIndex={0}
-                  role="button"
-                  className="m-1 flex items-center"
-                >
-                  <label tabIndex={0}>
-                    {user.photoURL ? (
-                      <img
-                        className="w-[36px] h-[36px] rounded-full"
-                        src={user.photoURL}
-                        alt="Profile"
-                      />
-                    ) : (
-                      <FaUserCircle className="w-[30px] h-[30px] text-white" />
-                    )}
-                  </label>
-                </div>
-                <ul
-                  tabIndex={0}
-                  className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-                >
-                  <li className="font-medium font-poppins text-black">
-                    <Link to={"/dashboard/expenses"}>Dashboard</Link>
-                  </li>
-                  <li>
-                    <button
-                      className="font-medium font-poppins text-black"
-                      onClick={handleLogOut}
-                    >
-                      Logout
-                    </button>
-                  </li>
-                </ul>
-              </div>
+              Create an account
+            </a> */}
+          </div>
+          <div className="lg:hidden md:flex flex-col justify-end">
+            <button onClick={toggleNavbar}>
+              {mobileDrawerOpen ? <X/> : <Menu/>}
+            </button>
+          </div>
+        </div>
+        {mobileDrawerOpen && (
+          <div className="fixed right-0 z-20 bg-neutral-900 text-white w-full p-12 flex flex-col justify-center items-center lg:hidden">
+            <ul>
+              {navItems.map((item, index) => (
+                <li key={index} className="py-4">
+                  <a href={item.href}>{item.label}</a>
+                </li>
+              ))}
+            </ul>
+            <div className="flex space-x-6">
+              <a href="#" className="py-2 px-3 border rounded-md">
+                Sign In
+              </a>
+              <a
+                href="#"
+                className="py-2 px-3 rounded-md bg-[#3EAC91]"
+              >
+                Create an account
+              </a>
             </div>
-          </>
+          </div>
         )}
       </div>
-    </div>
+    </nav>
   );
 };
 
