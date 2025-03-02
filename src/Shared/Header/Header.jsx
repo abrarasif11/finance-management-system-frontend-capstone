@@ -50,7 +50,7 @@ const Header = () => {
             ))}
           </ul>
           <div className="hidden lg:flex justify-center space-x-12 items-center">
-            <a href="/login"  className="py-2 px-3 border bg-[#3EAC91]  rounded-md">
+            <a href="/login"  className="py-2 px-3 bg-gradient-to-r from-green-500 to-green-800 rounded-md">
               Sign In
             </a>
             {/* <a

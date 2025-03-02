@@ -20,7 +20,6 @@ export const router = createBrowserRouter([
       },
   {
             path: '/pricing',
-            loader : () => fetch('https://api-financial-management-system.vercel.app/api/v1/financial-services'),
             element: <Pricing/>
         },
       {

@@ -5,7 +5,7 @@
 
 
 body {
-  @apply bg-black text-white; /* Apply black background and white text */
+  @apply bg-black text-white; 
 }
 
 .slick-slider>div{
