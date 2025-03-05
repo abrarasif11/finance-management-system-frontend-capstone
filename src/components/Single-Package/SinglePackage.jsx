@@ -33,7 +33,7 @@ const SinglePackage = ({ priced }) => {
         <a
           rel="noopener noreferrer"
           href="#"
-          className="inline-flex justify-center items-center text-center w-full h-12 p-5 mt-20 tracking-tight text-xl hover:bg-orange-900 border border-orange-900 rounded-lg transition duration-200"
+          className="inline-flex justify-center items-center text-center w-full h-12 p-5 mt-20 tracking-tight text-xl hover:bg-gradient-to-r from-green-500 to-green-800 border border-green-500 rounded-lg transition duration-200"
         >
           Get Started
         </a>

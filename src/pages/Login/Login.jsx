@@ -41,7 +41,7 @@ const Login = () => {
         <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
           <div className="flex flex-col items-center justify-between xl:flex-row">
             <div className="w-full max-w-xl mb-12 xl:mb-0 xl:pr-16 xl:w-7/12">
-              <h2 className="max-w-lg mb-6 font-poppins text-3xl font-bold tracking-tight text-[#EF4E5D] sm:text-4xl sm:leading-none">
+              <h2 className="max-w-lg mb-6 font-poppins text-3xl font-bold tracking-tight text-green-500 sm:text-4xl sm:leading-none">
                 Hi There !
                 <br />
                 Welcome To
@@ -50,7 +50,7 @@ const Login = () => {
               </h2>
             </div>
             <div className="w-full font-poppins max-w-xl xl:px-8 xl:w-5/12">
-              <div className="bg-[#DFE2E7] text-[#21304E] rounded shadow-2xl p-7 sm:p-10">
+              <div className="bg-white text-black rounded shadow-2xl p-7 sm:p-10">
                 <form onSubmit={handleSubmit}>
                   <h3 className='text-4xl font-semibold mb-5'>Log In Here</h3>
                   <div className="mb-1 sm:mb-2">
@@ -76,13 +76,13 @@ const Login = () => {
                     <button
                       type="submit"
                       disabled={isLoading}
-                      className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded-badge shadow-md bg-[#EF4E5D] focus:shadow-outline focus:outline-none"
+                      className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded-badge shadow-md bg-gradient-to-r from-green-500 to-green-800 focus:shadow-outline focus:outline-none"
                     >
                       {isLoading ? "Loading..." : "Log In"}
                     </button>
                     <br />
                     <button className='w-full'>
-                      <a href="#" className="flex items-center justify-center px-6 py-3 mt-4 text-white transition-colors duration-300 transform border rounded-badge dark:border-gray-700 bg-[#21304E] dark:hover:bg-gray-600">
+                      <a href="#" className="flex items-center justify-center px-6 py-3 mt-4 text-white transition-colors duration-300 transform border rounded-badge bg-black">
                         <svg className="w-6 h-6 mx-2" viewBox="0 0 40 40">
                           <path d="M36.3425 16.7358H35V16.6667H20V23.3333H29.4192C28.045 27.2142 24.3525 30 20 30C14.4775 30 10 25.5225 10 20C10 14.4775 14.4775 9.99999 20 9.99999C22.5492 9.99999 24.8683 10.9617 26.6342 12.5325L31.3483 7.81833C28.3717 5.04416 24.39 3.33333 20 3.33333C10.7958 3.33333 3.33335 10.7958 3.33335 20C3.33335 29.2042 10.7958 36.6667 20 36.6667C29.2042 36.6667 36.6667 29.2042 36.6667 20C36.6667 18.8825 36.5517 17.7917 36.3425 16.7358Z" fill="#FFC107" />
                           <path d="M5.25497 12.2425L10.7308 16.2583C12.2125 12.59 15.8008 9.99999 20 9.99999C22.5491 9.99999 24.8683 10.9617 26.6341 12.5325L31.3483 7.81833C28.3716 5.04416 24.39 3.33333 20 3.33333C13.5983 3.33333 8.04663 6.94749 5.25497 12.2425Z" fill="#FF3D00" />
@@ -94,7 +94,7 @@ const Login = () => {
                     </button>
                   </div>
                   <div className="mt-6 text-center">
-                    Don’t have an account? <Link to='/register' className='hover:underline'> <span className='text-[#EF4E5D]'> Register</span></Link>
+                    Don’t have an account? <Link to='/register' className='hover:underline'> <span className='text-green-500'> Register</span></Link>
                   </div>
                 </form>
               </div>

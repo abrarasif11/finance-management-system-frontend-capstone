@@ -67,7 +67,7 @@ const Register = () => {
         <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
           <div className="flex flex-col items-center justify-between xl:flex-row">
             <div className="w-full max-w-xl mb-12 xl:mb-0 xl:pr-16 xl:w-7/12">
-              <h2 className="max-w-lg mb-6 font-poppins text-3xl font-bold tracking-tight text-[#EF4E5D] sm:text-4xl sm:leading-none">
+              <h2 className="max-w-lg mb-6 font-poppins text-3xl font-bold tracking-tight text-green-500 sm:text-4xl sm:leading-none">
                 <span className="text-white">FMS</span>
                 <br />
                 Register! <br className="hidden md:block" />
@@ -75,7 +75,7 @@ const Register = () => {
               </h2>
             </div>
             <div className="w-full font-poppins max-w-xl xl:px-8 xl:w-5/12">
-              <div className="bg-[#DFE2E7] text-[#21304E] rounded shadow-2xl p-7 sm:p-10">
+              <div className="bg-black text-white rounded shadow-2xl p-7 sm:p-10">
                 <form onSubmit={handleSubmit}>
                   <h3 className="text-4xl font-semibold mb-5">Register Here</h3>
                   <div className="mb-1  sm:mb-2">
@@ -167,7 +167,7 @@ const Register = () => {
                   <div className="mt-4 mb-2 sm:mb-4">
                     <button
                       type="submit"
-                      className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded-badge shadow-md   bg-[#EF4E5D]  focus:shadow-outline focus:outline-none"
+                      className="inline-flex items-center justify-center w-full h-12 px-6 font-medium tracking-wide text-white transition duration-200 rounded-badge shadow-md bg-gradient-to-r from-green-500 to-green-800 focus:shadow-outline focus:outline-none"
                     >
                       Register
                     </button>
@@ -178,7 +178,7 @@ const Register = () => {
                     Already have an account?{" "}
                     <Link to="/login" className="hover:underline">
                       {" "}
-                      <span className="text-[#EF4E5D]"> Log In</span>
+                      <span className="text-green-500"> Log In</span>
                     </Link>
                   </div>
                 </form>
