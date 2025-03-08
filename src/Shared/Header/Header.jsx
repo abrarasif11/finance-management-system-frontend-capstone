@@ -39,7 +39,7 @@ const Header = () => {
           <div className="flex items-center flex-shrink-0">
             {/* <img className="h-10 w-10 mr-2" src={logo} alt="Logo" /> */}
             <a href="/">
-            <span className="text-xl text-green-500 tracking-tight">FMS</span>
+            <span className="text-2xl font-semibold text-green-500 tracking-tight">BudgetBuddy</span>
             </a>
           </div>
           <ul className="hidden lg:flex ml-14 space-x-12">

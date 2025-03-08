@@ -1,37 +1,38 @@
-import React from 'react';
+import React from "react";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
-
 const Feedback = () => {
-    const data = [
-        {
-            id: '1',
-            name: `Yasir`,
-            img: `/src/assets/437909366_2162601154083568_8384285843800500649_n.jpg`,
-            review: `nice`,
-        },
-        {
-            id: '2',
-            name: `Asif`,
-            img: `/src/assets/459809096_1213306209810555_1832615970736443789_n.jpg`,
-            review: `nice`,
-        },
-        {
-            id: '3',
-            name: `Sakib`,
-            img: `/src/assets/461517104_878925317519341_419941465583354984_n.jpg`,
-            review: `nice`,
-        },
+  const data = [
+    {
+      id: "1",
+      name: `Yasir`,
+      img: `/src/assets/437909366_2162601154083568_8384285843800500649_n.jpg`,
+      review: `nice`,
+    },
+    {
+      id: "2",
+      name: `Asif`,
+      img: `/src/assets/459809096_1213306209810555_1832615970736443789_n.jpg`,
+      review: `nice`,
+    },
+    {
+      id: "3",
+      name: `Sakib`,
+      img: `/src/assets/461517104_878925317519341_419941465583354984_n.jpg`,
+      review: `nice`,
+    },
+  ];
 
-    ]
-
-   
-    return (
-<div className="mt-20 tracking-wide">
-      <h2 className="text-3xl sm:text-5xl lg:text-6xl text-center my-10 lg:my-20">
-        What People are saying
-      </h2>
+  return (
+    <div className="mt-20 tracking-wide">
+      <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold mb-10 text-center tracking-wide">
+        Users
+        <span className="bg-green-500 font-semibold to-green-800 text-transparent bg-clip-text">
+          {" "}
+          Appreciation
+        </span>
+      </h1>
       <div className="flex flex-wrap justify-center">
         {data.map((testimonial, index) => (
           <div key={index} className="w-full sm:w-1/2 lg:w-1/3 px-4 py-2">
@@ -55,8 +56,7 @@ const Feedback = () => {
         ))}
       </div>
     </div>
-        
-    );
+  );
 };
 
 export default Feedback;

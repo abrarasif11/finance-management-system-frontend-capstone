@@ -25,10 +25,13 @@ const Pricing = () => {
       <section className="py-20 text-white">
         <div className="container px-4 mx-auto">
           <div className="max-w-2xl mx-auto mb-16 text-center">
-            <span className="text-4xl font-bold lg:text-5xl">Pricing</span>
-            <h2 className="text-3xl text-white font-bold lg:text-4xl">
-              Choose your best plan
-            </h2>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
+        Choose Your
+        <span className="bg-green-500 font-semibold to-green-800 text-transparent bg-clip-text">
+          {" "}
+         Best Plan
+        </span>
+      </h1>
           </div>
           <div className="flex flex-wrap items-stretch -mx-4">
             {prices?.data?.map((pricer) => (

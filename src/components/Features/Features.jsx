@@ -3,15 +3,15 @@ import { features } from "../constants/index";
 const Features = () => {
   console.log(features)
   return (
-    <div className="relative mt-20 border-b border-neutral-800 min-h-[800px]">
+    <div className="mx-auto w-lg relative mt-20 border-b border-neutral-800 min-h-[800px]">
     <div className="text-center">
       <span className="bg-neutral-900 text-green-500 rounded-full h-6 text-xl font-medium px-2 py-1 uppercase">
-        Feature
+       Features 
       </span>
-      <h2 className="text-3xl sm:text-5xl lg:text-6xl mt-10 lg:mt-20 tracking-wide">
-        Easily build{" "}
+      <h2 className="text-2xl md:text-4xl lg:text-5xl font-semibold mt-10 lg:mt-20 tracking-wide">
+      Smart Features {" "}
         <span className="bg-gradient-to-r from-green-500 to-green-800 text-transparent bg-clip-text">
-          your code
+        for Smarter Finances!
         </span>
       </h2>
     </div>
