@@ -3,6 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 
+
+body {
+  @apply bg-black text-white; 
+}
+
 .slick-slider>div{
   margin: 0 10px;
 }
@@ -112,4 +117,8 @@
   font-family: "Poppins", serif;
   font-weight: 900;
   font-style: italic;
+}
+:root {
+  font-family: "Poppins", sans-serif;
+  color-scheme: dark;
 }
