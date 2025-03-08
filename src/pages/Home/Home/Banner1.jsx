@@ -33,7 +33,7 @@ const Banner1 = () => {
           autoPlay
           loop
           muted
-          className="rounded-lg w-1/2 border border-orange-700 shadow-sm shadow-orange-400 mx-2 my-4"
+          className="rounded-lg w-1/2 border border-green-500 shadow-sm shadow-green-500 mx-2 my-4"
         >
           {/* <source src={video1} type="video/mp4" /> */}
           Your browser does not support the video tag.
@@ -42,7 +42,7 @@ const Banner1 = () => {
           autoPlay
           loop
           muted
-          className="rounded-lg w-1/2 border border-orange-700 shadow-sm shadow-orange-400 mx-2 my-4"
+          className="rounded-lg w-1/2 border border-green-500 shadow-sm shadow-green-500 mx-2 my-4"
         >
           {/* <source src={video2} type="video/mp4" /> */}
           Your browser does not support the video tag.

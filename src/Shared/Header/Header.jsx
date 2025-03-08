@@ -39,7 +39,7 @@ const Header = () => {
           <div className="flex items-center flex-shrink-0">
             {/* <img className="h-10 w-10 mr-2" src={logo} alt="Logo" /> */}
             <a href="/">
-            <span className="text-xl text-[#3EAC91] tracking-tight">FMS</span>
+            <span className="text-xl text-green-500 tracking-tight">FMS</span>
             </a>
           </div>
           <ul className="hidden lg:flex ml-14 space-x-12">
@@ -81,7 +81,7 @@ const Header = () => {
               </a>
               <a
                 href="#"
-                className="py-2 px-3 rounded-md bg-[#3EAC91]"
+                className="py-2 px-3 rounded-md bg-gradient-to-r from-green-500 to-green-800"
               >
                 Create an account
               </a>

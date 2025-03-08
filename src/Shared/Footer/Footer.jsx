@@ -23,42 +23,42 @@ const Footer = () => {
             <div className="space-y-3">
               <h3 className="text-white font-semibold text-lg">Use cases</h3>
               <ul className="space-y-1">
-                <li className="hover:text-[#3EAC91]"><a href="#">UI design</a></li>
-                <li className="hover:text-[#3EAC91]"><a href="#">Wire framing</a></li>
-                <li className="hover:text-[#3EAC91]"><a href="#">Diagramming</a></li>
-                <li className="hover:text-[#3EAC91]"><a href="#">Brainstorming</a></li>
-                <li className="hover:text-[#3EAC91]"><a href="#">Online whiteboard</a></li>
-                <li className="hover:text-[#3EAC91]"><a href="#">Team collaboration</a></li>
+                <li className="hover:text-green-500"><a href="#">UI design</a></li>
+                <li className="hover:text-green-500"><a href="#">Wire framing</a></li>
+                <li className="hover:text-green-500"><a href="#">Diagramming</a></li>
+                <li className="hover:text-green-500"><a href="#">Brainstorming</a></li>
+                <li className="hover:text-green-500"><a href="#">Online whiteboard</a></li>
+                <li className="hover:text-green-500"><a href="#">Team collaboration</a></li>
               </ul>
             </div>
             <div className="space-y-3">
               <h3 className="text-white font-semibold text-lg">Explore</h3>
               <ul className="space-y-1">
-                <li className="hover:text-[#EF4E5D]"><a href="#">Design</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Prototyping</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Development features</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Design systems</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Collaboration features</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Design process</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Fig Jam</a></li>
+                <li className="hover:text-green-500"><a href="#">Design</a></li>
+                <li className="hover:text-green-500"><a href="#">Prototyping</a></li>
+                <li className="hover:text-green-500"><a href="#">Development features</a></li>
+                <li className="hover:text-green-500"><a href="#">Design systems</a></li>
+                <li className="hover:text-green-500"><a href="#">Collaboration features</a></li>
+                <li className="hover:text-green-500"><a href="#">Design process</a></li>
+                <li className="hover:text-green-500"><a href="#">Fig Jam</a></li>
               </ul>
             </div>
             <div className="space-y-3">
               <h3 className="text-white font-semibold text-lg">Resources</h3>
               <ul className="space-y-1">
-                <li className="hover:text-[#EF4E5D]"><a href="#">Blog</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Best practices</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Colors</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Color wheel</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Support</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Developers</a></li>
-                <li className="hover:text-[#EF4E5D]"><a href="#">Resource library</a></li>
+                <li className="hover:text-green-500"><a href="#">Blog</a></li>
+                <li className="hover:text-green-500"><a href="#">Best practices</a></li>
+                <li className="hover:text-green-500"><a href="#">Colors</a></li>
+                <li className="hover:text-green-500"><a href="#">Color wheel</a></li>
+                <li className="hover:text-green-500"><a href="#">Support</a></li>
+                <li className="hover:text-green-500"><a href="#">Developers</a></li>
+                <li className="hover:text-green-500"><a href="#">Resource library</a></li>
               </ul>
             </div>
           </div>
         </div>
 
-		<div className="py-6 text-sm text-center hover:text-[#EF4E5D]">
+		<div className="py-6 text-sm text-center hover:text-green-500">
 		© 2025 Finance Management System. All rights reserved.
 		</div>
       </footer>
