@@ -16,39 +16,39 @@ export const navItems = [
   export const features = [
     {
       icon: <BotMessageSquare />,
-      text: "Drag-and-Drop Interface",
+      text: "Expense and Income Tracking",
       description:
-        "Easily design and arrange your VR environments with a user-friendly drag-and-drop interface.",
+        "Log expenses and income by category to understand spending patterns and manage budgets.",
     },
     {
       icon: <Fingerprint />,
-      text: "Multi-Platform Compatibility",
+      text: "Budgeting",
       description:
-        "Build VR applications that run seamlessly across multiple platforms, including mobile, desktop, and VR headsets.",
+        "Set monthly or annual budgets with alerts to help users stick to financial limits.",
     },
     {
       icon: <ShieldHalf />,
-      text: "Built-in Templates",
+      text: "Savings and Goal Planning",
       description:
-        "Jumpstart your VR projects with a variety of built-in templates for different types of applications and environments.",
+        "Track savings goals (like vacations or emergency funds) with progress updates.",
     },
     {
       icon: <BatteryCharging />,
-      text: "Real-Time Preview",
+      text: "Investment Management",
       description:
-        "Preview your VR application in real-time as you make changes, allowing for quick iterations and adjustments.",
+        "Monitor personal investments, returns, and portfolio growth.",
     },
     {
       icon: <PlugZap />,
-      text: "Collaboration Tools",
+      text: "Debt and Loan Management",
       description:
-        "Work together with your team in real-time on VR projects, enabling seamless collaboration and idea sharing.",
+        "Track bills, debts, and repayment schedules to avoid late fees and manage liabilities.",
     },
     {
       icon: <GlobeLock />,
-      text: "Analytics Dashboard",
+      text: "Tax Preparation",
       description:
-        "Gain valuable insights into user interactions and behavior within your VR applications with an integrated analytics dashboard.",
+        "Store tax documents and track deductible expenses for simplified tax filing.",
     },
   ];
   export const checklistItems = [
