@@ -1,21 +1,22 @@
 // import { Link } from "react-router-dom";
 // import BannerImg from "../BannerImg/BannerImg";
-import video1 from "../../../assets/(59) Dollars Falling Down Free video Background Loop - VJ Loops for Background - MONEY Falling - YouTube - Google Chrome 2025-02-15 20-15-04.mov"
-import video2 from "../../../assets/(59) Financial Background Video Data Visuals - High Resolution - YouTube - Google Chrome 2025-02-15 20-15-54.mov"
+import video1 from "../../../assets/(59) Dollars Falling Down Free video Background Loop - VJ Loops for Background - MONEY Falling - YouTube - Google Chrome 2025-02-15 20-15-04.mov";
+import video2 from "../../../assets/(59) Financial Background Video Data Visuals - High Resolution - YouTube - Google Chrome 2025-02-15 20-15-54.mov";
 const Banner1 = () => {
-    return (
-        <div className="flex flex-col items-center mt-6 lg:mt-20">
-      <h1 className="text-4xl sm:text-6xl lg:text-5xl text-center tracking-wide">
-      Finance Management System
-        <span className="bg-green-500 to-green-800 text-transparent bg-clip-text">
+  return (
+    <div className="flex flex-col items-center mt-6 lg:mt-20">
+      <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
+        Track, Save and
+        <span className="bg-green-500 font-semibold to-green-800 text-transparent bg-clip-text">
           {" "}
-          for Capstone
+          Plan Your Finance!
         </span>
       </h1>
-      <p className="mt-10 text-lg text-center text-neutral-500 max-w-4xl">
-        Empower your creativity and bring your VR app ideas to life with our
-        intuitive development tools. Get started today and turn your imagination
-        into immersive reality!
+      <p className="mt-10 text-lg text-center text-white max-w-4xl">
+        Your Ultimate Smart Finance Companion for Effortless Budgeting, Smarter
+        Spending, and Long Term Financial Growth. Take Control of Your Finances,
+        Track Expenses Seamlessly, Save Smarter and Achieve Your Financial
+        Goals with Confidence!
       </p>
       <div className="flex justify-center my-10">
         <a
@@ -49,7 +50,7 @@ const Banner1 = () => {
         </video>
       </div>
     </div>
-    );
+  );
 };
 
 export default Banner1;
