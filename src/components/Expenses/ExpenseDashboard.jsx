@@ -37,7 +37,7 @@ const ExpenseDashboard = () => {
     import.meta.env.VITE_BASE_URL
   }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
 
-  const { data: expenses = [], isError } = useQuery({
+  const { data: expenses = [], isError, refetch } = useQuery({
     queryKey: ["expenses"],
     queryFn: async () => {
       const res = await fetch(EXPENSES_API_URL);
@@ -47,7 +47,7 @@ const ExpenseDashboard = () => {
       const data = await res.json();
       return data.data;
     },
-    refetchInterval: 60000,
+    refetchInterval: 100,
     refetchOnWindowFocus: true,
   });
   console.log(expenses);
@@ -93,9 +93,10 @@ const ExpenseDashboard = () => {
     setSelectedRange(days);
     filterExpenses(days);
     setFilterOpen(false); // Close dropdown after selection
+    refetch();
   };
   return (
-    <div className="bg-white p-6 rounded-lg">
+    <div className="bg-white text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Pie Chart */}
         <div className="rounded-xl shadow-xl p-6">
@@ -128,7 +129,7 @@ const ExpenseDashboard = () => {
               </button>
 
               {filterOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg p-4">
+                <div className="absolute right-0 mt-2 w-40 bg-white text-black border rounded-lg shadow-lg p-4">
                   <h3 className="text-sm font-bold mb-2">Filter by Date:</h3>
                   <div className="space-y-2">
                     <label className="flex items-center">
@@ -177,9 +178,9 @@ const ExpenseDashboard = () => {
           >
             Add New
           </button>
-          <AddExpensesModal />
+          <AddExpensesModal props={{user}}/>
         </div>
-        <table className="min-w-full bg-white border">
+        <table className="min-w-full bg-white border text-black">
           <thead>
             <tr>
               <th className="py-2 px-4 border">Title</th>
