@@ -6,7 +6,7 @@ import Address from "../Address/Address";
 
 const UserProfile = () => {
   return (
-    <div>
+    <div className="bg-gray-500">
       <h1 className="mt-10 mb-5 ml-6">My Profile </h1>
       <div></div>
       <div className="mb-10">

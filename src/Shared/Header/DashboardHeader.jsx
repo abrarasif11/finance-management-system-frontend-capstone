@@ -1,114 +1,104 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../contexts/AuthContext";
-import { FaUserCircle } from "react-icons/fa";
-
+import { CircleUser } from "lucide-react";
+import { useState } from "react";
+import { Menu, X } from "lucide-react";
 const DashboardHeader = () => {
+  const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const { user, logout } = useContext(AuthContext);
   const navigate = useNavigate();
-
+  const toggleNavbar = () => {
+    setMobileDrawerOpen(!mobileDrawerOpen);
+  };
   const handleLogOut = () => {
     logout();
     navigate("/login"); // Redirect to login after logout
   };
   const menuItems = <li>Hello</li>;
   return (
-    <div>
-      <div className="navbar bg-[#21304E]">
-        <div className="navbar-start">
-          <div className="dropdown">
-            <label tabIndex={0} className="btn text-white btn-ghost lg:hidden">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h8m-8 6h16"
-                />
-              </svg>
-            </label>
-            <ul
-              tabIndex={1}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-[#21304E] rounded-box w-52"
-            >
-              {menuItems}
-            </ul>
-          </div>
-          <div className="lg:hidden">
-            <Link
-              to="/"
-              className="btn btn-ghost text-white font-poppins font-semibold normal-case text-2xl"
-            >
-              FMS
-            </Link>
-          </div>
+    <nav className="sticky top-0 z-50   py-3 backdrop-blur-lg border-[#1A2C2A]">
+    <div className="container px-4 mx-auto relative lg:text-sm">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center flex-shrink-0">
+          {/* <img className="h-10 w-10 mr-2" src={logo} alt="Logo" /> */}
+          <a href="/">
+            <span className="text-2xl font-semibold text-green-500 tracking-tight">
+              BudgetBuddy
+            </span>
+          </a>
         </div>
-        <div className="hidden lg:flex lg:justify-between">
-          <div>
-            {!user ? (
-              <Link
-                to="/login"
-                className="font-medium btn-hidden px-5 py-2  bg-[#EF4E5D] hover:bg-[#ef3648] rounded-badge font-poppins text-white"
-              >
-                Login
-              </Link>
-            ) : (
-              <div className="flex items-center justify-between">
-                <p className="text-white text-xl">
-                  {user.user.first_name + " " + user.user?.last_name}
-                </p>
-                <div
-                  className="tooltip ml-4 mb-1 lg:tooltip-left md:tooltip-right mt-1 dropdown dropdown-bottom dropdown-end"
-                  data-tip={user.displayName || "Profile"}
-                >
-                  <div className="dropdown dropdown-end">
-                    <div
-                      tabIndex={0}
-                      role="button"
-                      className="m-1 flex items-center"
-                    >
-                      <label tabIndex={0}>
-                        {user.photoURL ? (
-                          <img
-                            className="w-[36px] h-[36px] rounded-full"
-                            src={user.photoURL}
-                            alt="Profile"
-                          />
-                        ) : (
-                          <FaUserCircle className="w-[30px] h-[30px] text-white" />
-                        )}
-                      </label>
-                    </div>
-                    <ul
-                      tabIndex={0}
-                      className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-                    >
-                      <li className="font-medium font-poppins text-black">
-                        <Link to="/dashboard/expenses">Dashboard</Link>
-                      </li>
-                      <li>
-                        <button
-                          className="font-medium font-poppins text-black"
-                          onClick={handleLogOut}
-                        >
-                          Logout
-                        </button>
-                      </li>
-                    </ul>
+        
+        <div className="hidden lg:flex justify-center space-x-12 items-center">
+          {user ? (
+            <label tabIndex={0}>
+              {
+                <div className="dropdown  dropdown-end">
+                  <div tabIndex={0} role="button" className=" ">
+                    {" "}
+                    <CircleUser
+                    className=" 
+                    text-green-500
+                    "/>
                   </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-green-500 rounded-box z-1 w-52 p-2 shadow-sm"
+                  >
+                    <li>
+                      <Link to='/profile'>Profile</Link>
+                    </li>
+                    <li>
+                      <Link to='/dashboard/expenses'>Dashboard</Link>
+                    </li>
+                    <li
+                    onClick={logout}
+                    >
+                       <a>Logout</a>
+                    </li>
+                  </ul>
                 </div>
-              </div>
-            )}
-          </div>
+              }
+            </label>
+          ) : (
+            <a
+              href="/login"
+              className="py-2 px-3 bg-gradient-to-r from-green-500 to-green-800 rounded-md"
+            >
+              Sign In
+            </a>
+          )}
+          {/* <a
+            href="/register"
+            className="bg-[#3EAC91] py-2 px-3 rounded-md"
+          >
+            Create an account
+          </a> */}
+        </div>
+        <div className="lg:hidden md:flex flex-col justify-end">
+          <button onClick={toggleNavbar}>
+            {mobileDrawerOpen ? <X /> : <Menu />}
+          </button>
         </div>
       </div>
+      {mobileDrawerOpen && (
+        <div className="fixed right-0 z-20 bg-neutral-900 text-white w-full p-12 flex flex-col justify-center items-center lg:hidden">
+          
+          <div className="flex space-x-6">
+            <a href="#" className="py-2 px-3 border rounded-md">
+              Sign In
+            </a>
+            <a
+              href="#"
+              className="py-2 px-3 rounded-md bg-gradient-to-r from-green-500 to-green-800"
+            >
+              Create an account
+            </a>
+          </div>
+        </div>
+      )}
     </div>
+  </nav>
   );
 };
 

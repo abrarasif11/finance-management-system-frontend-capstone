@@ -92,7 +92,7 @@ const Address = () => {
                     type="text"
                     id="country"
                     name="country"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter Country Name"
                   />
                 </div>
@@ -107,7 +107,7 @@ const Address = () => {
                     type="text"
                     id="city"
                     name="city"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter City / State Name"
                   />
                 </div>
@@ -123,7 +123,7 @@ const Address = () => {
                     type="text"
                     id="code"
                     name="code"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter Postal Code"
                   />
                 </div>
@@ -138,7 +138,7 @@ const Address = () => {
                     type="text"
                     id="tax"
                     name="tax"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white  rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter Tax ID"
                   />
                 </div>
@@ -146,7 +146,7 @@ const Address = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full px-4 py-2 bg-[#EF4E5D] text-white rounded  transition"
+                  className="w-full px-4 py-2 bg-green-500 font-semibold to-green-800 text-white rounded  transition"
                 >
                   Save
                 </button>
