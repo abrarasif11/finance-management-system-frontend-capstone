@@ -18,7 +18,7 @@ const Information = () => {
   return (
     <div className="h-full p-3 ml-5 mr-5 space-y-2 w-ful border-4 rounded-lg border-[#DFE2E7] bg-white flex justify-between text-black">
       <div className="flex items-center p-2 space-x-4">
-        <fieldset className="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm dark:bg-gray-50">
+        <fieldset className="grid grid-cols-4 gap-6 p-6 rounded-md shadow-sm ">
           <div className="space-y-2 col-span-full lg:col-span-1">
             <p className="font-medium">Personal Information </p>
           </div>
@@ -102,14 +102,14 @@ const Information = () => {
                     type="text"
                     id="name"
                     name="name"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 bg-white p-2 border rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter First Name"
                   />
                 </div>
                 <div className="mb-4">
                   <label
                     htmlFor="name"
-                    className="block text-sm font-medium text-gray-700"
+                    className="block text-sm  font-medium text-gray-700"
                   >
                    Last Name
                   </label>
@@ -117,7 +117,7 @@ const Information = () => {
                     type="text"
                     id="name"
                     name="name"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter Last Name"
                   />
                 </div>
@@ -133,7 +133,7 @@ const Information = () => {
                     type="email"
                     id="email"
                     name="email"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter your email"
                   />
                 </div>
@@ -148,7 +148,7 @@ const Information = () => {
                     type="text"
                     id="number"
                     name="number"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border bg-white rounded focus:ring focus:ring-blue-300"
                     placeholder="Enter Phone Number"
                   />
                 </div>
@@ -163,7 +163,7 @@ const Information = () => {
                     type="text"
                     id="bio"
                     name="Bio"
-                    className="w-full mt-1 p-2 border rounded focus:ring focus:ring-blue-300"
+                    className="w-full mt-1 p-2 border rounded  bg-white focus:ring focus:ring-blue-300"
                     placeholder="Enter You Bio"
                   />
                 </div>
@@ -171,7 +171,7 @@ const Information = () => {
                 {/* Submit Button */}
                 <button
                   type="submit"
-                  className="w-full px-4 py-2 bg-[#EF4E5D] text-white rounded  transition"
+                  className="w-full px-4 py-2 bg-green-500 font-semibold to-green-800 text-white rounded  transition"
                 >
                   Save
                 </button>

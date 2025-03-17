@@ -4,6 +4,7 @@ import { AuthContext } from "../../contexts/AuthContext";
 import { useState } from "react";
 import { navItems } from "../../components/constants/index";
 import { Menu, X } from "lucide-react";
+import { CircleUser } from "lucide-react";
 const Header = () => {
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
@@ -39,7 +40,9 @@ const Header = () => {
           <div className="flex items-center flex-shrink-0">
             {/* <img className="h-10 w-10 mr-2" src={logo} alt="Logo" /> */}
             <a href="/">
-            <span className="text-2xl font-semibold text-green-500 tracking-tight">BudgetBuddy</span>
+              <span className="text-2xl font-semibold text-green-500 tracking-tight">
+                BudgetBuddy
+              </span>
             </a>
           </div>
           <ul className="hidden lg:flex ml-14 space-x-12">
@@ -50,9 +53,44 @@ const Header = () => {
             ))}
           </ul>
           <div className="hidden lg:flex justify-center space-x-12 items-center">
-            <a href="/login"  className="py-2 px-3 bg-gradient-to-r from-green-500 to-green-800 rounded-md">
-              Sign In
-            </a>
+            {user ? (
+              <label tabIndex={0}>
+                {
+                  <div className="dropdown  dropdown-end">
+                    <div tabIndex={0} role="button" className=" ">
+                      {" "}
+                      <CircleUser
+                      className=" 
+                      text-green-500
+                      "/>
+                    </div>
+                    <ul
+                      tabIndex={0}
+                      className="dropdown-content menu bg-green-500 rounded-box z-1 w-52 p-2 shadow-sm"
+                    >
+                      <li>
+                        <Link to='/profile'>Profile</Link>
+                      </li>
+                      <li>
+                        <Link to='/dashboard/expenses'>Dashboard</Link>
+                      </li>
+                      <li
+                      onClick={logout}
+                      >
+                         <a>Logout</a>
+                      </li>
+                    </ul>
+                  </div>
+                }
+              </label>
+            ) : (
+              <a
+                href="/login"
+                className="py-2 px-3 bg-gradient-to-r from-green-500 to-green-800 rounded-md"
+              >
+                Sign In
+              </a>
+            )}
             {/* <a
               href="/register"
               className="bg-[#3EAC91] py-2 px-3 rounded-md"
@@ -62,7 +100,7 @@ const Header = () => {
           </div>
           <div className="lg:hidden md:flex flex-col justify-end">
             <button onClick={toggleNavbar}>
-              {mobileDrawerOpen ? <X/> : <Menu/>}
+              {mobileDrawerOpen ? <X /> : <Menu />}
             </button>
           </div>
         </div>
