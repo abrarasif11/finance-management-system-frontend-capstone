@@ -14,6 +14,11 @@ import AddExpensesModal from "./AddExpensesModal";
 import { FaFilter } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../contexts/AuthContext";
+import {
+  calculateCategoryTotals,
+  splitKeysAndValues,
+} from "../../utils/expenses/categoryWiseAmounts";
+import { getTotalExpenses } from "../../utils/totalAmount";
 
 // Register components
 ChartJS.register(
@@ -37,7 +42,12 @@ const ExpenseDashboard = () => {
     import.meta.env.VITE_BASE_URL
   }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
 
-  const { data: expenses = [], isError } = useQuery({
+  const {
+    data: expenses = [],
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
     queryKey: ["expenses"],
     queryFn: async () => {
       const res = await fetch(EXPENSES_API_URL);
@@ -47,18 +57,24 @@ const ExpenseDashboard = () => {
       const data = await res.json();
       return data.data;
     },
-    refetchInterval: 60000,
-    refetchOnWindowFocus: true,
+    // refetchInterval: 1000,
   });
-  console.log(expenses);
+
+  if (isFetching) console.log("Fetching...");
+
+  const categoryWiseIncome = calculateCategoryTotals(expenses);
+  const { keys, values, colors } = splitKeysAndValues(categoryWiseIncome);
+  const totalExpenses = getTotalExpenses(expenses);
+
+  console.log(totalExpenses);
 
   // Prepare chart data
   const categoryData = {
-    labels: ["Food", "Utilities", "Health"],
+    labels: keys,
     datasets: [
       {
-        data: [230, 300, 50],
-        backgroundColor: ["#f97316", "#60a5fa", "#34d399"],
+        data: values,
+        backgroundColor: colors,
       },
     ],
   };
@@ -93,32 +109,14 @@ const ExpenseDashboard = () => {
     setSelectedRange(days);
     filterExpenses(days);
     setFilterOpen(false); // Close dropdown after selection
+    refetch();
   };
   return (
-    <div className="bg-white p-6 rounded-lg">
+    <div className="bg-white text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        {/* Pie Chart */}
         <div className="rounded-xl shadow-xl p-6">
-          <h2 className="text-xl font-bold mb-4">Category-wise Expenses</h2>
-          <div style={{ width: "300px", height: "300px" }}>
-            <Pie data={categoryData} />
-          </div>
-        </div>
-        {/* Bar Chart */}
-        <div className="rounded-xl shadow-xl p-6">
-          <h2 className="text-xl font-bold mb-4">Monthly Expenses</h2>
-          <div>
-            <Bar data={monthlyData} />
-          </div>
-        </div>
-      </div>
-
-      {/* Expense Table */}
-      <div className="rounded-xl shadow-xl p-6">
-        <div className="flex justify-between">
-          <div className="flex items-center gap-5">
-            <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
-            {/* Filter Icon and Dropdown */}
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold mb-4">Total Expenses</h2>
             <div className="relative">
               <button
                 className="text-secondary text-lg mb-3"
@@ -128,7 +126,7 @@ const ExpenseDashboard = () => {
               </button>
 
               {filterOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg p-4">
+                <div className="absolute right-0 mt-2 w-40 bg-white text-black border rounded-lg shadow-lg p-4">
                   <h3 className="text-sm font-bold mb-2">Filter by Date:</h3>
                   <div className="space-y-2">
                     <label className="flex items-center">
@@ -169,6 +167,34 @@ const ExpenseDashboard = () => {
               )}
             </div>
           </div>
+          <div className="flex flex-col items-center justify-center pt-20">
+            <p className="text-6xl font-medium">{totalExpenses}</p>
+            <p className="text-4xl font-light">BDT</p>
+          </div>
+        </div>
+        {/* Pie Chart */}
+        <div className="rounded-xl shadow-xl p-6">
+          <h2 className="text-xl font-bold mb-4">Category-wise Expenses</h2>
+          <div style={{ width: "300px", height: "300px" }}>
+            <Pie data={categoryData} />
+          </div>
+        </div>
+        {/* Bar Chart */}
+        {/*<div className="rounded-xl shadow-xl p-6">
+          <h2 className="text-xl font-bold mb-4">Monthly Expenses</h2>
+          <div>
+            <Bar data={monthlyData} />
+          </div>
+        </div>*/}
+      </div>
+
+      {/* Expense Table */}
+      <div className="rounded-xl shadow-xl p-6">
+        <div className="flex justify-between">
+          <div className="flex items-center gap-5">
+            <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
+            {/* Filter Icon and Dropdown */}
+          </div>
           <button
             className="text-sm font-bold mb-4 text-white bg-secondary hover:bg-hoversec px-5 py-2 rounded-lg"
             onClick={() =>
@@ -177,9 +203,9 @@ const ExpenseDashboard = () => {
           >
             Add New
           </button>
-          <AddExpensesModal />
+          <AddExpensesModal props={{ user, refetch }} />
         </div>
-        <table className="min-w-full bg-white border">
+        <table className="min-w-full bg-white border text-black">
           <thead>
             <tr>
               <th className="py-2 px-4 border">Title</th>
@@ -193,7 +219,7 @@ const ExpenseDashboard = () => {
               expenses?.map((expense) => (
                 <tr key={expense.id}>
                   <td className="py-2 px-4 border">{expense.title}</td>
-                  <td className="py-2 px-4 border">${expense.amount}</td>
+                  <td className="py-2 px-4 border">{expense.amount} BDT</td>
                   <td className="py-2 px-4 border">{expense.category}</td>
                   <td className="py-2 px-4 border">{expense.date}</td>
                 </tr>

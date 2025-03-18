@@ -1,15 +1,35 @@
-import React from "react";
+import axios from "axios";
+import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
-const AddExpensesModal = ({ onSubmit }) => {
+const AddExpensesModal = ({ props }) => {
+  const {user, refetch} = props;
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const formRef = useRef()
 
-  const submitHandler = (data) => {
-    onSubmit(data);
+  const submitHandler = async (data) => {
+    try {
+      if (!data) return;
+      data.user_id=user?.user?.id;
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/personal/expenses`,
+        data
+      );
+      
+      if(res?.data?.success === true){
+        toast.success("New expense saved!");
+        formRef.current.reset()
+        document.getElementById("addExpenseModal").showModal=false;
+        refetch()
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -18,17 +38,17 @@ const AddExpensesModal = ({ onSubmit }) => {
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
           Add New Expense
         </h2>
-        <form onSubmit={handleSubmit(submitHandler)} className="space-y-4">
+        <form onSubmit={handleSubmit(submitHandler)} ref={formRef} className="space-y-4">
           {/* Title Field */}
           <div>
-            <label htmlFor="title" className="block text-gray-700 font-medium">
+            <label htmlFor="title" className="block text-black font-medium">
               Title
             </label>
             <input
               id="title"
               type="text"
               {...register("title", { required: "Title is required" })}
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-2 border bg-white text-black rounded-md ${
                 errors.title ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Ex: Family dinner"
@@ -42,7 +62,7 @@ const AddExpensesModal = ({ onSubmit }) => {
 
           {/* Amount Field */}
           <div>
-            <label htmlFor="amount" className="block text-gray-700 font-medium">
+            <label htmlFor="amount" className="block text-black font-medium">
               Amount (BDT)
             </label>
             <input
@@ -50,7 +70,7 @@ const AddExpensesModal = ({ onSubmit }) => {
               type="number"
               step="0.01"
               {...register("amount", { required: "Amount is required" })}
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-2 border bg-white text-black rounded-md ${
                 errors.amount ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Ex: 1200"
@@ -66,7 +86,7 @@ const AddExpensesModal = ({ onSubmit }) => {
           <div>
             <label
               htmlFor="category"
-              className="block text-gray-700 font-medium"
+              className="block text-black font-medium"
             >
               Category
             </label>
@@ -74,7 +94,7 @@ const AddExpensesModal = ({ onSubmit }) => {
               id="category"
               type="text"
               {...register("category", { required: "Category is required" })}
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-2 border bg-white text-black rounded-md ${
                 errors.category ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Ex: Food"
@@ -88,14 +108,14 @@ const AddExpensesModal = ({ onSubmit }) => {
 
           {/* Date Field */}
           <div>
-            <label htmlFor="date" className="block text-gray-700 font-medium">
+            <label htmlFor="date" className="block text-black font-medium">
               Date
             </label>
             <input
               id="date"
               type="datetime-local"
               {...register("date", { required: "Date is required" })}
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-2 border bg-white text-black rounded-md ${
                 errors.date ? "border-red-500" : "border-gray-300"
               }`}
             />
