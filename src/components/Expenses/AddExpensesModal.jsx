@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 const AddExpensesModal = ({ props }) => {
-  const {user} = props;
+  const {user, refetch} = props;
   const {
     register,
     handleSubmit,
@@ -20,10 +20,12 @@ const AddExpensesModal = ({ props }) => {
         `${import.meta.env.VITE_BASE_URL}/personal/expenses`,
         data
       );
-      console.log(res?.status);
+      
       if(res?.data?.success === true){
         toast.success("New expense saved!");
+        formRef.current.reset()
         document.getElementById("addExpenseModal").showModal=false;
+        refetch()
       }
     } catch (error) {
       console.log(error);
