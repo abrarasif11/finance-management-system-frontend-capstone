@@ -38,7 +38,13 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (error) {
       console.log(error)
-      toast.error(error.response?.data?.message || "Login failed!");
+      const userData = {
+        ...error.response
+      }
+      setUser(userData);
+      toast.error(error.response?.data?.message || "Login failed!" ,{
+        position:'top-right'
+      });
     }
   };
 

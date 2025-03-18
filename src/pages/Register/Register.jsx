@@ -75,7 +75,7 @@ const Register = () => {
               </h2>
             </div>
             <div className="w-full font-poppins max-w-xl xl:px-8 xl:w-5/12">
-              <div className="bg-black text-white rounded shadow-2xl p-7 sm:p-10">
+              <div className="bg-white text-black rounded shadow-2xl p-7 sm:p-10">
                 <form onSubmit={handleSubmit}>
                   <h3 className="text-4xl font-semibold mb-5">Register Here</h3>
                   <div className="mb-1  sm:mb-2">

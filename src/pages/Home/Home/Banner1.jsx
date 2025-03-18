@@ -1,7 +1,6 @@
 // import { Link } from "react-router-dom";
 // import BannerImg from "../BannerImg/BannerImg";
-import video1 from "../../../assets/(59) Dollars Falling Down Free video Background Loop - VJ Loops for Background - MONEY Falling - YouTube - Google Chrome 2025-02-15 20-15-04.mov";
-import video2 from "../../../assets/(59) Financial Background Video Data Visuals - High Resolution - YouTube - Google Chrome 2025-02-15 20-15-54.mov";
+import video1 from "../../../assets/giphy.gif";
 const Banner1 = () => {
   return (
     <div className="flex flex-col items-center mt-6 lg:mt-20">
@@ -30,24 +29,26 @@ const Banner1 = () => {
         </a>
       </div>
       <div className="flex mt-10 justify-center">
-        <video
+        {/* <video
+          autoPlay
+          loop
+          muted
+          className="rounded-lg w-1/2 border border-green-500 shadow-sm shadow-green-500 mx-2 my-4"
+        > */}
+          <img className="w-[700px]" src={video1} alt="" />
+          {/* Your browser does not support the video tag. */}
+          {/* <img src={video2} alt="" /> */}
+          {/* Your browser does not support the video tag. */}
+        {/* </video> */}
+        {/* <video
           autoPlay
           loop
           muted
           className="rounded-lg w-1/2 border border-green-500 shadow-sm shadow-green-500 mx-2 my-4"
         >
-          {/* <source src={video1} type="video/mp4" /> */}
+          <source src={video2} type="video/mp4" />
           Your browser does not support the video tag.
-        </video>
-        <video
-          autoPlay
-          loop
-          muted
-          className="rounded-lg w-1/2 border border-green-500 shadow-sm shadow-green-500 mx-2 my-4"
-        >
-          {/* <source src={video2} type="video/mp4" /> */}
-          Your browser does not support the video tag.
-        </video>
+        </video> */}
       </div>
     </div>
   );

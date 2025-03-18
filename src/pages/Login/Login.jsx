@@ -20,15 +20,17 @@ const Login = () => {
       const res = await login(email, password);
       console.log("Response:", res);
       if (res === 200) {
-        navigate(`/profile`);
+        navigate(`/dashboard/expenses`);
         toast.success("Logged in successfully!");
       }
     } catch (error) {
       toast.error("Please enter valid email or password!");
+      console.log(error)
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="relative">
@@ -80,6 +82,7 @@ const Login = () => {
                     >
                       {isLoading ? "Loading..." : "Log In"}
                     </button>
+                    {/* <p className='text-[#DC0000] mt-7 mb-7'> {error}</p> */}
                     <br />
                     <button className='w-full'>
                       <a href="#" className="flex items-center justify-center px-6 py-3 mt-4 text-white transition-colors duration-300 transform border rounded-badge bg-black">
