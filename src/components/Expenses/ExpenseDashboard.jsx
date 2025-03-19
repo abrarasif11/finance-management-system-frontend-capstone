@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pie, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -19,6 +19,7 @@ import {
   splitKeysAndValues,
 } from "../../utils/expenses/categoryWiseAmounts";
 import { getTotalExpenses } from "../../utils/totalAmount";
+import { CirclePlus, Pencil, Trash2 } from "lucide-react";
 
 // Register components
 ChartJS.register(
@@ -37,6 +38,8 @@ const ExpenseDashboard = () => {
   // State to manage filter
   const [selectedRange, setSelectedRange] = useState(30);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
 
   const EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
@@ -48,7 +51,7 @@ const ExpenseDashboard = () => {
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["expenses"],
+    queryKey: ["expenses", selectedRange],
     queryFn: async () => {
       const res = await fetch(EXPENSES_API_URL);
       if (!res.ok) {
@@ -57,16 +60,15 @@ const ExpenseDashboard = () => {
       const data = await res.json();
       return data.data;
     },
-    // refetchInterval: 1000,
   });
 
-  if (isFetching) console.log("Fetching...");
+  useEffect(() => {
+    refetch();
+  }, [selectedRange]);
 
   const categoryWiseIncome = calculateCategoryTotals(expenses);
   const { keys, values, colors } = splitKeysAndValues(categoryWiseIncome);
   const totalExpenses = getTotalExpenses(expenses);
-
-  console.log(totalExpenses);
 
   // Prepare chart data
   const categoryData = {
@@ -79,38 +81,21 @@ const ExpenseDashboard = () => {
     ],
   };
 
-  //   Monthly Bar Data
-  const monthlyData = {
-    labels: ["Jan", "Feb", "Mar", "Apr", "May"],
-    datasets: [
-      {
-        label: "Monthly Expenses",
-        data: [5800, 6770, 1200, 5000, 4000],
-        backgroundColor: "#9333ea",
-      },
-    ],
-  };
+  // Paginate expenses
+  const lastItemIndex = currentPage * itemsPerPage;
+  const firstItemIndex = lastItemIndex - itemsPerPage;
+  const currentExpenses = expenses.slice(firstItemIndex, lastItemIndex);
 
-  // Function to filter expenses by date range
-  const [filteredExpenses, setFilteredExpenses] = useState(expenses);
-  const filterExpenses = (days) => {
-    const today = new Date();
-    const filtered = expenses.filter((expense) => {
-      const expenseDate = new Date(expense.date);
-      const timeDifference = (today - expenseDate) / (1000 * 60 * 60 * 24);
-      return timeDifference <= days;
-    });
-    setFilteredExpenses(filtered);
-  };
+  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
   // Handle radio button change
   const handleRadioChange = (e) => {
     const days = parseInt(e.target.value);
     setSelectedRange(days);
-    filterExpenses(days);
     setFilterOpen(false); // Close dropdown after selection
-    refetch();
+    setCurrentPage(1); // Reset to first page after filter
   };
+
   return (
     <div className="bg-white text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
@@ -129,39 +114,19 @@ const ExpenseDashboard = () => {
                 <div className="absolute right-0 mt-2 w-40 bg-white text-black border rounded-lg shadow-lg p-4">
                   <h3 className="text-sm font-bold mb-2">Filter by Date:</h3>
                   <div className="space-y-2">
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="dateFilter"
-                        value="7"
-                        checked={selectedRange === 7}
-                        onChange={handleRadioChange}
-                        className="mr-2"
-                      />
-                      Last 7 Days
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="dateFilter"
-                        value="15"
-                        checked={selectedRange === 15}
-                        onChange={handleRadioChange}
-                        className="mr-2"
-                      />
-                      Last 15 Days
-                    </label>
-                    <label className="flex items-center">
-                      <input
-                        type="radio"
-                        name="dateFilter"
-                        value="30"
-                        checked={selectedRange === 30}
-                        onChange={handleRadioChange}
-                        className="mr-2"
-                      />
-                      Last 30 Days
-                    </label>
+                    {[7, 15, 30].map((day) => (
+                      <label key={day} className="flex items-center">
+                        <input
+                          type="radio"
+                          name="dateFilter"
+                          value={day}
+                          checked={selectedRange === day}
+                          onChange={handleRadioChange}
+                          className="mr-2"
+                        />
+                        Last {day} Days
+                      </label>
+                    ))}
                   </div>
                 </div>
               )}
@@ -179,30 +144,17 @@ const ExpenseDashboard = () => {
             <Pie data={categoryData} />
           </div>
         </div>
-        {/* Bar Chart */}
-        {/*<div className="rounded-xl shadow-xl p-6">
-          <h2 className="text-xl font-bold mb-4">Monthly Expenses</h2>
-          <div>
-            <Bar data={monthlyData} />
-          </div>
-        </div>*/}
       </div>
 
       {/* Expense Table */}
       <div className="rounded-xl shadow-xl p-6">
-        <div className="flex justify-between">
-          <div className="flex items-center gap-5">
-            <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
-            {/* Filter Icon and Dropdown */}
-          </div>
-          <button
-            className="text-sm font-bold mb-4 text-white bg-secondary hover:bg-hoversec px-5 py-2 rounded-lg"
+        <div className="flex justify-between items-center">
+          <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
+          <CirclePlus
             onClick={() =>
               document.getElementById("addExpenseModal").showModal()
             }
-          >
-            Add New
-          </button>
+          />
           <AddExpensesModal props={{ user, refetch }} />
         </div>
         <table className="min-w-full bg-white border text-black">
@@ -212,23 +164,43 @@ const ExpenseDashboard = () => {
               <th className="py-2 px-4 border">Amount</th>
               <th className="py-2 px-4 border">Category</th>
               <th className="py-2 px-4 border">Date</th>
+              <th className="py-2 px-4 border">Actions</th>
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(expenses) ? (
-              expenses?.map((expense) => (
-                <tr key={expense.id}>
-                  <td className="py-2 px-4 border">{expense.title}</td>
-                  <td className="py-2 px-4 border">{expense.amount} BDT</td>
-                  <td className="py-2 px-4 border">{expense.category}</td>
-                  <td className="py-2 px-4 border">{expense.date}</td>
-                </tr>
-              ))
-            ) : (
-              <tr></tr>
-            )}
+            {currentExpenses.map((expense) => (
+              <tr key={expense.id}>
+                <td className="py-2 px-4 border">{expense.title}</td>
+                <td className="py-2 px-4 border">{expense.amount} BDT</td>
+                <td className="py-2 px-4 border">{expense.category}</td>
+                <td className="py-2 px-4 border">{expense.date.split("T")[0]} | {expense.date.split("T")[1]}</td>
+                <td className="flex gap-2 justify-center items-center my-1">
+                <Pencil color="#0a54ff" size={20}/>
+                <Trash2 color="#ff2424" size={20}/>
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
+
+        {/* Pagination */}
+        <div className="flex justify-center mt-4 gap-2">
+          {Array.from({
+            length: Math.ceil(expenses.length / itemsPerPage),
+          }).map((_, index) => (
+            <button
+              key={index + 1}
+              onClick={() => handlePageChange(index + 1)}
+              className={`px-3 py-1 rounded ${
+                currentPage === index + 1
+                  ? "bg-secondary text-white"
+                  : "bg-gray-200"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
+        </div>
       </div>
     </div>
   );
