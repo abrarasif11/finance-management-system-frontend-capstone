@@ -32,7 +32,7 @@ const Dashboard = () => {
               <li key={i} className="mb-3">
                 <NavLink
                   className={({ isActive }) =>
-                    `rounded-lg px-4 py-2 ${
+                    `rounded-lg px-4 py-1 ${
                       isActive
                         ? "text-green-500 bg-white"
                         : "bg-gray-500 text-white"

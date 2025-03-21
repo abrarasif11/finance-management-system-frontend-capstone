@@ -11,7 +11,6 @@ import {
   Legend,
 } from "chart.js";
 import AddExpensesModal from "./AddExpensesModal";
-import { FaFilter } from "react-icons/fa";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../contexts/AuthContext";
 import {
@@ -20,6 +19,8 @@ import {
 } from "../../utils/expenses/categoryWiseAmounts";
 import { getTotalExpenses } from "../../utils/totalAmount";
 import { CirclePlus, Pencil, Trash2 } from "lucide-react";
+import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
+import PieChart from "../../Shared/Infographics/PieChart";
 
 // Register components
 ChartJS.register(
@@ -36,14 +37,26 @@ const ExpenseDashboard = () => {
   const { user } = useUser();
 
   // State to manage filter
+  const [rangedExpenses, setRangedExpenses] = useState([]);
   const [selectedRange, setSelectedRange] = useState(30);
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const EXPENSES_API_URL = `${
+  const RANGED_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
   }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
+
+  const fetchRangedExpenses = async () => {
+    const res = await fetch(RANGED_EXPENSES_API_URL);
+    if (!res.ok) throw new Error("Failed to fetch expenses");
+    const data = await res.json();
+    return data.data;
+  };
+
+  const USERS_EXPENSES_API_URL = `${
+    import.meta.env.VITE_BASE_URL
+  }/personal/expenses?user_id=${user?.user?.id}`;
 
   const {
     data: expenses = [],
@@ -53,10 +66,8 @@ const ExpenseDashboard = () => {
   } = useQuery({
     queryKey: ["expenses", selectedRange],
     queryFn: async () => {
-      const res = await fetch(EXPENSES_API_URL);
-      if (!res.ok) {
-        throw new Error("Network response was not ok");
-      }
+      const res = await fetch(USERS_EXPENSES_API_URL);
+      if (!res.ok) throw new Error("Failed to fetch incomes");
       const data = await res.json();
       return data.data;
     },
@@ -65,7 +76,8 @@ const ExpenseDashboard = () => {
   useEffect(() => {
     refetch();
   }, [selectedRange]);
-
+  console.log(rangedExpenses);
+  // Categorised Calculation
   const categoryWiseIncome = calculateCategoryTotals(expenses);
   const { keys, values, colors } = splitKeysAndValues(categoryWiseIncome);
   const totalExpenses = getTotalExpenses(expenses);
@@ -88,66 +100,28 @@ const ExpenseDashboard = () => {
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
-  // Handle radio button change
-  const handleRadioChange = (e) => {
-    const days = parseInt(e.target.value);
-    setSelectedRange(days);
-    setFilterOpen(false); // Close dropdown after selection
-    setCurrentPage(1); // Reset to first page after filter
-  };
-
   return (
     <div className="bg-white text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <div className="rounded-xl shadow-xl p-6">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold mb-4">Total Expenses</h2>
-            <div className="relative">
-              <button
-                className="text-secondary text-lg mb-3"
-                onClick={() => setFilterOpen(!filterOpen)}
-              >
-                <FaFilter />
-              </button>
-
-              {filterOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white text-black border rounded-lg shadow-lg p-4">
-                  <h3 className="text-sm font-bold mb-2">Filter by Date:</h3>
-                  <div className="space-y-2">
-                    {[7, 15, 30].map((day) => (
-                      <label key={day} className="flex items-center">
-                        <input
-                          type="radio"
-                          name="dateFilter"
-                          value={day}
-                          checked={selectedRange === day}
-                          onChange={handleRadioChange}
-                          className="mr-2"
-                        />
-                        Last {day} Days
-                      </label>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="flex flex-col items-center justify-center pt-20">
-            <p className="text-6xl font-medium">{totalExpenses}</p>
-            <p className="text-4xl font-light">BDT</p>
-          </div>
-        </div>
+        {/* Total Estimates */}
+        <TotalEstimateBlock
+          props={{
+            records: expenses,
+            filterOpen,
+            setFilterOpen,
+            selectedRange,
+            setSelectedRange,
+            total: totalExpenses,
+            setCurrentPage,
+            title: "Expenses",
+          }}
+        />
         {/* Pie Chart */}
-        <div className="rounded-xl shadow-xl p-6">
-          <h2 className="text-xl font-bold mb-4">Category-wise Expenses</h2>
-          <div style={{ width: "300px", height: "300px" }}>
-            <Pie data={categoryData} />
-          </div>
-        </div>
+        <PieChart props={{ categoryData, title: "Expenses" }} />
       </div>
 
       {/* Expense Table */}
-      <div className="rounded-xl shadow-xl p-6">
+      <div className="border-2 rounded-xl shadow-xl p-6">
         <div className="flex justify-between items-center">
           <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
           <CirclePlus
@@ -157,7 +131,7 @@ const ExpenseDashboard = () => {
           />
           <AddExpensesModal props={{ user, refetch }} />
         </div>
-        <table className="min-w-full bg-white border text-black">
+        <table className="min-w-full bg-white text-black">
           <thead>
             <tr>
               <th className="py-2 px-4 border">Title</th>
@@ -173,10 +147,12 @@ const ExpenseDashboard = () => {
                 <td className="py-2 px-4 border">{expense.title}</td>
                 <td className="py-2 px-4 border">{expense.amount} BDT</td>
                 <td className="py-2 px-4 border">{expense.category}</td>
-                <td className="py-2 px-4 border">{expense.date.split("T")[0]} | {expense.date.split("T")[1]}</td>
-                <td className="flex gap-2 justify-center items-center my-1">
-                <Pencil color="#0a54ff" size={20}/>
-                <Trash2 color="#ff2424" size={20}/>
+                <td className="py-2 px-4 border">
+                  {expense.date.split(" ")[0]} | {expense.date.split(" ")[1]}
+                </td>
+                <td className="flex gap-4 justify-center items-center py-3 px-4 border">
+                  <Pencil color="#0a54ff" size={20} />
+                  <Trash2 color="#ff2424" size={20} />
                 </td>
               </tr>
             ))}
@@ -193,7 +169,7 @@ const ExpenseDashboard = () => {
               onClick={() => handlePageChange(index + 1)}
               className={`px-3 py-1 rounded ${
                 currentPage === index + 1
-                  ? "bg-secondary text-white"
+                  ? "bg-green-500 text-white"
                   : "bg-gray-200"
               }`}
             >
