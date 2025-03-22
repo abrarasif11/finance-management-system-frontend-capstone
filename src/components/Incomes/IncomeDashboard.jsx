@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import AddExpensesModal from "./AddExpensesModal";
+import AddIncomesModal from "./AddIncomesModal";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../contexts/AuthContext";
 import {
@@ -21,7 +21,7 @@ import { CirclePlus, Pencil, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
-import UpdateExpenseModal from "./UpdateExpensesModal";
+import UpdateIncomeModal from "./UpdateIncomesModal";
 
 // Register components
 ChartJS.register(
@@ -34,11 +34,10 @@ ChartJS.register(
   Legend
 );
 
-const ExpenseDashboard = () => {
+const IncomeDashboard = () => {
   const { user } = useUser();
 
   // State to manage filter
-  const [rangedExpenses, setRangedExpenses] = useState([]);
   const [selectedId, setSelectedId] = useState();
   const [selectedRange, setSelectedRange] = useState(30);
   const [filterOpen, setFilterOpen] = useState(false);
@@ -47,19 +46,19 @@ const ExpenseDashboard = () => {
 
   const RANGED_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
+  }/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
 
   const USERS_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/expenses?user_id=${user?.user?.id}`;
+  }/personal/incomes?user_id=${user?.user?.id}`;
 
   const {
-    data: expenses = [],
+    data: incomes = [],
     isError,
     isFetching,
     refetch,
   } = useQuery({
-    queryKey: ["expenses", selectedRange],
+    queryKey: ["incomes", selectedRange],
     queryFn: async () => {
       const res = await fetch(
         selectedRange ? RANGED_EXPENSES_API_URL : USERS_EXPENSES_API_URL
@@ -75,9 +74,9 @@ const ExpenseDashboard = () => {
   }, [selectedRange]);
 
   // Categorised Calculation
-  const categoryWiseIncome = calculateCategoryTotals(expenses);
+  const categoryWiseIncome = calculateCategoryTotals(incomes);
   const { keys, values, colors } = splitKeysAndValues(categoryWiseIncome);
-  const totalExpenses = getTotalOfRecords(expenses);
+  const totalIncomes = getTotalOfRecords(incomes);
 
   // Prepare chart data
   const categoryData = {
@@ -90,10 +89,10 @@ const ExpenseDashboard = () => {
     ],
   };
 
-  // Paginate expenses
+  // Paginate incomes
   const lastItemIndex = currentPage * itemsPerPage;
   const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentExpenses = expenses.slice(firstItemIndex, lastItemIndex);
+  const currentIncomes = incomes.slice(firstItemIndex, lastItemIndex);
 
   const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -108,30 +107,30 @@ const ExpenseDashboard = () => {
             setFilterOpen,
             selectedRange,
             setSelectedRange,
-            total: totalExpenses,
+            total: totalIncomes,
             setCurrentPage,
-            title: "Expenses",
+            title: "Incomes",
           }}
         />
         {/* Pie Chart */}
-        <PieChart props={{ categoryData, title: "Expenses" }} />
+        <PieChart props={{ categoryData, title: "Incomes" }} />
       </div>
 
-      {/* Expense Table */}
+      {/* Income Table */}
       <div className="border-2 rounded-xl shadow-xl p-6">
         <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold mb-4">Recent Expenses</h2>
+          <h2 className="text-xl font-bold mb-4">Recent Incomes</h2>
           <CirclePlus
             onClick={() =>
-              document.getElementById("addExpenseModal").showModal()
+              document.getElementById("addIncomeModal").showModal()
             }
           />
-          <AddExpensesModal props={{ user, refetch }} />
+          <AddIncomesModal props={{ user, refetch }} />
         </div>
         <table className="min-w-full bg-white text-black">
           <thead>
             <tr>
-              <th className="py-2 px-4 border">Title</th>
+              <th className="py-2 px-4 border">Source</th>
               <th className="py-2 px-4 border">Amount</th>
               <th className="py-2 px-4 border">Category</th>
               <th className="py-2 px-4 border">Date</th>
@@ -139,28 +138,28 @@ const ExpenseDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {currentExpenses.map((expense) => (
-              <tr key={expense.id}>
-                <td className="py-2 px-4 border">{expense.title}</td>
-                <td className="py-2 px-4 border">{expense.amount} BDT</td>
-                <td className="py-2 px-4 border">{expense.category}</td>
+            {currentIncomes.map((income) => (
+              <tr key={income.id}>
+                <td className="py-2 px-4 border">{income.source}</td>
+                <td className="py-2 px-4 border">{income.amount} BDT</td>
+                <td className="py-2 px-4 border">{income.category}</td>
                 <td className="py-2 px-4 border">
-                  {expense.date.split(" ")[0]} | {expense.date.split(" ")[1]}
+                  {income.date.split(" ")[0]} | {income.date.split(" ")[1]}
                 </td>
                 <td className="flex gap-4 justify-center items-center py-3 px-4 border">
                   <Pencil
                     className="text-blue-600 hover:text-blue-400"
                     size={20}
                     onClick={async () => {
-                      setSelectedId(expense.id);
-                      document.getElementById("updateExpenseModal").open = true;
+                      setSelectedId(income.id);
+                      document.getElementById("updateIncomeModal").open = true;
                     }}
                   />
-                  <UpdateExpenseModal
+                  <UpdateIncomeModal
                     props={{
                       userId: user?.user?.id,
                       id: selectedId,
-                      records: expenses,
+                      records: incomes,
                       refetch,
                     }}
                   />
@@ -169,8 +168,8 @@ const ExpenseDashboard = () => {
                     size={20}
                     onClick={async () => {
                       await deleteRecord(
-                        `${import.meta.env.VITE_BASE_URL}/personal/expenses/${
-                          expense?.id
+                        `${import.meta.env.VITE_BASE_URL}/personal/incomes/${
+                          income?.id
                         }`
                       );
                       refetch();
@@ -185,7 +184,7 @@ const ExpenseDashboard = () => {
         {/* Pagination */}
         <div className="flex justify-center mt-4 gap-2">
           {Array.from({
-            length: Math.ceil(expenses.length / itemsPerPage),
+            length: Math.ceil(incomes.length / itemsPerPage),
           }).map((_, index) => (
             <button
               key={index + 1}
@@ -205,4 +204,4 @@ const ExpenseDashboard = () => {
   );
 };
 
-export default ExpenseDashboard;
+export default IncomeDashboard;
