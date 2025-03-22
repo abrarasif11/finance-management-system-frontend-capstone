@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Pie, Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -21,6 +20,8 @@ import { getTotalExpenses } from "../../utils/totalAmount";
 import { CirclePlus, Pencil, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
+import { deleteRecord } from "../../utils/API_Operations/apiOperations";
+import UpdateExpenseModal from "./UpdateExpensesModal";
 
 // Register components
 ChartJS.register(
@@ -38,6 +39,7 @@ const ExpenseDashboard = () => {
 
   // State to manage filter
   const [rangedExpenses, setRangedExpenses] = useState([]);
+  const [selectedId, setSelectedId] = useState();
   const [selectedRange, setSelectedRange] = useState(30);
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -46,13 +48,6 @@ const ExpenseDashboard = () => {
   const RANGED_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
   }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
-
-  const fetchRangedExpenses = async () => {
-    const res = await fetch(RANGED_EXPENSES_API_URL);
-    if (!res.ok) throw new Error("Failed to fetch expenses");
-    const data = await res.json();
-    return data.data;
-  };
 
   const USERS_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
@@ -66,7 +61,9 @@ const ExpenseDashboard = () => {
   } = useQuery({
     queryKey: ["expenses", selectedRange],
     queryFn: async () => {
-      const res = await fetch(USERS_EXPENSES_API_URL);
+      const res = await fetch(
+        selectedRange ? RANGED_EXPENSES_API_URL : USERS_EXPENSES_API_URL
+      );
       if (!res.ok) throw new Error("Failed to fetch incomes");
       const data = await res.json();
       return data.data;
@@ -76,7 +73,7 @@ const ExpenseDashboard = () => {
   useEffect(() => {
     refetch();
   }, [selectedRange]);
-  console.log(rangedExpenses);
+
   // Categorised Calculation
   const categoryWiseIncome = calculateCategoryTotals(expenses);
   const { keys, values, colors } = splitKeysAndValues(categoryWiseIncome);
@@ -106,7 +103,7 @@ const ExpenseDashboard = () => {
         {/* Total Estimates */}
         <TotalEstimateBlock
           props={{
-            records: expenses,
+            apiUrl: USERS_EXPENSES_API_URL,
             filterOpen,
             setFilterOpen,
             selectedRange,
@@ -151,8 +148,34 @@ const ExpenseDashboard = () => {
                   {expense.date.split(" ")[0]} | {expense.date.split(" ")[1]}
                 </td>
                 <td className="flex gap-4 justify-center items-center py-3 px-4 border">
-                  <Pencil color="#0a54ff" size={20} />
-                  <Trash2 color="#ff2424" size={20} />
+                  <Pencil
+                    className="text-blue-600 hover:text-blue-400"
+                    size={20}
+                    onClick={async () => {
+                      setSelectedId(expense.id);
+                      document.getElementById("updateExpenseModal").open = true;
+                    }}
+                  />
+                  <UpdateExpenseModal
+                    props={{
+                      userId: user?.user?.id,
+                      id: selectedId,
+                      records: expenses,
+                      refetch,
+                    }}
+                  />
+                  <Trash2
+                    className="text-red-600 hover:text-red-400"
+                    size={20}
+                    onClick={async () => {
+                      await deleteRecord(
+                        `${import.meta.env.VITE_BASE_URL}/personal/expenses/${
+                          expense?.id
+                        }`
+                      );
+                      refetch();
+                    }}
+                  />
                 </td>
               </tr>
             ))}
@@ -170,7 +193,7 @@ const ExpenseDashboard = () => {
               className={`px-3 py-1 rounded ${
                 currentPage === index + 1
                   ? "bg-green-500 text-white"
-                  : "bg-gray-200"
+                  : "bg-gray-300 hover:bg-gray-200"
               }`}
             >
               {index + 1}

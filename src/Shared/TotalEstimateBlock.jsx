@@ -1,10 +1,11 @@
 import { FaFilter } from "react-icons/fa";
 import { getCurrentMonthRecords } from "../utils/expenses/categoryWiseAmounts";
 import { getTotalExpenses } from "../utils/totalAmount";
+import { useQuery } from "@tanstack/react-query";
 
 const TotalEstimateBlock = ({ props }) => {
   const {
-    records,
+    apiUrl,
     filterOpen,
     setFilterOpen,
     selectedRange,
@@ -14,11 +15,27 @@ const TotalEstimateBlock = ({ props }) => {
     title,
   } = props;
 
+  const {
+    data: records = [],
+    isError,
+    isFetching,
+    refetch,
+  } = useQuery({
+    queryKey: ["records"],
+    queryFn: async () => {
+      const res = await fetch(apiUrl);
+      if (!res.ok) throw new Error("Failed to fetch incomes");
+      const data = await res.json();
+      return data.data;
+    },
+  });
+
+
   const handleRadioChange = (e) => {
     const days = parseInt(e.target.value);
     setSelectedRange(days);
-    setFilterOpen(false); // Close dropdown after selection
-    setCurrentPage(1); // Reset to first page after filter
+    setFilterOpen(false);
+    setCurrentPage(1); 
   };
 
   const thisMonthData = getCurrentMonthRecords(records);

@@ -1,6 +1,5 @@
 export function calculateCategoryTotals(data) {
   const categoryTotals = {};
-  console.log(data)
   data.forEach((entry) => {
     const { category, amount } = entry;
     if (categoryTotals[category]) {

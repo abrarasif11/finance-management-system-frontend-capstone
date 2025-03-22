@@ -1,33 +1,43 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const AddExpensesModal = ({ props }) => {
-  const { user, refetch } = props;
+const UpdateExpenseModal = ({ props }) => {
+  const { userId, id, records, refetch } = props;
+
+  // Finding current expense
+  const existingRecord = records.find((details) => details.id === id);
+
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({ defaultValues: existingRecord });
+
   const formRef = useRef();
+
+  // Setting up default values
+  useEffect(() => {
+    if (existingRecord) {
+      reset(existingRecord); // Reset form with new data
+    }
+  }, [existingRecord, reset]);
 
   const submitHandler = async (data) => {
     try {
       if (!data) return;
-      data.user_id = user?.user?.id;
-      const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/personal/expenses`,
+
+      data.user_id = userId;
+      const res = await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/personal/expenses/${id}`,
         data
       );
 
-      if (parseInt(res?.status) === 201) {
-        toast.success("New expense saved!", {
-          duration: 2000,
-          position: "top-right",
-        });
-        formRef.current.reset();
-        document.getElementById("addExpenseModal").close();
+      if (parseInt(res?.status) === 200) {
+        toast.success("Expense Updated!",{duration:2000, position:'top-right'});
+        document.getElementById("updateExpenseModal").open = false;
         refetch();
       }
     } catch (error) {
@@ -36,10 +46,10 @@ const AddExpensesModal = ({ props }) => {
   };
 
   return (
-    <dialog id="addExpenseModal" className="modal">
+    <dialog id="updateExpenseModal" className="modal">
       <div className="modal-box max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
-          Add New Expense
+          Update Expense
         </h2>
         <form
           onSubmit={handleSubmit(submitHandler)}
@@ -131,9 +141,9 @@ const AddExpensesModal = ({ props }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-secondary text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+            className="w-full bg-green-400 hover:bg-green-500 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
           >
-            Add Expense
+            Save
           </button>
         </form>
       </div>
@@ -145,4 +155,4 @@ const AddExpensesModal = ({ props }) => {
   );
 };
 
-export default AddExpensesModal;
+export default UpdateExpenseModal;
