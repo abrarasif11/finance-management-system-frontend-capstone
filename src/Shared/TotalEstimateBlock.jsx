@@ -1,6 +1,6 @@
 import { FaFilter } from "react-icons/fa";
-import { getCurrentMonthRecords } from "../utils/expenses/categoryWiseAmounts";
-import { getTotalExpenses } from "../utils/totalAmount";
+import { getCurrentMonthRecords } from "../utils/categoryWiseAmounts";
+import { getTotalOfRecords } from "../utils/totalAmount";
 import { useQuery } from "@tanstack/react-query";
 
 const TotalEstimateBlock = ({ props }) => {
@@ -39,7 +39,7 @@ const TotalEstimateBlock = ({ props }) => {
   };
 
   const thisMonthData = getCurrentMonthRecords(records);
-  const thisMonthTotal = getTotalExpenses(thisMonthData.data);
+  const thisMonthTotal = getTotalOfRecords(thisMonthData.data);
 
   return (
     <div className="border-2 rounded-xl shadow-xl p-6">
