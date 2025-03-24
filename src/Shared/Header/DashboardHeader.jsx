@@ -48,9 +48,6 @@ const DashboardHeader = () => {
                     <li>
                       <Link to='/profile'>Profile</Link>
                     </li>
-                    <li>
-                      <Link to='/dashboard/expenses'>Dashboard</Link>
-                    </li>
                     <li
                     onClick={handleLogOut}
                     >

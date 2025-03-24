@@ -19,7 +19,7 @@ const Login = () => {
       const res = await login(email, password);
       
       if (res?.statusCode === 200) {
-        navigate(`/dashboard/expenses`);
+        navigate(`/dashboard/analytics`);
         toast.success("Logged in successfully!");
       }
     } catch (error) {
