@@ -13,7 +13,7 @@ const AboutUs = () => {
             <p className="max-w-3xl mx-auto mt-4 text-xl text-center text-white">
               To make financial literacy accessible by equipping individuals
               with intelligent, data-driven tools that help them make better
-              financial decisions, save efficiently, and invest wisely.
+              financial decisions, save efficiently and invest wisely.
             </p>
           </div>
           <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
