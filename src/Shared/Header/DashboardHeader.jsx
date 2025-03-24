@@ -52,7 +52,7 @@ const DashboardHeader = () => {
                       <Link to='/dashboard/expenses'>Dashboard</Link>
                     </li>
                     <li
-                    onClick={logout}
+                    onClick={handleLogOut}
                     >
                        <a>Logout</a>
                     </li>
