@@ -102,7 +102,7 @@ const IncomeDashboard = () => {
         {/* Total Estimates */}
         <TotalEstimateBlock
           props={{
-            apiUrl: USERS_EXPENSES_API_URL,
+            apiUrl: USERS_INCOMES_API_URL,
             filterOpen,
             setFilterOpen,
             selectedRange,
