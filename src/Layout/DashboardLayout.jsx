@@ -6,7 +6,7 @@ const DashboardLayout = () => {
   const links = [
     {
       title: "Dashboard",
-      to: "/dashboard",
+      to: "/dashboard/analytics",
     },
     {
       title: "Expenses",

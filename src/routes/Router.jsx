@@ -6,7 +6,7 @@ import Register from "../pages/Register/Register";
 import UserProfile from "../components/UserProfile/UserProfile";
 import Pricing from "../pages/Pricing/Pricing";
 import PrivateRoute from "../Shared/PrivateRoute";
-import DashboardLayout from "../Layout/Dashboard";
+import DashboardLayout from "../Layout/DashboardLayout";
 import Expenses from "../pages/Expenses";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import Features from "../components/Features/Features";
@@ -57,7 +57,7 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "/dashboard",
+        path: "/dashboard/analytics",
         element: <Dashboard/>,
       },
       {
