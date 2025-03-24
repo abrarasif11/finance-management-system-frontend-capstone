@@ -7,9 +7,10 @@ import Register from "../pages/Register/Register";
 import UserProfile from "../components/UserProfile/UserProfile";
 import Pricing from "../pages/Pricing/Pricing";
 import PrivateRoute from "../Shared/PrivateRoute";
-import Dashboard from "../Layout/Dashboard";
+import DashboardLayout from "../Layout/Dashboard";
 import Expenses from "../pages/Expenses";
 import Incomes from "../pages/Incomes";
+import Dashboard from "../pages/Dashboard";
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -41,10 +42,14 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <PrivateRoute>
-        <Dashboard />
+        <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard/>,
+      },
       {
         path: "/dashboard/expenses",
         element: <Expenses />,

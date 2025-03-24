@@ -44,11 +44,11 @@ const IncomeDashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
-  const RANGED_EXPENSES_API_URL = `${
+  const RANGED_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
   }/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
 
-  const USERS_EXPENSES_API_URL = `${
+  const USERS_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
   }/personal/incomes?user_id=${user?.user?.id}`;
 
@@ -61,7 +61,7 @@ const IncomeDashboard = () => {
     queryKey: ["incomes", selectedRange],
     queryFn: async () => {
       const res = await fetch(
-        selectedRange ? RANGED_EXPENSES_API_URL : USERS_EXPENSES_API_URL
+        selectedRange ? RANGED_INCOMES_API_URL : USERS_INCOMES_API_URL
       );
       if (!res.ok) throw new Error("Failed to fetch incomes");
       const data = await res.json();
