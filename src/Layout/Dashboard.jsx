@@ -1,8 +1,18 @@
 import React from "react";
 import DashboardHeader from "../Shared/Header/DashboardHeader";
-import { Link, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet } from "react-router-dom";
 
 const Dashboard = () => {
+  const links = [
+    {
+      title: "Expenses",
+      to: "/dashboard/expenses",
+    },
+    {
+      title: "Incomes",
+      to: "/dashboard/incomes",
+    },
+  ];
   return (
     <div>
       <DashboardHeader />
@@ -17,15 +27,23 @@ const Dashboard = () => {
             aria-label="close sidebar"
             className="drawer-overlay lg:hidden"
           ></label>
-          <ul className="menu p-4 w-80 min-h-full text-lg bg-[#6e7482] mt-20 lg:mt-0 lg:">
-            <li>
-              <Link
-                className="bg-white rounded-sm text-black active:text-white"
-                to="/dashboard/expenses"
-              >
-                Expenses
-              </Link>
-            </li>
+          <ul className="menu p-4 w-60 min-h-full text-lg bg-[#36454F] mt-20 lg:mt-0 lg:">
+            {links.map((link, i) => (
+              <li key={i} className="mb-3">
+                <NavLink
+                  className={({ isActive }) =>
+                    `rounded-lg px-4 py-1 ${
+                      isActive
+                        ? "text-green-500 bg-white"
+                        : "bg-gray-500 text-white"
+                    }`
+                  }
+                  to={link.to}
+                >
+                  {link.title}
+                </NavLink>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

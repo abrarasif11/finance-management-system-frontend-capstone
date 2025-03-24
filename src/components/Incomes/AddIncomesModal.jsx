@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
-const AddExpensesModal = ({ props }) => {
+const AddIncomesModal = ({ props }) => {
   const { user, refetch } = props;
   const {
     register,
@@ -17,17 +17,17 @@ const AddExpensesModal = ({ props }) => {
       if (!data) return;
       data.user_id = user?.user?.id;
       const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/personal/expenses`,
+        `${import.meta.env.VITE_BASE_URL}/personal/incomes`,
         data
       );
 
       if (parseInt(res?.status) === 201) {
-        toast.success("New expense saved!", {
+        toast.success("New income saved!", {
           duration: 2000,
           position: "top-right",
         });
         formRef.current.reset();
-        document.getElementById("addExpenseModal").close();
+        document.getElementById("addIncomeModal").close();
         refetch();
       }
     } catch (error) {
@@ -36,33 +36,33 @@ const AddExpensesModal = ({ props }) => {
   };
 
   return (
-    <dialog id="addExpenseModal" className="modal">
+    <dialog id="addIncomeModal" className="modal">
       <div className="modal-box max-w-md mx-auto mt-10 p-6 bg-white shadow-md rounded-lg">
         <h2 className="text-2xl font-bold mb-6 text-gray-800 text-center">
-          Add New Expense
+          Add New Income
         </h2>
         <form
           onSubmit={handleSubmit(submitHandler)}
           ref={formRef}
           className="space-y-4"
         >
-          {/* Title Field */}
+          {/* Source Field */}
           <div>
-            <label htmlFor="title" className="block text-black font-medium">
-              Title
+            <label htmlFor="source" className="block text-black font-medium">
+              Source
             </label>
             <input
-              id="title"
+              id="source"
               type="text"
-              {...register("title", { required: "Title is required" })}
+              {...register("source", { required: "Source is required" })}
               className={`w-full mt-1 p-2 border bg-white text-black rounded-md ${
-                errors.title ? "border-red-500" : "border-gray-300"
+                errors.source ? "border-red-500" : "border-gray-300"
               }`}
               placeholder="Ex: Family dinner"
             />
-            {errors.title && (
+            {errors.source && (
               <p className="text-red-500 text-sm mt-1">
-                {errors.title.message}
+                {errors.source.message}
               </p>
             )}
           </div>
@@ -110,6 +110,27 @@ const AddExpensesModal = ({ props }) => {
             )}
           </div>
 
+          {/* Notes Field */}
+          <div>
+            <label htmlFor="notes" className="block text-black font-medium">
+              Notes
+            </label>
+            <textarea
+              id="notes"
+              type="text"
+              {...register("notes")}
+              className={`w-full mt-1 p-2 border bg-white text-black rounded-md h-20 ${
+                errors.notes ? "border-red-500" : "border-gray-300"
+              }`}
+              placeholder="Enter some notes if necessary"
+            />
+            {errors.notes && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.notes.message}
+              </p>
+            )}
+          </div>
+
           {/* Date Field */}
           <div>
             <label htmlFor="date" className="block text-black font-medium">
@@ -131,9 +152,9 @@ const AddExpensesModal = ({ props }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-secondary text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+            className="w-full bg-green-400 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
           >
-            Add Expense
+            Add Income
           </button>
         </form>
       </div>
@@ -145,4 +166,4 @@ const AddExpensesModal = ({ props }) => {
   );
 };
 
-export default AddExpensesModal;
+export default AddIncomesModal;

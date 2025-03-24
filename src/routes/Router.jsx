@@ -11,6 +11,8 @@ import Dashboard from "../Layout/Dashboard";
 import Expenses from "../pages/Expenses";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import Features from "../components/Features/Features";
+import Incomes from "../pages/Incomes";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -47,7 +49,7 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/dashboard/expenses",
+    path: "/dashboard",
     element: (
       <PrivateRoute>
         <Dashboard />
@@ -57,6 +59,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/expenses",
         element: <Expenses />,
+      },
+      {
+        path: "/dashboard/incomes",
+        element: <Incomes />,
       },
     ],
   },
