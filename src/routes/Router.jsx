@@ -9,8 +9,11 @@ import Pricing from "../pages/Pricing/Pricing";
 import PrivateRoute from "../Shared/PrivateRoute";
 import DashboardLayout from "../Layout/Dashboard";
 import Expenses from "../pages/Expenses";
+import AboutUs from "../pages/AboutUs/AboutUs";
+import Features from "../components/Features/Features";
 import Incomes from "../pages/Incomes";
 import Dashboard from "../pages/Dashboard";
+
 export const router = createBrowserRouter([
   {
     path: "/",
@@ -23,6 +26,14 @@ export const router = createBrowserRouter([
       {
         path: "/pricing",
         element: <Pricing />,
+      },
+      {
+        path: "/about",
+        element: <AboutUs />,
+      },
+      {
+        path: "/services",
+        element: <Features/>,
       },
       {
         path: "/login",
