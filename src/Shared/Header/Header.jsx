@@ -98,6 +98,7 @@ const Header = () => {
               Create an account
             </a> */}
           </div>
+          {/* Mobile Version */}
           <div className="lg:hidden md:flex flex-col justify-end">
             <button onClick={toggleNavbar}>
               {mobileDrawerOpen ? <X /> : <Menu />}
@@ -114,7 +115,7 @@ const Header = () => {
               ))}
             </ul>
             <div className="flex space-x-6">
-              <a href="#" className="py-2 px-3 border rounded-md">
+              <a href="/login" className="py-2 px-3 border rounded-md">
                 Sign In
               </a>
               <a

@@ -2,8 +2,12 @@ import React from "react";
 import DashboardHeader from "../Shared/Header/DashboardHeader";
 import { Link, NavLink, Outlet } from "react-router-dom";
 
-const Dashboard = () => {
+const DashboardLayout = () => {
   const links = [
+    {
+      title: "Dashboard",
+      to: "/dashboard",
+    },
     {
       title: "Expenses",
       to: "/dashboard/expenses",
@@ -51,4 +55,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardLayout;

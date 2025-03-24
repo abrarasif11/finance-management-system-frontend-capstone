@@ -1,17 +1,17 @@
 import { createBrowserRouter } from "react-router-dom";
 import Main from "../Layout/Main";
 import Home from "../pages/Home/Home/Home";
-//import Login from "../pages/Login/Login";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register/Register";
 import UserProfile from "../components/UserProfile/UserProfile";
 import Pricing from "../pages/Pricing/Pricing";
 import PrivateRoute from "../Shared/PrivateRoute";
-import Dashboard from "../Layout/Dashboard";
+import DashboardLayout from "../Layout/Dashboard";
 import Expenses from "../pages/Expenses";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import Features from "../components/Features/Features";
 import Incomes from "../pages/Incomes";
+import Dashboard from "../pages/Dashboard";
 
 export const router = createBrowserRouter([
   {
@@ -52,10 +52,14 @@ export const router = createBrowserRouter([
     path: "/dashboard",
     element: (
       <PrivateRoute>
-        <Dashboard />
+        <DashboardLayout />
       </PrivateRoute>
     ),
     children: [
+      {
+        path: "/dashboard",
+        element: <Dashboard/>,
+      },
       {
         path: "/dashboard/expenses",
         element: <Expenses />,

@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
 
       if (res.status === 200) {
         const userData = {
-          ...res.data, // Include all data returned from the login response
+          ...res.data,
         };
 
         // Save user data to context and localStorage
@@ -34,16 +34,15 @@ export const AuthProvider = ({ children }) => {
         // Save token in cookies for authenticated API requests
         Cookies.set("XTOKEN", res.data.token, { expires: 1 });
 
-        return 200;
+        return {
+          message: res?.data?.message,
+          success: res?.data?.success,
+          statusCode: res?.status,
+        };
       }
     } catch (error) {
-      console.log(error)
-      const userData = {
-        ...error.response
-      }
-      setUser(userData);
-      toast.error(error.response?.data?.message || "Login failed!" ,{
-        position:'top-right'
+      toast.error(error.response?.data?.message || "Login failed!", {
+        position: "top-right",
       });
     }
   };

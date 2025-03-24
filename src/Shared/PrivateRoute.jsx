@@ -9,7 +9,7 @@ const PrivateRoute = ({ children }) => {
   if (loading) {
     return;
   }
-  if (user?.user || token) {
+  if (user?.user && token) {
     return children;
   }
 
