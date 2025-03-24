@@ -11,14 +11,15 @@ const AboutUs = () => {
               Our Mission
             </h2>
             <p className="max-w-3xl mx-auto mt-4 text-xl text-center text-white">
-              At BudgetBuddy, we empower everyone with intuitive tools for
-              tracking finances, setting goals, and making smart investments.
+              To make financial literacy accessible by equipping individuals
+              with intelligent, data-driven tools that help them make better
+              financial decisions, save efficiently, and invest wisely.
             </p>
           </div>
           <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
             <div>
               <h3 className="text-2xl font-bold tracking-tight sm:text-3xl text-green-500">
-                What We Offer
+                Our Goals
               </h3>
               <div className="mt-12 space-y-12">
                 <div className="flex">
@@ -42,11 +43,11 @@ const AboutUs = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-medium leading-6 text-white">
-                      Expense & Income Tracking
+                      Enhance Financial Awareness
                     </h4>
                     <p className="mt-2 text-gray-500">
-                      Log expenses and income by category to understand spending
-                      patterns and manage budgets.
+                      Help users understand their spending habits and improve
+                      financial literacy.
                     </p>
                   </div>
                 </div>
@@ -71,11 +72,11 @@ const AboutUs = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-medium leading-6 text-white">
-                      Budgeting
+                      Provide AI-Driven Budgeting
                     </h4>
                     <p className="mt-2 text-gray-500">
-                      Set monthly or annual budgets with alerts to help users
-                      stick to financial limits.
+                      Automate budget planning based on income, expenses, and
+                      financial goals.
                     </p>
                   </div>
                 </div>
@@ -100,11 +101,11 @@ const AboutUs = () => {
                   </div>
                   <div className="ml-4">
                     <h4 className="text-lg font-medium leading-6 text-white">
-                      Savings and Goal Planning
+                      Predict Future Financial Trends
                     </h4>
                     <p className="mt-2 text-gray-500">
-                      Track savings goals (like vacations or emergency funds)
-                      with progress updates.
+                      Use machine learning to forecast spending patterns and
+                      savings potential.
                     </p>
                   </div>
                 </div>
@@ -144,11 +145,11 @@ const AboutUs = () => {
 
                     <div className="ml-4">
                       <h4 className="text-lg font-medium leading-6 text-white">
-                        Investment Management
+                        Enable Goal
                       </h4>
                       <p className="mt-2 text-gray-500">
-                        Monitor personal investments, returns, and portfolio
-                        growth.
+                        Based Financial Planning – Assist users in setting and
+                        achieving financial milestones.
                       </p>
                     </div>
                   </div>
@@ -173,11 +174,11 @@ const AboutUs = () => {
                     </div>
                     <div className="ml-4">
                       <h4 className="text-lg font-medium leading-6 text-white">
-                        Debt and Loan Management
+                        Encourage Smart Saving & Investments
                       </h4>
                       <p className="mt-2 text-gray-500">
-                        Track bills, debts, and repayment schedules to avoid
-                        late fees and manage liabilities.
+                        Offer personalized recommendations for savings and
+                        investment opportunities.
                       </p>
                     </div>
                   </div>
@@ -202,11 +203,11 @@ const AboutUs = () => {
                     </div>
                     <div className="ml-4">
                       <h4 className="text-lg font-medium leading-6 text-white">
-                        Tax Preparation
+                        Improve Financial Security
                       </h4>
                       <p className="mt-2 text-gray-500">
-                        Store tax documents and track deductible expenses for
-                        simplified tax filing.
+                        Detect fraud risks and ensure safe money management
+                        practices.
                       </p>
                     </div>
                   </div>
@@ -335,29 +336,26 @@ const AboutUs = () => {
           </dl>
         </div>
       </div>
-	  {/* contact */}
-	  <div className="text-center">
-		<div className="items-center">
-		<h2 className="text-3xl font-extrabold sm:text-4xl">
-		Join Us Today!
-            </h2>
-			<p className="pt-2 mt-5 pb-4">Sign up now and start managing your money smarter!</p>
-			<div className="text-center mt-5 mb-10 space-y-4">
-				<p className="text-center flex items-center">
-					
-					<span>📩  </span>
-				</p>
-				<p className="flex items-center">
-					
-				📞 
-				</p>
-				<p className="flex mb-10 items-center">
-					
-				🌐 
-				</p>
-			</div>
-			</div>
-			</div>
+      {/* contact */}
+      <div className="text-center">
+        <div className="items-center">
+          <h2 className="text-3xl font-extrabold sm:text-4xl">
+            Join Us Today!
+          </h2>
+          <p className="pt-2 mt-5 pb-4">
+            Sign up now and start managing your money smarter!
+          </p>
+          <div className="text-center mt-5 mb-10 space-y-4">
+            <p className="text-center flex items-center">
+              <span>📩 budgetbuddy@finance.com </span>
+            </p>
+            <p className="flex items-center">📞 01776621100</p>
+            <p className="flex mb-10 items-center">
+              🌐 https://finance-management-system-frontend-capstone.vercel.app/
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
