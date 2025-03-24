@@ -16,17 +16,19 @@ const StatsCards = () => {
     import.meta.env.VITE_BASE_URL
   }/personal/incomes?user_id=${user?.user?.id}`;
 
-  useEffect(async () => {
-    const expenses = await axios.get(USERS_EXPENSES_API_URL);
-    const incomes = await axios.get(USERS_INCOMES_API_URL);
+  useEffect(() => {
+    const fetchData = async () => {
+      const expenses = await axios.get(USERS_EXPENSES_API_URL);
+      const incomes = await axios.get(USERS_INCOMES_API_URL);
 
-    setExpenses(expenses?.data?.data);
-    setIncomes(incomes?.data?.data);
+      setExpenses(expenses?.data?.data);
+      setIncomes(incomes?.data?.data);
+    };
+    fetchData()
   }, []);
 
   const totalExpenses = getTotalOfRecords(expenses);
   const totalIncomes = getTotalOfRecords(incomes);
-  console.log(totalExpenses, totalIncomes);
 
   const stats = [
     { label: "Total Income", value: `৳${totalIncomes}`, color: "bg-green-500" },

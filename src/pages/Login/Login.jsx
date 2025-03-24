@@ -13,14 +13,13 @@ const Login = () => {
     const form = event.target;
     const email = form.email.value;
     const password = form.password.value;
-    console.log(email, password);
 
     try {
       setIsLoading(true);
       const res = await login(email, password);
       
       if (res?.statusCode === 200) {
-        navigate(`/dashboard/expenses`);
+        navigate(`/dashboard/analytics`);
         toast.success("Logged in successfully!");
       }
     } catch (error) {

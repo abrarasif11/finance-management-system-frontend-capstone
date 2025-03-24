@@ -72,7 +72,7 @@ const Header = () => {
                         <Link to='/profile'>Profile</Link>
                       </li>
                       <li>
-                        <Link to='/dashboard/expenses'>Dashboard</Link>
+                        <Link to='/dashboard/analytics'>Dashboard</Link>
                       </li>
                       <li
                       onClick={logout}
