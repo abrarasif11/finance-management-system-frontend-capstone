@@ -345,15 +345,15 @@ const AboutUs = () => {
 			<div className="text-center mt-5 mb-10 space-y-4">
 				<p className="text-center flex items-center">
 					
-					<span>📩 Contact Us: [Your Email]</span>
+					<span>📩  </span>
 				</p>
 				<p className="flex items-center">
 					
-				📞 [Your Phone Number]
+				📞 
 				</p>
 				<p className="flex mb-10 items-center">
 					
-				🌐 [Your Website URL]
+				🌐 
 				</p>
 			</div>
 			</div>
