@@ -22,6 +22,7 @@ import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
 import UpdateIncomeModal from "./UpdateIncomesModal";
+import Pagination from "../../Shared/Pagination";
 
 // Register components
 ChartJS.register(
@@ -42,7 +43,7 @@ const IncomeDashboard = () => {
   const [selectedRange, setSelectedRange] = useState(30);
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const recordsPerPage = 5;
 
   const RANGED_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
@@ -90,11 +91,10 @@ const IncomeDashboard = () => {
   };
 
   // Paginate incomes
-  const lastItemIndex = currentPage * itemsPerPage;
-  const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentIncomes = incomes.slice(firstItemIndex, lastItemIndex);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const currentRecords = incomes.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(incomes.length / recordsPerPage);
 
   return (
     <div className="bg-white text-black p-6 rounded-lg">
@@ -138,7 +138,7 @@ const IncomeDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {currentIncomes.map((income) => (
+            {currentRecords.map((income) => (
               <tr key={income.id}>
                 <td className="py-2 px-4 border">{income.source}</td>
                 <td className="py-2 px-4 border">{income.amount} BDT</td>
@@ -182,23 +182,7 @@ const IncomeDashboard = () => {
         </table>
 
         {/* Pagination */}
-        <div className="flex justify-center mt-4 gap-2">
-          {Array.from({
-            length: Math.ceil(incomes.length / itemsPerPage),
-          }).map((_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => handlePageChange(index + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === index + 1
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-300 hover:bg-gray-200"
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
+        <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
       </div>
     </div>
   );

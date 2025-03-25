@@ -22,6 +22,7 @@ import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
 import UpdateExpenseModal from "./UpdateExpensesModal";
+import Pagination from "../../Shared/Pagination";
 
 // Register components
 ChartJS.register(
@@ -43,7 +44,7 @@ const ExpenseDashboard = () => {
   const [selectedRange, setSelectedRange] = useState(30);
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 5;
+  const recordsPerPage = 5;
 
   const RANGED_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
@@ -91,11 +92,10 @@ const ExpenseDashboard = () => {
   };
 
   // Paginate expenses
-  const lastItemIndex = currentPage * itemsPerPage;
-  const firstItemIndex = lastItemIndex - itemsPerPage;
-  const currentExpenses = expenses.slice(firstItemIndex, lastItemIndex);
-
-  const handlePageChange = (pageNumber) => setCurrentPage(pageNumber);
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const currentRecords = expenses.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(expenses.length / recordsPerPage);
 
   return (
     <div className="bg-white text-black p-6 rounded-lg">
@@ -139,7 +139,7 @@ const ExpenseDashboard = () => {
             </tr>
           </thead>
           <tbody>
-            {currentExpenses.map((expense) => (
+            {currentRecords.map((expense) => (
               <tr key={expense.id}>
                 <td className="py-2 px-4 border">{expense.title}</td>
                 <td className="py-2 px-4 border">{expense.amount} BDT</td>
@@ -183,7 +183,7 @@ const ExpenseDashboard = () => {
         </table>
 
         {/* Pagination */}
-        <div className="flex justify-center mt-4 gap-2">
+        {/* <div className="flex justify-center mt-4 gap-2">
           {Array.from({
             length: Math.ceil(expenses.length / itemsPerPage),
           }).map((_, index) => (
@@ -199,7 +199,8 @@ const ExpenseDashboard = () => {
               {index + 1}
             </button>
           ))}
-        </div>
+        </div> */}
+        <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
       </div>
     </div>
   );
