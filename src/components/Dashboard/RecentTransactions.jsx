@@ -1,44 +1,66 @@
 // src/components/Dashboard/RecentTransactions.jsx
-import React from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import Pagination from "../../Shared/Pagination";
 
-const RecentTransactions = () => {
-  const transactions = [
-    { id: 1, title: "Groceries", amount: "৳3,000", type: "Expense", date: "2025-02-22" },
-    { id: 2, title: "Salary", amount: "৳20,000", type: "Income", date: "2025-02-01" },
-    { id: 3, title: "Rent", amount: "৳7,000", type: "Expense", date: "2025-02-10" },
-  ];
+const RecentTransactions = ({ props }) => {
+  const { transactions } = props;
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 5;
+
+  // Calculate indexes
+  const lastIndex = currentPage * recordsPerPage;
+  const firstIndex = lastIndex - recordsPerPage;
+  const currentRecords = transactions.slice(firstIndex, lastIndex);
+  const totalPages = Math.ceil(transactions.length / recordsPerPage);
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
 
   return (
     <div className="p-4 bg-white rounded-lg shadow">
-      <h2 className="text-black text-xl font-semibold mb-2">Recent Transactions</h2>
-      <table className="text-black w-full table-auto">
+      <h2 className="text-black text-xl font-semibold mb-2">
+        Recent Transactions
+      </h2>
+      <table className="text-black w-full table-auto mb-4">
         <thead>
           <tr className="bg-gray-200">
-            <th className="p-2">Title</th>
-            <th className="p-2">Amount</th>
             <th className="p-2">Type</th>
+            <th className="p-2">Title/Source</th>
+            <th className="p-2">Amount</th>
+            <th className="p-2">Category</th>
             <th className="p-2">Date</th>
-            <th className="p-2">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {transactions.map((trx) => (
-            <tr key={trx.id} className="border-t">
-              <td className="p-2">{trx.title}</td>
-              <td className="p-2">{trx.amount}</td>
-              <td className={`p-2 ${trx.type === "Income" ? "text-green-500" : "text-red-500"}`}>
-                {trx.type}
+          {currentRecords.map((trx) => (
+            <tr key={trx.id} className="border-t text-center">
+              <td
+                className={`p-2 ${
+                  (trx.source && "text-green-500") ||
+                  (trx.title && "text-red-500")
+                }`}
+              >
+                {(trx.source && "Income") || (trx.title && "Expense")}
               </td>
+              <td className="p-2">{trx.title ? trx.title : trx.source}</td>
+              <td className="p-2">৳{trx.amount}</td>
+              <td className="p-2">{trx.category}</td>
               <td className="p-2">{trx.date}</td>
-              <td className="p-2 flex gap-2">
-                <FaEdit className="text-blue-500 cursor-pointer" />
-                <FaTrash className="text-red-500 cursor-pointer" />
-              </td>
             </tr>
           ))}
         </tbody>
       </table>
+
+      {/* Pagination Controls */}
+      <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
     </div>
   );
 };
