@@ -3,33 +3,11 @@ import React, { useEffect, useState } from "react";
 import { useUser } from "../../contexts/AuthContext";
 import { getTotalOfRecords } from "../../utils/totalAmount";
 
-const StatsCards = () => {
-  const { user } = useUser();
-  const [expenses, setExpenses] = useState([]);
-  const [incomes, setIncomes] = useState([]);
-
-  const USERS_EXPENSES_API_URL = `${
-    import.meta.env.VITE_BASE_URL
-  }/personal/expenses?user_id=${user?.user?.id}`;
-
-  const USERS_INCOMES_API_URL = `${
-    import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}`;
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const expenses = await axios.get(USERS_EXPENSES_API_URL);
-      const incomes = await axios.get(USERS_INCOMES_API_URL);
-
-      setExpenses(expenses?.data?.data);
-      setIncomes(incomes?.data?.data);
-    };
-    fetchData()
-  }, []);
-
-  const totalExpenses = getTotalOfRecords(expenses);
-  const totalIncomes = getTotalOfRecords(incomes);
-
+const StatsCards = ({ props }) => {
+  const { totalExpenses, totalIncomes } = props;
+  const savingsRate = totalIncomes
+  ? ((totalIncomes - totalExpenses) / totalIncomes) * 100
+  : 0;
   const stats = [
     { label: "Total Income", value: `৳${totalIncomes}`, color: "bg-green-500" },
     {
@@ -42,7 +20,7 @@ const StatsCards = () => {
       value: `৳${totalIncomes - totalExpenses}`,
       color: "bg-blue-500",
     },
-    { label: "Savings Rate", value: "37.5%", color: "bg-yellow-500" },
+    { label: "Savings Rate", value: `${savingsRate.toFixed(2)}%`, color: "bg-yellow-500" },
   ];
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

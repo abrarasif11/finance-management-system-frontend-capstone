@@ -68,7 +68,7 @@ const UpdateIncomeModal = ({ props }) => {
               className={`w-full mt-1 p-2 border bg-white text-black rounded-md ${
                 errors.source ? "border-red-500" : "border-gray-300"
               }`}
-              placeholder="Ex: Family dinner"
+              placeholder="Ex: Monthly Salary"
             />
             {errors.source && (
               <p className="text-red-500 text-sm mt-1">
@@ -128,7 +128,7 @@ const UpdateIncomeModal = ({ props }) => {
             <textarea
               id="notes"
               type="text"
-              {...register("notes", { required: "Notes is required" })}
+              {...register("notes")}
               className={`w-full mt-1 p-2 border bg-white text-black rounded-md h-20 ${
                 errors.notes ? "border-red-500" : "border-gray-300"
               }`}
