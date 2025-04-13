@@ -1,5 +1,7 @@
 // src/components/Dashboard/GoalsTable.jsx
+import { Edit, Trash2 } from "lucide-react";
 import React from "react";
+import { Button } from "../ui/Button";
 
 const GoalsTable = ({ goals }) => {
   return (
@@ -16,16 +18,26 @@ const GoalsTable = ({ goals }) => {
               <th className="px-4 py-3">Start Date</th>
               <th className="px-4 py-3">End Date</th>
               <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3">Action</th>
             </tr>
           </thead>
           <tbody>
-            {goals.map(goal => {
-              const progress = Math.min((goal.current_amount / goal.target_amount) * 100, 100);
+            {goals.map((goal) => {
+              const progress = Math.min(
+                (goal.current_amount / goal.target_amount) * 100,
+                100
+              );
               return (
                 <tr key={goal.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium text-gray-900">{goal.title}</td>
-                  <td className="px-4 py-3">৳{goal.target_amount.toLocaleString()}</td>
-                  <td className="px-4 py-3">৳{goal.current_amount.toLocaleString()}</td>
+                  <td className="px-4 py-3 font-medium text-gray-900">
+                    {goal.title}
+                  </td>
+                  <td className="px-4 py-3">
+                    ৳{goal.target_amount.toLocaleString()}
+                  </td>
+                  <td className="px-4 py-3">
+                    ৳{goal.current_amount.toLocaleString()}
+                  </td>
                   <td className="px-4 py-3">
                     <div className="w-full bg-gray-200 rounded-full h-2.5">
                       <div
@@ -33,7 +45,9 @@ const GoalsTable = ({ goals }) => {
                         style={{ width: `${progress}%` }}
                       ></div>
                     </div>
-                    <span className="text-xs text-gray-500">{progress.toFixed(1)}%</span>
+                    <span className="text-xs text-gray-500">
+                      {progress.toFixed(1)}%
+                    </span>
                   </td>
                   <td className="px-4 py-3">{goal.start_date}</td>
                   <td className="px-4 py-3">{goal.end_date || "—"}</td>
@@ -49,6 +63,14 @@ const GoalsTable = ({ goals }) => {
                     >
                       {goal.status}
                     </span>
+                  </td>
+                  <td>
+                    <Button variant="outline" className="mx-1">
+                      <Edit size={16} />
+                    </Button>
+                    <Button variant="destructive">
+                      <Trash2 size={16} />
+                    </Button>
                   </td>
                 </tr>
               );

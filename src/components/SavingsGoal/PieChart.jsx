@@ -19,10 +19,22 @@ const PieChart = ({ completedGoals, inProgressGoals, canceledGoals }) => {
     ],
   };
 
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: "bottom",
+      },
+    },
+  };
+
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
+    <div className="p-4 bg-white rounded-lg shadow w-full max-w-md">
       <h2 className="text-xl font-semibold text-black mb-2">Goals Overview</h2>
-      <Pie data={data}  style={{ width: "300px", height: "300px" }}/>
+      <div className="w-[300px] h-[300px] mx-auto">
+        <Pie data={data} options={options} />
+      </div>
     </div>
   );
 };
