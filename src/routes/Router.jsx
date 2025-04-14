@@ -12,6 +12,7 @@ import AboutUs from "../pages/AboutUs/AboutUs";
 import Features from "../components/Features/Features";
 import Incomes from "../pages/Incomes";
 import Dashboard from "../pages/Dashboard";
+import SavingsGoals from "../pages/SavingsGoals";
 
 export const router = createBrowserRouter([
   {
@@ -32,7 +33,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/services",
-        element: <Features/>,
+        element: <Features />,
       },
       {
         path: "/login",
@@ -58,7 +59,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/dashboard/analytics",
-        element: <Dashboard/>,
+        element: <Dashboard />,
       },
       {
         path: "/dashboard/expenses",
@@ -67,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/incomes",
         element: <Incomes />,
+      },
+      {
+        path: "/dashboard/saving-goals",
+        element: <SavingsGoals />,
       },
     ],
   },
