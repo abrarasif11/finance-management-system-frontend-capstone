@@ -32,17 +32,18 @@ const RecentTransactions = ({ props }) => {
       </h2>
       <table className="min-w-full text-sm text-left text-gray-700">
         <thead className="bg-gray-100 uppercase text-xs text-gray-600">
-          <tr >
+          <tr className="text-center border-b hover:bg-gray-50">
             <th className="px-4 py-3">Type</th>
             <th className="px-4 py-3">Title/Source</th>
             <th className="px-4 py-3">Amount</th>
             <th className="px-4 py-3">Category</th>
             <th className="px-4 py-3">Date</th>
+            <th className="px-4 py-3">Action</th>
           </tr>
         </thead>
         <tbody>
           {currentRecords.map((trx) => (
-            <tr key={trx.id} className="border-t text-center">
+            <tr key={trx.id} className="border-t text-center border-b hover:bg-gray-50">
               <td
                 className={`p-2 ${
                   (trx.source && "text-green-500") ||

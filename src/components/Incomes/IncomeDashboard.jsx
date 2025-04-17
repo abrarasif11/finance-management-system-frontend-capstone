@@ -17,12 +17,13 @@ import {
   splitKeysAndValues,
 } from "../../utils/categoryWiseAmounts";
 import { getTotalOfRecords } from "../../utils/totalAmount";
-import { CirclePlus, Pencil, Trash2 } from "lucide-react";
+import { CirclePlus, Edit, Pencil, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
 import UpdateIncomeModal from "./UpdateIncomesModal";
 import Pagination from "../../Shared/Pagination";
+import { Button } from "../ui/Button";
 
 // Register components
 ChartJS.register(
@@ -127,34 +128,27 @@ const IncomeDashboard = () => {
           />
           <AddIncomesModal props={{ user, refetch }} />
         </div>
-        <table className="min-w-full bg-white text-black">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border">Source</th>
-              <th className="py-2 px-4 border">Amount</th>
-              <th className="py-2 px-4 border">Category</th>
-              <th className="py-2 px-4 border">Date</th>
-              <th className="py-2 px-4 border">Actions</th>
+        <table className="min-w-full text-sm text-left text-gray-700">
+          <thead className="bg-gray-100 uppercase text-xs text-gray-600">
+            <tr className="text-center">
+              <th className="px-4 py-3">Source</th>
+              <th className="px-4 py-3">Amount</th>
+              <th className="px-4 py-3">Category</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentRecords.map((income) => (
-              <tr key={income.id}>
-                <td className="py-2 px-4 border">{income.source}</td>
-                <td className="py-2 px-4 border">{income.amount} BDT</td>
-                <td className="py-2 px-4 border">{income.category}</td>
-                <td className="py-2 px-4 border">
+              <tr key={income.id} className="text-center border-b hover:bg-gray-50">
+                <td className="px-4 py-3">{income.source}</td>
+                <td className="px-4 py-3">{income.amount} BDT</td>
+                <td className="px-4 py-3">{income.category}</td>
+                <td className="px-4 py-3">
                   {income.date.split(" ")[0]} | {income.date.split(" ")[1]}
                 </td>
-                <td className="flex gap-4 justify-center items-center py-3 px-4 border">
-                  <Pencil
-                    className="text-blue-600 hover:text-blue-400"
-                    size={20}
-                    onClick={async () => {
-                      setSelectedId(income.id);
-                      document.getElementById("updateIncomeModal").open = true;
-                    }}
-                  />
+                <td className="flex gap-4 justify-center items-center py-3 px-4 ">
+                  
                   <UpdateIncomeModal
                     props={{
                       userId: user?.user?.id,
@@ -163,9 +157,20 @@ const IncomeDashboard = () => {
                       refetch,
                     }}
                   />
-                  <Trash2
-                    className="text-red-600 hover:text-red-400"
-                    size={20}
+                  
+                    <Button variant="outline">
+                      <Edit
+                    
+                    size={16}
+                    onClick={async () => {
+                      setSelectedId(income.id);
+                      document.getElementById("updateIncomeModal").open = true;
+                    }}
+                  />
+                    </Button>
+                    <Button variant="destructive" className="mx-1">
+                   <Trash2
+                    size={16}
                     onClick={async () => {
                       await deleteRecord(
                         `${import.meta.env.VITE_BASE_URL}/personal/incomes/${
@@ -175,6 +180,7 @@ const IncomeDashboard = () => {
                       refetch();
                     }}
                   />
+                    </Button>
                 </td>
               </tr>
             ))}
