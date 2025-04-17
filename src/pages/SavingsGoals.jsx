@@ -3,7 +3,7 @@ import SavingsGoalsDashboard from "../components/SavingsGoal/SavingsGoalsDashboa
 
 const SavingsGoals = () => {
   return (
-    <div>
+    <div className="p-6 bg-gray-100 min-h-screen">
       <SavingsGoalsDashboard />
     </div>
   );
