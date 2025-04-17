@@ -1,6 +1,6 @@
 import React from "react";
 import DashboardHeader from "../Shared/Header/DashboardHeader";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
   const links = [
@@ -15,6 +15,10 @@ const DashboardLayout = () => {
     {
       title: "Incomes",
       to: "/dashboard/incomes",
+    },
+    {
+      title: "SavingsGoals",
+      to: "/dashboard/saving-goals",
     },
   ];
   return (
