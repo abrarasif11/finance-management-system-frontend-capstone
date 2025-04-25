@@ -17,7 +17,7 @@ import {
   splitKeysAndValues,
 } from "../../utils/categoryWiseAmounts";
 import { getTotalOfRecords } from "../../utils/totalAmount";
-import { CirclePlus, Edit, Pencil, Trash2 } from "lucide-react";
+import { CirclePlus, Edit, Edit, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
@@ -70,7 +70,7 @@ const IncomeDashboard = () => {
       return data.data;
     },
   });
-
+  console.log(incomes);
   useEffect(() => {
     refetch();
   }, [selectedRange]);
@@ -98,7 +98,7 @@ const IncomeDashboard = () => {
   const totalPages = Math.ceil(incomes.length / recordsPerPage);
 
   return (
-    <div className="bg-white text-black p-6 rounded-lg">
+    <div className="text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
         <TotalEstimateBlock
@@ -118,78 +118,83 @@ const IncomeDashboard = () => {
       </div>
 
       {/* Income Table */}
-      <div className="border-2 rounded-xl shadow-xl p-6">
-        <div className="flex justify-between items-center">
-          <h2 className="text-xl font-bold mb-4">Recent Incomes</h2>
-          <CirclePlus
+      <Card>
+        <CardHeader className="flex justify-between items-center">
+          <CardTitle className="text-xl font-bold">Recent Incomes</CardTitle>
+          <Button
             onClick={() =>
               document.getElementById("addIncomeModal").showModal()
             }
-          />
+            className="font-normal flex justify-between items-center gap-2"
+          >
+            <CirclePlus />
+            New Expense
+          </Button>
           <AddIncomesModal props={{ user, refetch }} />
-        </div>
-        <table className="min-w-full text-sm text-left text-gray-700">
-          <thead className="bg-gray-100 uppercase text-xs text-gray-600">
-            <tr className="text-center">
-              <th className="px-4 py-3">Source</th>
-              <th className="px-4 py-3">Amount</th>
-              <th className="px-4 py-3">Category</th>
-              <th className="px-4 py-3">Date</th>
-              <th className="px-4 py-3">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentRecords.map((income) => (
-              <tr key={income.id} className="text-center border-b hover:bg-gray-50">
-                <td className="px-4 py-3">{income.source}</td>
-                <td className="px-4 py-3">{income.amount} BDT</td>
-                <td className="px-4 py-3">{income.category}</td>
-                <td className="px-4 py-3">
-                  {income.date.split(" ")[0]} | {income.date.split(" ")[1]}
-                </td>
-                <td className="flex gap-4 justify-center items-center py-3 px-4 ">
-                  
-                  <UpdateIncomeModal
-                    props={{
-                      userId: user?.user?.id,
-                      id: selectedId,
-                      records: incomes,
-                      refetch,
-                    }}
-                  />
-                  
-                    <Button variant="outline">
-                      <Edit
-                    
-                    size={16}
-                    onClick={async () => {
-                      setSelectedId(income.id);
-                      document.getElementById("updateIncomeModal").open = true;
-                    }}
-                  />
-                    </Button>
-                    <Button variant="destructive" className="mx-1">
-                   <Trash2
-                    size={16}
-                    onClick={async () => {
-                      await deleteRecord(
-                        `${import.meta.env.VITE_BASE_URL}/personal/incomes/${
-                          income?.id
-                        }`
-                      );
-                      refetch();
-                    }}
-                  />
-                    </Button>
-                </td>
+        </CardHeader>
+        <CardContent>
+          <table className="min-w-full text-sm text-left text-black">
+            <thead className="bg-gray-100 uppercase text-xs text-gray-600">
+              <tr>
+                <th className="px-4 py-3">Source</th>
+                <th className="px-4 py-3">Amount</th>
+                <th className="px-4 py-3">Category</th>
+                <th className="px-4 py-3">Date</th>
+                <th className="px-4 py-3">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {currentRecords.map((income) => (
+                <tr key={income.id} className="border-b hover:bg-gray-50">
+                  <td className="px-4 py-3">{income.source}</td>
+                  <td className="px-4 py-3">{income.amount} BDT</td>
+                  <td className="px-4 py-3">{income.category}</td>
+                  <td className="px-4 py-3">
+                    {income.date.split(" ")[0]} | {income.date.split(" ")[1]}
+                  </td>
+                  <td>
+                    <Button variant="outline" className="mx-1">
+                      <Edit
+                        size={16}
+                        onClick={async () => {
+                          setSelectedId(income.id);
+                          document.getElementById(
+                            "updateIncomeModal"
+                          ).open = true;
+                        }}
+                      />
+                    </Button>
+                    <UpdateIncomeModal
+                      props={{
+                        userId: user?.user?.id,
+                        id: selectedId,
+                        records: incomes,
+                        refetch,
+                      }}
+                    />
+                    <Button variant="destructive">
+                      <Trash2
+                        size={16}
+                        onClick={async () => {
+                          await deleteRecord(
+                            `${
+                              import.meta.env.VITE_BASE_URL
+                            }/personal/incomes/${income?.id}`
+                          );
+                          refetch();
+                        }}
+                      />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </CardContent>
 
         {/* Pagination */}
         <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
-      </div>
+      </Card>
     </div>
   );
 };
