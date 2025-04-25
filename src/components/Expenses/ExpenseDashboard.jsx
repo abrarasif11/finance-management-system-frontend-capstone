@@ -17,12 +17,13 @@ import {
   splitKeysAndValues,
 } from "../../utils/categoryWiseAmounts";
 import { getTotalOfRecords } from "../../utils/totalAmount";
-import { CirclePlus, Pencil, Trash2 } from "lucide-react";
+import { CirclePlus, Edit, Pencil, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
 import UpdateExpenseModal from "./UpdateExpensesModal";
 import Pagination from "../../Shared/Pagination";
+import { Button } from "../ui/Button";
 
 // Register components
 ChartJS.register(
@@ -98,7 +99,7 @@ const ExpenseDashboard = () => {
   const totalPages = Math.ceil(expenses.length / recordsPerPage);
 
   return (
-    <div className="text-black p-6 rounded-lg">
+    <div className="bg-white  text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
         <TotalEstimateBlock
@@ -128,34 +129,41 @@ const ExpenseDashboard = () => {
           />
           <AddExpensesModal props={{ user, refetch }} />
         </div>
-        <table className="min-w-full bg-white text-black">
-          <thead>
-            <tr>
-              <th className="py-2 px-4 border">Title</th>
-              <th className="py-2 px-4 border">Amount</th>
-              <th className="py-2 px-4 border">Category</th>
-              <th className="py-2 px-4 border">Date</th>
-              <th className="py-2 px-4 border">Actions</th>
+        <table className="min-w-full text-sm text-left text-gray-700">
+          <thead className="bg-gray-100 uppercase text-xs text-gray-600">
+            <tr className="text-center">
+              <th className="px-4 py-3">Title</th>
+              <th className="px-4 py-3">Amount</th>
+              <th className="px-4 py-3">Category</th>
+              <th className="px-4 py-3">Date</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
             {currentRecords.map((expense) => (
-              <tr key={expense.id}>
-                <td className="py-2 px-4 border">{expense.title}</td>
-                <td className="py-2 px-4 border">{expense.amount} BDT</td>
-                <td className="py-2 px-4 border">{expense.category}</td>
-                <td className="py-2 px-4 border">
+              <tr
+                key={expense.id}
+                className="text-center border-b hover:bg-gray-50"
+              >
+                <td className="py-2 px-4 ">{expense.title}</td>
+                <td className="py-2 px-4 ">{expense.amount} BDT</td>
+                <td className="py-2 px-4 ">{expense.category}</td>
+                <td className="py-2 px-4 ">
                   {expense.date.split(" ")[0]} | {expense.date.split(" ")[1]}
                 </td>
-                <td className="flex gap-4 justify-center items-center py-3 px-4 border">
-                  <Pencil
-                    className="text-blue-600 hover:text-blue-400"
-                    size={20}
-                    onClick={async () => {
-                      setSelectedId(expense.id);
-                      document.getElementById("updateExpenseModal").open = true;
-                    }}
-                  />
+                <td className="flex gap-4 justify-center items-center py-3 px-4 ">
+                  <Button variant="outline" className="mx-1">
+                    <Edit
+                      
+                      size={16}
+                      onClick={async () => {
+                        setSelectedId(expense.id);
+                        document.getElementById(
+                          "updateExpenseModal"
+                        ).open = true;
+                      }}
+                    />
+                  </Button>
                   <UpdateExpenseModal
                     props={{
                       userId: user?.user?.id,
@@ -164,18 +172,21 @@ const ExpenseDashboard = () => {
                       refetch,
                     }}
                   />
-                  <Trash2
-                    className="text-red-600 hover:text-red-400"
-                    size={20}
-                    onClick={async () => {
-                      await deleteRecord(
-                        `${import.meta.env.VITE_BASE_URL}/personal/expenses/${
-                          expense?.id
-                        }`
-                      );
-                      refetch();
-                    }}
-                  />
+
+                  <Button variant="destructive">
+                    <Trash2
+                     
+                      size={16}
+                      onClick={async () => {
+                        await deleteRecord(
+                          `${import.meta.env.VITE_BASE_URL}/personal/expenses/${
+                            expense?.id
+                          }`
+                        );
+                        refetch();
+                      }}
+                    />
+                  </Button>
                 </td>
               </tr>
             ))}
