@@ -18,7 +18,6 @@ import {
 } from "../../utils/categoryWiseAmounts";
 import { getTotalOfRecords } from "../../utils/totalAmount";
 import { CirclePlus, Edit, Pencil, Trash2 } from "lucide-react";
-import { CirclePlus, Edit, Pencil, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
