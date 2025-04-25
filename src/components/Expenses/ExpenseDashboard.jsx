@@ -98,7 +98,7 @@ const ExpenseDashboard = () => {
   const totalPages = Math.ceil(expenses.length / recordsPerPage);
 
   return (
-    <div className="bg-white text-black p-6 rounded-lg">
+    <div className="text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
         <TotalEstimateBlock

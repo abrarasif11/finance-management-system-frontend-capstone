@@ -26,7 +26,7 @@ const DashboardLayout = () => {
       <DashboardHeader />
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content p-5 overflow-y-auto">
+        <div className="drawer-content p-5 overflow-y-auto bg-[#F4F6F8]">
           <Outlet />
         </div>
         <div className="drawer-side h-screen overflow-y-scroll">

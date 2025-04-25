@@ -66,3 +66,4 @@ const RecentTransactions = ({ props }) => {
 };
 
 export default RecentTransactions;
+  
