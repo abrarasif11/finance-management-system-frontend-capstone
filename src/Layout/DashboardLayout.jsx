@@ -1,6 +1,6 @@
 import React from "react";
 import DashboardHeader from "../Shared/Header/DashboardHeader";
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 const DashboardLayout = () => {
   const links = [
@@ -16,13 +16,17 @@ const DashboardLayout = () => {
       title: "Incomes",
       to: "/dashboard/incomes",
     },
+    {
+      title: "SavingsGoals",
+      to: "/dashboard/saving-goals",
+    },
   ];
   return (
     <div>
       <DashboardHeader />
       <div className="drawer lg:drawer-open">
         <input id="my-drawer-2" type="checkbox" className="drawer-toggle" />
-        <div className="drawer-content p-5 overflow-y-auto">
+        <div className="drawer-content p-5 overflow-y-auto bg-[#F4F6F8]">
           <Outlet />
         </div>
         <div className="drawer-side h-screen overflow-y-scroll">

@@ -2,6 +2,7 @@ import { FaFilter } from "react-icons/fa";
 import { getCurrentMonthRecords } from "../utils/categoryWiseAmounts";
 import { getTotalOfRecords } from "../utils/totalAmount";
 import { useQuery } from "@tanstack/react-query";
+import { Card } from "../components/ui/card";
 
 const TotalEstimateBlock = ({ props }) => {
   const {
@@ -42,7 +43,7 @@ const TotalEstimateBlock = ({ props }) => {
   const thisMonthTotal = getTotalOfRecords(thisMonthData.data);
 
   return (
-    <div className="border-2 rounded-xl shadow-xl p-6">
+    <Card className="bg-white border-2 rounded-xl shadow-xl p-6">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold mb-4">Total {title}</h2>
         <div className="relative ">
@@ -89,7 +90,7 @@ const TotalEstimateBlock = ({ props }) => {
           {thisMonthData?.month}'{thisMonthData?.year}: {thisMonthTotal} BDT
         </p>
       </div>
-    </div>
+    </Card>
   );
 };
 

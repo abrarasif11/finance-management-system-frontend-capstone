@@ -1,8 +1,9 @@
 // src/components/Dashboard/RecentTransactions.jsx
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Edit, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Pagination from "../../Shared/Pagination";
+import { Button } from "../ui/Button";
 
 const RecentTransactions = ({ props }) => {
   const { transactions } = props;
@@ -25,23 +26,24 @@ const RecentTransactions = ({ props }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow">
-      <h2 className="text-black text-xl font-semibold mb-2">
+    <div className="bg-white rounded-xl shadow-md p-6">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">
         Recent Transactions
       </h2>
-      <table className="text-black w-full table-auto mb-4">
-        <thead>
-          <tr className="bg-gray-200">
-            <th className="p-2">Type</th>
-            <th className="p-2">Title/Source</th>
-            <th className="p-2">Amount</th>
-            <th className="p-2">Category</th>
-            <th className="p-2">Date</th>
+      <table className="min-w-full text-sm text-left text-gray-700">
+        <thead className="bg-gray-100 uppercase text-xs text-gray-600">
+          <tr className="text-center border-b hover:bg-gray-50">
+            <th className="px-4 py-3">Type</th>
+            <th className="px-4 py-3">Title/Source</th>
+            <th className="px-4 py-3">Amount</th>
+            <th className="px-4 py-3">Category</th>
+            <th className="px-4 py-3">Date</th>
+            <th className="px-4 py-3">Action</th>
           </tr>
         </thead>
         <tbody>
           {currentRecords.map((trx) => (
-            <tr key={trx.id} className="border-t text-center">
+            <tr key={trx.id} className="border-t text-center border-b hover:bg-gray-50">
               <td
                 className={`p-2 ${
                   (trx.source && "text-green-500") ||
@@ -54,6 +56,14 @@ const RecentTransactions = ({ props }) => {
               <td className="p-2">৳{trx.amount}</td>
               <td className="p-2">{trx.category}</td>
               <td className="p-2">{trx.date}</td>
+              <td>
+                    <Button variant="outline" className="mx-1">
+                      <Edit size={16} />
+                    </Button>
+                    <Button variant="destructive">
+                      <Trash2 size={16} />
+                    </Button>
+                  </td>
             </tr>
           ))}
         </tbody>
@@ -66,3 +76,4 @@ const RecentTransactions = ({ props }) => {
 };
 
 export default RecentTransactions;
+  

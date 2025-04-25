@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import Filters from "../components/Dashboard/Filters";
-import StatsCards from "../components/Dashboard/StatsCard";
-import ChartsSection from "../components/Dashboard/ChartsSection";
-import RecentTransactions from "../components/Dashboard/RecentTransactions";
+import StatsCards from "../components/DashboardHome/StatsCard";
+import ChartsSection from "../components/DashboardHome/ChartsSection";
+import RecentTransactions from "../components/DashboardHome/RecentTransactions";
 import { useUser } from "../contexts/AuthContext";
 import { getTotalOfRecords } from "../utils/totalAmount";
 import axios from "axios";
