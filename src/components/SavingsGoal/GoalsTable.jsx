@@ -5,12 +5,22 @@ import { Button } from "../ui/Button";
 import toast from "react-hot-toast";
 import { useUser } from "../../contexts/AuthContext";
 
-const GoalsTable = ({ goals }) => {
+const GoalsTable = ({ goals, onAddNew }) => {
   const { user } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [editGoalData, setEditGoalData] = useState({});
   const [selectedGoalId, setSelectedGoalId] = useState(null);
 
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [newGoalData, setNewGoalData] = useState({
+    title: "",
+    target_amount: "",
+    description: "",
+    start_date: "",
+    end_date: "",
+  });
+
+  // Edit Modal Functions
   const handleOpen = (goal) => {
     setEditGoalData(goal);
     setSelectedGoalId(goal.id);
@@ -29,7 +39,7 @@ const GoalsTable = ({ goals }) => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     try {
       const response = await fetch(
         `https://api-financial-management-system.vercel.app/api/v1/personal/savings-goals/${selectedGoalId}?user_id=${user?.user?.id}`,
@@ -42,9 +52,10 @@ const GoalsTable = ({ goals }) => {
         }
       );
 
-      if (response.status == parseInt(200)) {
+      if (response.status === 200) {
         toast.success("Goal updated successfully");
         handleClose();
+        onAddNew(); // refresh table
       } else {
         toast.error("Failed to update goal");
       }
@@ -54,6 +65,7 @@ const GoalsTable = ({ goals }) => {
     }
   };
 
+  // Delete Function
   const handleDelete = async (goalId) => {
     try {
       const response = await fetch(
@@ -65,6 +77,7 @@ const GoalsTable = ({ goals }) => {
 
       if (response.ok) {
         toast.success("Goal deleted successfully");
+        onAddNew(); // refresh table
       } else {
         toast.error("Failed to delete goal");
       }
@@ -74,9 +87,67 @@ const GoalsTable = ({ goals }) => {
     }
   };
 
+  // Add Modal Functions
+  const handleAddNewOpen = () => {
+    setIsAddModalOpen(true);
+  };
+
+  const handleAddNewClose = () => {
+    setIsAddModalOpen(false);
+    setNewGoalData({
+      title: "",
+      target_amount: "",
+      description: "",
+      start_date: "",
+      end_date: "",
+    });
+  };
+
+  const handleAddInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewGoalData({ ...newGoalData, [name]: value });
+  };
+
+  const handleAddSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(
+        `https://api-financial-management-system.vercel.app/api/v1/personal/savings-goals`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(newGoalData),
+        }
+      );
+
+      if (response.ok) {
+        toast.success("New budget added successfully");
+        handleAddNewClose();
+        onAddNew(); // refresh table
+      } else {
+        toast.error("Failed to add new budget");
+        console.log(response)
+      }
+    } catch (error) {
+      console.error("Add new budget error:", error);
+      toast.error("Error adding new budget");
+    }
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">Savings Goals</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Savings Goals</h2>
+        <button
+          onClick={handleAddNewOpen}
+          className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+        >
+          Add New Budget
+        </button>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-left text-gray-700">
           <thead className="bg-gray-100 uppercase text-xs text-gray-600">
@@ -156,11 +227,10 @@ const GoalsTable = ({ goals }) => {
         </table>
       </div>
 
-      {/* Modal */}
+      {/* Edit Modal */}
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10">
           <div className="bg-white rounded-lg shadow-lg p-6 w-[480px]">
-            {/* Modal Header */}
             <div className="flex justify-between items-center">
               <h2 className="text-lg font-bold">Update Savings Goal</h2>
               <button
@@ -171,16 +241,11 @@ const GoalsTable = ({ goals }) => {
               </button>
             </div>
 
-            {/* Modal Form */}
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
-              {/* Title */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Title
                 </label>
-                <small className="text-gray-500">
-                  Current: {editGoalData.title}
-                </small>
                 <input
                   type="text"
                   name="title"
@@ -191,14 +256,10 @@ const GoalsTable = ({ goals }) => {
                 />
               </div>
 
-              {/* Target Amount */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Target Amount
                 </label>
-                <small className="text-gray-500">
-                  Current: {editGoalData.target_amount}
-                </small>
                 <input
                   type="number"
                   name="target_amount"
@@ -209,7 +270,6 @@ const GoalsTable = ({ goals }) => {
                 />
               </div>
 
-              {/* Goal Description */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Description
@@ -220,11 +280,10 @@ const GoalsTable = ({ goals }) => {
                   value={editGoalData.description || ""}
                   onChange={handleInputChange}
                   className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
-                  placeholder="e.g. Buying a 4060 GPU"
+                  placeholder="e.g. Buying a GPU"
                 />
               </div>
 
-              {/* Start Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   Start Date
@@ -234,11 +293,10 @@ const GoalsTable = ({ goals }) => {
                   name="start_date"
                   value={editGoalData.start_date || ""}
                   onChange={handleInputChange}
-                  className="w-full mt-1 p-2 border rounded bg-white focus:ring text-black focus:ring-blue-300"
+                  className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
                 />
               </div>
 
-              {/* End Date */}
               <div>
                 <label className="block text-sm font-medium text-gray-700">
                   End Date
@@ -248,16 +306,80 @@ const GoalsTable = ({ goals }) => {
                   name="end_date"
                   value={editGoalData.end_date || ""}
                   onChange={handleInputChange}
-                  className="w-full mt-1 p-2 border rounded bg-white focus:ring text-black focus:ring-blue-300"
+                  className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
                 />
               </div>
 
-              {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full px-4 py-2 bg-green-500 font-semibold text-white rounded transition hover:bg-green-600"
+                className="w-full px-4 py-2 bg-green-500 font-semibold text-white rounded hover:bg-green-600"
               >
                 Update
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Add New Modal */}
+      {isAddModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/10">
+          <div className="bg-white rounded-lg shadow-lg p-6 w-[480px]">
+            <div className="flex justify-between items-center">
+              <h2 className="text-lg text-black font-bold">Add New Budget</h2>
+              <button
+                onClick={handleAddNewClose}
+                className="text-gray-500 hover:text-gray-700"
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleAddSubmit} className="mt-4 space-y-4">
+              <input
+                type="text"
+                name="title"
+                value={newGoalData.title}
+                onChange={handleAddInputChange}
+                placeholder="Enter goal title"
+                className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
+              />
+              <input
+                type="number"
+                name="target_amount"
+                value={newGoalData.target_amount}
+                onChange={handleAddInputChange}
+                placeholder="Enter target amount"
+                className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
+              />
+              <input
+                type="text"
+                name="description"
+                value={newGoalData.description}
+                onChange={handleAddInputChange}
+                placeholder="Enter description"
+                className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
+              />
+              <input
+                type="date"
+                name="start_date"
+                value={newGoalData.start_date}
+                onChange={handleAddInputChange}
+                className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
+              />
+              <input
+                type="date"
+                name="end_date"
+                value={newGoalData.end_date}
+                onChange={handleAddInputChange}
+                className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
+              />
+
+              <button
+                type="submit"
+                className="w-full px-4 py-2 bg-blue-600 font-semibold text-white rounded hover:bg-blue-700"
+              >
+                Add Budget
               </button>
             </form>
           </div>
