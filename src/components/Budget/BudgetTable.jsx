@@ -1,7 +1,11 @@
 import { useState, useEffect } from "react";
 import Pagination from "../../Shared/Pagination";
 import { Button } from "../ui/Button";
-import { Edit, Edit2, Plus, Trash2 } from "lucide-react";
+import { Edit, Plus, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
+import axios from "axios";
+import { data } from "autoprefixer";
+import { useUser } from "../../contexts/AuthContext";
 
 const BudgetTable = ({
   budgets,
@@ -10,22 +14,33 @@ const BudgetTable = ({
   onDelete,
   onAddSubEvent,
 }) => {
+  const { user } = useUser();
   const [filterType, setFilterType] = useState("All");
   const [sortOption, setSortOption] = useState("amount-asc");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBudgets, setFilteredBudgets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [newBudget, setNewBudget] = useState({
+    title: "",
+    total_amount: "",
+    remaining: "",
+    type: "Monthly",
+    start_date: "",
+    end_date: "",
+    user_id:  parseInt(user?.user?.id),
+  });
+  const [editBudget, setEditBudget] = useState(null);
   const rowsPerPage = 10;
 
   useEffect(() => {
     let temp = [...budgets];
 
-    // Filter by type
     if (filterType !== "All") {
       temp = temp.filter((budget) => budget.type === filterType);
     }
 
-    // Search across title, type, start_date, end_date
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       temp = temp.filter(
@@ -37,7 +52,6 @@ const BudgetTable = ({
       );
     }
 
-    // Sort
     switch (sortOption) {
       case "amount-asc":
         temp.sort((a, b) => a.total_amount - b.total_amount);
@@ -56,14 +70,54 @@ const BudgetTable = ({
     }
 
     setFilteredBudgets(temp);
-    setCurrentPage(1); // Reset to first page when filters change
+    setCurrentPage(1);
   }, [budgets, filterType, sortOption, searchQuery]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentRows = filteredBudgets.slice(indexOfFirstRow, indexOfLastRow);
-
   const totalPages = Math.ceil(filteredBudgets.length / rowsPerPage);
+
+  // Handlers
+  const handleAddNewBudget = async () => {
+    try {
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/personal/budgets`,
+        newBudget
+      );
+      console.log(res);
+      if (res.status == 201) {
+        // setShowAddModal(false);
+        // setNewBudget({
+        //   title: "",
+        //   total_amount: "",
+        //   remaining: "",
+        //   type: "Monthly",
+        //   start_date: "",
+        //   end_date: "",
+        //   user_id: null,
+        // });
+        toast.success("New Budget Entered!");
+      } else {
+        toast.error("Failed to add new budget!");
+      }
+    } catch (error) {
+      toast.error("Failed to add new budget!");
+      console.log(error.message);
+    }
+  };
+
+  const handleEditBudget = () => {
+    onUpdate(editBudget);
+    setShowEditModal(false);
+    setEditBudget(null);
+  };
+
+  const handleDeleteBudget = (budget) => {
+    if (confirm(`Are you sure you want to delete '${budget.title}'?`)) {
+      onDelete(budget);
+    }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
@@ -106,7 +160,7 @@ const BudgetTable = ({
         {/* Right: Add Button */}
         <div>
           <button
-            onClick={onAddNew}
+            onClick={() => setShowAddModal(true)}
             className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
           >
             Add New Budget
@@ -119,15 +173,15 @@ const BudgetTable = ({
         <table className="min-w-full text-sm text-left text-gray-700">
           <thead className="bg-gray-100 uppercase text-xs text-gray-600">
             <tr>
-              <th className="py-2 px-4 border-b text-left">Title</th>
-              <th className="py-2 px-4 border-b text-left">Total</th>
-              <th className="py-2 px-4 border-b text-left">Remaining</th>
-              <th className="py-2 px-4 border-b text-left">Progress</th>
-              <th className="py-2 px-4 border-b text-left">Type</th>
-              <th className="py-2 px-4 border-b text-left">Start Date</th>
-              <th className="py-2 px-4 border-b text-left">End Date</th>
-              <th className="py-2 px-4 border-b text-left">Status</th>
-              <th className="py-2 px-4 border-b text-left">Actions</th>
+              <th className="py-2 px-4 border-b">Title</th>
+              <th className="py-2 px-4 border-b">Total</th>
+              <th className="py-2 px-4 border-b">Remaining</th>
+              <th className="py-2 px-4 border-b">Progress</th>
+              <th className="py-2 px-4 border-b">Type</th>
+              <th className="py-2 px-4 border-b">Start Date</th>
+              <th className="py-2 px-4 border-b">End Date</th>
+              <th className="py-2 px-4 border-b">Status</th>
+              <th className="py-2 px-4 border-b">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -136,12 +190,9 @@ const BudgetTable = ({
                 ((budget.total_amount - budget.remaining) /
                   budget.total_amount) *
                 100;
-
               return (
                 <tr key={budget.id} className="border-b hover:bg-gray-50">
-                  <td className="px-4 py-3 font-medium text-gray-900">
-                    {budget.title}
-                  </td>
+                  <td className="px-4 py-3">{budget.title}</td>
                   <td className="px-4 py-3">{budget.total_amount}</td>
                   <td className="px-4 py-3">{budget.remaining}</td>
                   <td className="flex items-center gap-1 px-4 py-3">
@@ -163,37 +214,40 @@ const BudgetTable = ({
                   <td className="px-4 py-3">
                     <span
                       className={`inline-block px-2 py-1 rounded text-xs font-semibold text-white ${
-                        budget?.total_amount == budget?.remaining
+                        budget.total_amount === budget.remaining
                           ? "bg-red-600"
-                          : budget?.total_amount > budget?.remaining &&
-                            budget?.total_amount != budget?.remaining
+                          : budget.total_amount > budget.remaining
                           ? "bg-yellow-500"
                           : "bg-green-500"
                       }`}
                     >
-                      {budget?.total_amount == budget?.remaining
+                      {budget.total_amount === budget.remaining
                         ? "Assigned"
-                        : budget?.total_amount > budget?.remaining &&
-                          budget?.total_amount != budget?.remaining
+                        : budget.total_amount > budget.remaining
                         ? "In Progress"
                         : "Completed"}
                     </span>
                   </td>
-                  <td className="py-2 px-4 border-b space-x-2">
+                  <td className="py-2 px-4 space-x-2 flex">
                     <Button
                       variant="outline"
                       onClick={() => onAddSubEvent(budget)}
-                      className="text-green-600 hover:underline"
                       title="Add New Entry"
                     >
                       <Plus size={18} />
                     </Button>
-                    <Button variant="outline" onClick={() => onUpdate(budget)}>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setEditBudget({ ...budget });
+                        setShowEditModal(true);
+                      }}
+                    >
                       <Edit size={18} />
                     </Button>
                     <Button
                       variant="destructive"
-                      onClick={() => onDelete(budget)}
+                      onClick={() => handleDeleteBudget(budget)}
                     >
                       <Trash2 size={18} />
                     </Button>
@@ -205,8 +259,126 @@ const BudgetTable = ({
         </table>
       </div>
 
-      {/* Pagination Controls */}
+      {/* Pagination */}
       <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
+
+      {/* Add Modal */}
+      {showAddModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-md w-1/2 space-y-4">
+            <h2 className="text-black text-lg font-semibold">Add New Budget</h2>
+            <input
+              type="text"
+              placeholder="Title"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={newBudget.title}
+              onChange={(e) =>
+                setNewBudget({ ...newBudget, title: e.target.value })
+              }
+            />
+            <input
+              type="number"
+              placeholder="Total Amount"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={newBudget.total_amount}
+              onChange={(e) =>
+                setNewBudget({
+                  ...newBudget,
+                  total_amount: parseFloat(e.target.value),
+                })
+              }
+            />
+            <input
+              type="number"
+              placeholder="Remaining"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={newBudget.remaining}
+              onChange={(e) =>
+                setNewBudget({
+                  ...newBudget,
+                  remaining: parseFloat(e.target.value),
+                })
+              }
+            />
+            <select
+              value={newBudget.type}
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              onChange={(e) =>
+                setNewBudget({ ...newBudget, type: e.target.value })
+              }
+            >
+              <option>Monthly</option>
+              <option>Annually</option>
+            </select>
+            <div className="w-full flex items-center justify-between gap-4">
+              <input
+                type="date"
+                className="w-full block text-black bg-white border border-gray-400 outline-none input"
+                value={newBudget.start_date}
+                onChange={(e) =>
+                  setNewBudget({ ...newBudget, start_date: e.target.value })
+                }
+              />
+              <input
+                type="date"
+                className="w-full block text-black bg-white border border-gray-400 outline-none input"
+                value={newBudget.end_date}
+                onChange={(e) =>
+                  setNewBudget({ ...newBudget, end_date: e.target.value })
+                }
+              />
+            </div>
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowAddModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddNewBudget}>Add</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Modal */}
+      {showEditModal && editBudget && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-md w-96 space-y-4">
+            <h2 className="text-lg font-semibold">Edit Budget</h2>
+            <input
+              type="text"
+              className="input"
+              value={editBudget.title}
+              onChange={(e) =>
+                setEditBudget({ ...editBudget, title: e.target.value })
+              }
+            />
+            <input
+              type="number"
+              className="input"
+              value={editBudget.total_amount}
+              onChange={(e) =>
+                setEditBudget({
+                  ...editBudget,
+                  total_amount: parseFloat(e.target.value),
+                })
+              }
+            />
+            <input
+              type="date"
+              className="input"
+              value={editBudget.end_date}
+              onChange={(e) =>
+                setEditBudget({ ...editBudget, end_date: e.target.value })
+              }
+            />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowEditModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleEditBudget}>Update</Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
