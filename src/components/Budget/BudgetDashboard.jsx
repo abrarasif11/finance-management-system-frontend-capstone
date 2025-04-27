@@ -1,13 +1,13 @@
-import { useState, useEffect } from 'react';
-import BudgetSummary from './BudgetSummary';
 
-import BudgetTable from './BudgetTable';
-import { useUser } from '../../contexts/AuthContext';
+import { useState, useEffect } from "react";
+import BudgetSummary from "./BudgetSummary";
+import BudgetTable from "./BudgetTable";
+import { useUser } from "../../contexts/AuthContext";
 
 const BudgetDashboard = () => {
   const [budgets, setBudgets] = useState([]);
   const [filteredBudgets, setFilteredBudgets] = useState([]);
-  const [typeFilter, setTypeFilter] = useState('All');
+  const [typeFilter, setTypeFilter] = useState("All");
 
   const { user } = useUser();
   useEffect(() => {
@@ -25,7 +25,7 @@ const BudgetDashboard = () => {
   console.log(budgets);
   const handleFilterChange = (type) => {
     setTypeFilter(type);
-    if (type === 'All') {
+    if (type === "All") {
       setFilteredBudgets(budgets);
     } else {
       setFilteredBudgets(budgets.filter((b) => b.type === type));
