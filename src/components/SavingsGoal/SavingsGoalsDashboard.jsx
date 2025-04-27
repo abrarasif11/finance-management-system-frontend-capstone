@@ -53,11 +53,11 @@ const SavingsGoalsDashboard = () => {
         completedGoals={completedGoals}
         inProgressGoals={inProgressGoals}
       />
-      <PieChart
+      {/* <PieChart
         completedGoals={completedGoals}
         inProgressGoals={inProgressGoals}
         canceledGoals={canceledGoals}
-      />
+      /> */}
       <GoalsTable goals={goals} />
     </div>
   );

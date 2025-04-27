@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import BudgetSummary from "./BudgetSummary";
 import BudgetTable from "./BudgetTable";
@@ -7,6 +8,7 @@ const BudgetDashboard = () => {
   const [budgets, setBudgets] = useState([]);
   const [filteredBudgets, setFilteredBudgets] = useState([]);
   const [typeFilter, setTypeFilter] = useState("All");
+
   const { user } = useUser();
   useEffect(() => {
     fetch(
