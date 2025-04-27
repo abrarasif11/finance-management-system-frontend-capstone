@@ -13,6 +13,7 @@ import Features from "../components/Features/Features";
 import Incomes from "../pages/Incomes";
 import Dashboard from "../pages/Dashboard";
 import SavingsGoals from "../pages/SavingsGoals";
+import Budget from "../pages/Budget";
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/saving-goals",
         element: <SavingsGoals />,
+      },
+      {
+        path: "/dashboard/budgets",
+        element: <Budget />,
       },
     ],
   },

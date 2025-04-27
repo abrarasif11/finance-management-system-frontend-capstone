@@ -42,7 +42,7 @@ const ExpenseDashboard = () => {
   // State to manage filter
   const [rangedExpenses, setRangedExpenses] = useState([]);
   const [selectedId, setSelectedId] = useState();
-  const [selectedRange, setSelectedRange] = useState(30);
+  const [selectedRange, setSelectedRange] = useState(0);
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
@@ -193,24 +193,6 @@ const ExpenseDashboard = () => {
           </tbody>
         </table>
 
-        {/* Pagination */}
-        {/* <div className="flex justify-center mt-4 gap-2">
-          {Array.from({
-            length: Math.ceil(expenses.length / itemsPerPage),
-          }).map((_, index) => (
-            <button
-              key={index + 1}
-              onClick={() => handlePageChange(index + 1)}
-              className={`px-3 py-1 rounded ${
-                currentPage === index + 1
-                  ? "bg-green-500 text-white"
-                  : "bg-gray-300 hover:bg-gray-200"
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div> */}
         <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
       </div>
     </div>
