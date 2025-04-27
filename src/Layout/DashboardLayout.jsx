@@ -20,6 +20,10 @@ const DashboardLayout = () => {
       title: "SavingsGoals",
       to: "/dashboard/saving-goals",
     },
+    {
+      title: "Budget",
+      to: "/dashboard/budgets",
+    },
   ];
   return (
     <div>

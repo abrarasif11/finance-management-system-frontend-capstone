@@ -24,6 +24,7 @@ import { deleteRecord } from "../../utils/API_Operations/apiOperations";
 import UpdateIncomeModal from "./UpdateIncomesModal";
 import Pagination from "../../Shared/Pagination";
 import { Button } from "../ui/Button";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 // Register components
 ChartJS.register(
@@ -41,7 +42,7 @@ const IncomeDashboard = () => {
 
   // State to manage filter
   const [selectedId, setSelectedId] = useState();
-  const [selectedRange, setSelectedRange] = useState(30);
+  const [selectedRange, setSelectedRange] = useState(0);
   const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 5;
