@@ -4,8 +4,10 @@ import { Button } from "../ui/Button";
 import { Edit, Plus, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { data } from "autoprefixer";
 import { useUser } from "../../contexts/AuthContext";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
 
 const BudgetTable = ({
   budgets,
@@ -16,12 +18,15 @@ const BudgetTable = ({
 }) => {
   const { user } = useUser();
   const [filterType, setFilterType] = useState("All");
+  const [filterMonth, setFilterMonth] = useState("All");
+  const [filterYear, setFilterYear] = useState("All");
   const [sortOption, setSortOption] = useState("amount-asc");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredBudgets, setFilteredBudgets] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [reportFormat, setReportFormat] = useState("PDF");
   const [newBudget, setNewBudget] = useState({
     title: "",
     total_amount: "",
@@ -29,18 +34,56 @@ const BudgetTable = ({
     type: "Monthly",
     start_date: "",
     end_date: "",
-    user_id:  parseInt(user?.user?.id),
+    user_id: parseInt(user?.user?.id),
   });
   const [editBudget, setEditBudget] = useState(null);
   const rowsPerPage = 10;
 
+  // Generate list of years (current year and past 5 years)
+  const currentYear = new Date().getFullYear();
+  const years = ["All", ...Array.from({ length: 6 }, (_, i) => currentYear - i)];
+  const months = [
+    "All",
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   useEffect(() => {
     let temp = [...budgets];
 
+    // Apply type filter
     if (filterType !== "All") {
       temp = temp.filter((budget) => budget.type === filterType);
     }
 
+    // Apply month filter
+    if (filterMonth !== "All") {
+      const monthIndex = months.indexOf(filterMonth) - 1; // -1 because "All" is first
+      temp = temp.filter((budget) => {
+        const startDate = new Date(budget.start_date);
+        return startDate.getMonth() === monthIndex;
+      });
+    }
+
+    // Apply year filter
+    if (filterYear !== "All") {
+      temp = temp.filter((budget) => {
+        const startDate = new Date(budget.start_date);
+        return startDate.getFullYear() === parseInt(filterYear);
+      });
+    }
+
+    // Apply search query
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       temp = temp.filter(
@@ -52,6 +95,7 @@ const BudgetTable = ({
       );
     }
 
+    // Apply sorting
     switch (sortOption) {
       case "amount-asc":
         temp.sort((a, b) => a.total_amount - b.total_amount);
@@ -71,7 +115,7 @@ const BudgetTable = ({
 
     setFilteredBudgets(temp);
     setCurrentPage(1);
-  }, [budgets, filterType, sortOption, searchQuery]);
+  }, [budgets, filterType, filterMonth, filterYear, sortOption, searchQuery]);
 
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
@@ -85,18 +129,7 @@ const BudgetTable = ({
         `${import.meta.env.VITE_BASE_URL}/personal/budgets`,
         newBudget
       );
-      console.log(res);
-      if (res.status == 201) {
-        // setShowAddModal(false);
-        // setNewBudget({
-        //   title: "",
-        //   total_amount: "",
-        //   remaining: "",
-        //   type: "Monthly",
-        //   start_date: "",
-        //   end_date: "",
-        //   user_id: null,
-        // });
+      if (res.status === 201) {
         toast.success("New Budget Entered!");
       } else {
         toast.error("Failed to add new budget!");
@@ -119,6 +152,86 @@ const BudgetTable = ({
     }
   };
 
+  const generateReport = () => {
+    // Debug log to verify filtered data
+    console.log("Filtered Budgets for Report:", filteredBudgets);
+
+    const reportData = filteredBudgets.map((budget) => ({
+      Title: budget.title,
+      Total: budget.total_amount,
+      Remaining: budget.remaining,
+      Progress: `${
+        ((budget.total_amount - budget.remaining) / budget.total_amount) * 100
+      }%`,
+      Type: budget.type,
+      "Start Date": budget.start_date.split(" ")[0],
+      "End Date": budget.end_date.split(" ")[0],
+      Status:
+        budget.total_amount === budget.remaining
+          ? "Assigned"
+          : budget.total_amount > budget.remaining
+          ? "In Progress"
+          : "Completed",
+    }));
+
+    if (reportFormat === "PDF") {
+      const doc = new jsPDF();
+      doc.text("Budget Report", 14, 20);
+      autoTable(doc, {
+        startY: 30,
+        head: [
+          [
+            "Title",
+            "Total",
+            "Remaining",
+            "Progress",
+            "Type",
+            "Start Date",
+            "End Date",
+            "Status",
+          ],
+        ],
+        body: reportData.map((row) => Object.values(row)),
+        theme: "striped",
+        headStyles: { fillColor: [22, 160, 220] },
+      });
+      doc.save("budget_report.pdf");
+    } else if (reportFormat === "Excel") {
+      const ws = XLSX.utils.json_to_sheet(reportData);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "Budgets");
+      XLSX.writeFile(wb, "budget_report.xlsx");
+    } else if (reportFormat === "CSV") {
+      const headers = [
+        "Title",
+        "Total",
+        "Remaining",
+        "Progress",
+        "Type",
+        "Start Date",
+        "End Date",
+        "Status",
+      ];
+      const csvContent = [
+        headers.join(","),
+        ...reportData.map((row) =>
+          headers
+            .map((header) => `"${row[header]}"`)
+            .join(",")
+        ),
+      ].join("\n");
+      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", "budget_report.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+    toast.success(`${reportFormat} report generated successfully!`);
+  };
+
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
       {/* Top Bar */}
@@ -133,6 +246,28 @@ const BudgetTable = ({
             <option value="All">All Types</option>
             <option value="Monthly">Monthly</option>
             <option value="Annually">Annually</option>
+          </select>
+          <select
+            value={filterMonth}
+            onChange={(e) => setFilterMonth(e.target.value)}
+            className="text-sm text-black p-2 rounded-full bg-green-200 border border-green-500"
+          >
+            {months.map((month) => (
+              <option key={month} value={month}>
+                {month}
+              </option>
+            ))}
+          </select>
+          <select
+            value={filterYear}
+            onChange={(e) => setFilterYear(e.target.value)}
+            className="text-sm text-black p-2 rounded-full bg-green-200 border border-green-500"
+          >
+            {years.map((year) => (
+              <option key={year} value={year}>
+                {year}
+              </option>
+            ))}
           </select>
           <select
             value={sortOption}
@@ -157,8 +292,23 @@ const BudgetTable = ({
           />
         </div>
 
-        {/* Right: Add Button */}
-        <div>
+        {/* Right: Add Button + Report Generation */}
+        <div className="flex gap-2">
+          <select
+            value={reportFormat}
+            onChange={(e) => setReportFormat(e.target.value)}
+            className="text-sm text-black p-2 rounded-full bg-green-200 border border-green-500"
+          >
+            <option value="PDF">PDF</option>
+            <option value="Excel">Excel</option>
+            <option value="CSV">CSV</option>
+          </select>
+          <button
+            onClick={generateReport}
+            className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
+          >
+            Generate Report
+          </button>
           <button
             onClick={() => setShowAddModal(true)}
             className="bg-blue-600 text-white p-2 rounded hover:bg-blue-700"
