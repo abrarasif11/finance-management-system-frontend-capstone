@@ -21,6 +21,7 @@ const BudgetDashboard = () => {
       });
   }, []);
   console.log(budgets);
+  
   const handleFilterChange = (type) => {
     setTypeFilter(type);
     if (type === "All") {
