@@ -25,6 +25,7 @@ import UpdateIncomeModal from "./UpdateIncomesModal";
 import Pagination from "../../Shared/Pagination";
 import { Button } from "../ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 // Register components
 ChartJS.register(
@@ -59,6 +60,7 @@ const IncomeDashboard = () => {
     data: incomes = [],
     isError,
     isFetching,
+    isLoading,
     refetch,
   } = useQuery({
     queryKey: ["incomes", selectedRange],
@@ -98,7 +100,9 @@ const IncomeDashboard = () => {
   const currentRecords = incomes.slice(firstIndex, lastIndex);
   const totalPages = Math.ceil(incomes.length / recordsPerPage);
 
-  return (
+  return isLoading && isFetching ? (
+    <LoadingSpinner />
+  ) : (
     <div className="text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}

@@ -4,10 +4,8 @@ import ExpenseDashboard from "../components/Expenses/ExpenseDashboard";
 const Expenses = () => {
   return (
     <div>
-      <div>
-        {/* <AddExpensesForm /> */}
-        <ExpenseDashboard />
-      </div>
+      {/* <AddExpensesForm /> */}
+      <ExpenseDashboard />
     </div>
   );
 };

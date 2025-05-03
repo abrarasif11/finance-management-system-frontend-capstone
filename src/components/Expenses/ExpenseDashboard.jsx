@@ -24,6 +24,7 @@ import { deleteRecord } from "../../utils/API_Operations/apiOperations";
 import UpdateExpenseModal from "./UpdateExpensesModal";
 import Pagination from "../../Shared/Pagination";
 import { Button } from "../ui/Button";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 // Register components
 ChartJS.register(
@@ -59,6 +60,7 @@ const ExpenseDashboard = () => {
     data: expenses = [],
     isError,
     isFetching,
+    isLoading,
     refetch,
   } = useQuery({
     queryKey: ["expenses", selectedRange],
@@ -98,7 +100,9 @@ const ExpenseDashboard = () => {
   const currentRecords = expenses.slice(firstIndex, lastIndex);
   const totalPages = Math.ceil(expenses.length / recordsPerPage);
 
-  return (
+  return isLoading && isFetching ? (
+    <LoadingSpinner />
+  ) : (
     <div className="bg-white  text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
@@ -154,7 +158,6 @@ const ExpenseDashboard = () => {
                 <td className="flex gap-4 justify-center items-center py-3 px-4 ">
                   <Button variant="outline" className="mx-1">
                     <Edit
-                      
                       size={16}
                       onClick={async () => {
                         setSelectedId(expense.id);
@@ -175,7 +178,6 @@ const ExpenseDashboard = () => {
 
                   <Button variant="destructive">
                     <Trash2
-                     
                       size={16}
                       onClick={async () => {
                         await deleteRecord(

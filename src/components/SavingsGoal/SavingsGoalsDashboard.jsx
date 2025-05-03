@@ -6,33 +6,41 @@ import TopCards from "./TopCards";
 import GoalsTable from "./GoalsTable";
 import PieChart from "./PieChart";
 import { useUser } from "../../contexts/AuthContext";
+import BiYearlyGoalsBar from "./BiYearlyGoalsBar";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const SavingsGoalsDashboard = () => {
   const { user } = useUser();
   const [goals, setGoals] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchGoals = async () => {
       try {
+        setLoading(true);
         const response = await fetch(
           `https://api-financial-management-system.vercel.app/api/v1/personal/savings-goals?user_id=${user?.user?.id}`
         );
 
         const data = await response.json();
-        setGoals(data.data); 
-        setLoading(false);
+        setGoals(data.data);
       } catch (error) {
         console.error("Error fetching goals:", error);
+      } finally {
         setLoading(false);
       }
     };
 
     fetchGoals();
   }, [user?.user?.id]);
-  console.log(goals);
+
+  // Loading Component
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   const totalGoals = goals.length;
@@ -58,6 +66,7 @@ const SavingsGoalsDashboard = () => {
         inProgressGoals={inProgressGoals}
         canceledGoals={canceledGoals}
       /> */}
+      <BiYearlyGoalsBar />
       <GoalsTable goals={goals} />
     </div>
   );
