@@ -54,7 +54,7 @@ const UpdateExpenseModal = ({ props }) => {
         <form
           onSubmit={handleSubmit(submitHandler)}
           ref={formRef}
-          className="space-y-4"
+          className="text-left space-y-4"
         >
           {/* Title Field */}
           <div>

@@ -30,7 +30,7 @@ const PieChart = ({ completedGoals, inProgressGoals, canceledGoals }) => {
   };
 
   return (
-    <div className="p-4 bg-white rounded-lg shadow w-full max-w-md">
+    <div className="p-4 bg-white rounded-lg shadow-xl w-full max-w-md col-span-1">
       <h2 className="text-xl font-semibold text-black mb-2">Goals Overview</h2>
       <div className="w-[300px] h-[300px] mx-auto">
         <Pie data={data} options={options} />

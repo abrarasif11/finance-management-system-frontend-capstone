@@ -12,7 +12,7 @@ const Home = () => {
       <Banner1 />
       <Features/>
       {/* <Banner2 /> */}
-      <Workflow/>
+      {/* <Workflow/> */}
       <Pricing/>
       <Feedback />
       {/* <ContactBanner /> */}

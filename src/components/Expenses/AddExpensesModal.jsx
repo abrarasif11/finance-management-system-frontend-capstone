@@ -131,7 +131,7 @@ const AddExpensesModal = ({ props }) => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-secondary text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+            className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
           >
             Add Expense
           </button>

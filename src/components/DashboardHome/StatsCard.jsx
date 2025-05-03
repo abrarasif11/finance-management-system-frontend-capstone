@@ -6,21 +6,30 @@ import { getTotalOfRecords } from "../../utils/totalAmount";
 const StatsCards = ({ props }) => {
   const { totalExpenses, totalIncomes } = props;
   const savingsRate = totalIncomes
-  ? ((totalIncomes - totalExpenses) / totalIncomes) * 100
-  : 0;
+    ? ((totalIncomes - totalExpenses) / totalIncomes) * 100
+    : 0;
+  const netBalance = totalIncomes - totalExpenses;
   const stats = [
-    { label: "Total Income", value: `৳${totalIncomes}`, color: "bg-green-500" },
+    {
+      label: "Total Income",
+      value: `৳${totalIncomes.toFixed(2)}`,
+      color: "bg-green-500",
+    },
     {
       label: "Total Expenses",
-      value: `৳${totalExpenses}`,
+      value: `৳${totalExpenses.toFixed(2)}`,
       color: "bg-red-500",
     },
     {
       label: "Net Balance",
-      value: `৳${totalIncomes - totalExpenses}`,
+      value: `৳${netBalance.toFixed(2)}`,
       color: "bg-blue-500",
     },
-    { label: "Savings Rate", value: `${savingsRate.toFixed(2)}%`, color: "bg-yellow-500" },
+    {
+      label: "Savings Rate",
+      value: `${savingsRate.toFixed(2)}%`,
+      color: "bg-yellow-500",
+    },
   ];
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

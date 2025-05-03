@@ -1,16 +1,19 @@
-
 import { useState, useEffect } from "react";
 import BudgetSummary from "./BudgetSummary";
 import BudgetTable from "./BudgetTable";
 import { useUser } from "../../contexts/AuthContext";
+import { useLoading } from "../../contexts/LoadingProvider";
+import LoadingSpinner from "../ui/LoadingSpinner";
 
 const BudgetDashboard = () => {
+  const { loading, setLoading } = useLoading();
+  const { user } = useUser();
   const [budgets, setBudgets] = useState([]);
   const [filteredBudgets, setFilteredBudgets] = useState([]);
   const [typeFilter, setTypeFilter] = useState("All");
 
-  const { user } = useUser();
   useEffect(() => {
+    setLoading(true);
     fetch(
       `${import.meta.env.VITE_BASE_URL}/personal/budgets?user_id=${
         user?.user?.id
@@ -20,10 +23,18 @@ const BudgetDashboard = () => {
       .then((data) => {
         setBudgets(data.data);
         setFilteredBudgets(data.data);
+        setLoading(false);
       });
   }, []);
-  console.log(budgets);
-  
+
+  if (loading) {
+    return (
+      <div>
+        <LoadingSpinner />
+      </div>
+    );
+  }
+
   const handleFilterChange = (type) => {
     setTypeFilter(type);
     if (type === "All") {
@@ -35,7 +46,6 @@ const BudgetDashboard = () => {
 
   return (
     <div className="p-6">
-      {/* <BudgetFilters onFilterChange={handleFilterChange} typeFilter={typeFilter} /> */}
       <BudgetSummary budgets={filteredBudgets} />
       <BudgetTable budgets={filteredBudgets} />
     </div>
