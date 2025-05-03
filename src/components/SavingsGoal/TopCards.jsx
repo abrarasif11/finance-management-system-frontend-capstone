@@ -10,7 +10,7 @@ const TopCards = ({ totalGoals, completedGoals, inProgressGoals }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {cardData.map((card, index) => (
-        <div key={index} className={`p-4 rounded-lg shadow ${card.bg}`}>
+        <div key={index} className={`p-4 rounded-lg shadow-xl ${card.bg}`}>
           <p className="text-sm font-medium text-white">{card.label}</p>
           <p className={`text-2xl font-semibold ${card.text}`}>{card.value}</p>
         </div>
