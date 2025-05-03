@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -41,31 +41,40 @@ ChartJS.register(
   Legend
 );
 
+const months = [
+  "All",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const IncomeDashboard = () => {
   const { user } = useUser();
 
   // State to manage filter, sort, search, and modals
-  const [selectedId, setSelectedId] = useState();
+  const [selectedId, setSelectedId] = useState(null);
   const [selectedRange, setSelectedRange] = useState(0);
-  const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState("date-newest");
   const [filterMonth, setFilterMonth] = useState("All");
   const [filterYear, setFilterYear] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredIncomes, setFilteredIncomes] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [incomeToDelete, setIncomeToDelete] = useState(null);
   const [reportFormat, setReportFormat] = useState("PDF");
   const recordsPerPage = 5;
 
-  const RANGED_INCOMES_API_URL = `${
-    import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
-
-  const USERS_INCOMES_API_URL = `${
-    import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}`;
+  const RANGED_INCOMES_API_URL = `${import.meta.env.VITE_BASE_URL}/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
+  const USERS_INCOMES_API_URL = `${import.meta.env.VITE_BASE_URL}/personal/incomes?user_id=${user?.user?.id}`;
 
   const {
     data: incomes = [],
@@ -74,7 +83,7 @@ const IncomeDashboard = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["incomes", selectedRange],
+    queryKey: ["incomes", selectedRange, user?.user?.id],
     queryFn: async () => {
       const res = await fetch(
         selectedRange ? RANGED_INCOMES_API_URL : USERS_INCOMES_API_URL
@@ -83,51 +92,24 @@ const IncomeDashboard = () => {
       const data = await res.json();
       return data.data;
     },
+    enabled: !!user?.user?.id, // Only fetch when user ID is available
+    refetchOnMount: false,
+    refetchOnWindowFocus: false, // Prevent refetch on window focus
+    keepPreviousData: true, // Keep previous data while fetching new data
   });
 
-  useEffect(() => {
-    refetch();
-  }, [selectedRange]);
-
-  // Dynamically generate years based on the data
-  const years = incomes.length
-    ? [
-        "All",
-        ...Array.from(
-          new Set(incomes.map((income) => new Date(income.date).getFullYear()))
-        ).sort((a, b) => a - b),
-      ]
-    : ["All"];
-  const months = [
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  // Filter and sort incomes
-  useEffect(() => {
+  // Memoize the filtered and sorted incomes to prevent unnecessary re-computations
+  const filteredIncomes = useMemo(() => {
     let temp = [...incomes];
 
-    // Apply month filter
     if (filterMonth !== "All") {
-      const monthIndex = months.indexOf(filterMonth) - 1; // -1 because "All" is first
+      const monthIndex = months.indexOf(filterMonth) - 1;
       temp = temp.filter((income) => {
         const incomeDate = new Date(income.date);
         return incomeDate.getMonth() === monthIndex;
       });
     }
 
-    // Apply year filter
     if (filterYear !== "All") {
       temp = temp.filter((income) => {
         const incomeDate = new Date(income.date);
@@ -135,7 +117,6 @@ const IncomeDashboard = () => {
       });
     }
 
-    // Apply search query (search on full dataset)
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       temp = temp.filter(
@@ -146,7 +127,6 @@ const IncomeDashboard = () => {
       );
     }
 
-    // Apply sorting
     switch (sortOption) {
       case "amount-asc":
         temp.sort((a, b) => a.amount - b.amount);
@@ -160,13 +140,28 @@ const IncomeDashboard = () => {
       case "date-oldest":
         temp.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
-      default:
-        break;
     }
 
-    setFilteredIncomes(temp);
-    setCurrentPage(1);
+    return temp;
   }, [incomes, filterMonth, filterYear, sortOption, searchQuery]);
+
+  // Reset current page when filteredIncomes changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredIncomes]);
+
+  // Dynamically generate years based on the data
+  const years = incomes.length
+    ? [
+        "All",
+        ...Array.from(
+          new Set(
+            incomes.map((income) => new Date(income.date).getFullYear())
+          )
+        ).sort((a, b) => a - b),
+      ]
+    : ["All"];
+  
 
   // Categorised Calculation
   const categoryWiseIncome = calculateCategoryTotals(incomes);
@@ -255,8 +250,8 @@ const IncomeDashboard = () => {
         <TotalEstimateBlock
           props={{
             apiUrl: USERS_INCOMES_API_URL,
-            filterOpen,
-            setFilterOpen,
+            filterOpen: false, // Removed unused state
+            setFilterOpen: () => {}, // No-op function
             selectedRange,
             setSelectedRange,
             total: totalIncomes,
@@ -369,9 +364,7 @@ const IncomeDashboard = () => {
                           size={16}
                           onClick={async () => {
                             setSelectedId(income.id);
-                            document.getElementById(
-                              "updateIncomeModal"
-                            ).open = true;
+                            document.getElementById("updateIncomeModal").showModal();
                           }}
                         />
                       </Button>

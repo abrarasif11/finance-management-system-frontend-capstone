@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -41,29 +41,41 @@ ChartJS.register(
   Legend
 );
 
+const months = [
+  "All",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
+
 const ExpenseDashboard = () => {
   const { user } = useUser();
 
   // State to manage filter, sort, search, and modals
-  const [rangedExpenses, setRangedExpenses] = useState([]);
-  const [selectedId, setSelectedId] = useState();
   const [selectedRange, setSelectedRange] = useState(0);
-  const [filterOpen, setFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOption, setSortOption] = useState("date-newest");
   const [filterMonth, setFilterMonth] = useState("All");
   const [filterYear, setFilterYear] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
-  const [filteredExpenses, setFilteredExpenses] = useState([]);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [expenseToDelete, setExpenseToDelete] = useState(null);
   const [reportFormat, setReportFormat] = useState("PDF");
+  const [selectedId, setSelectedId] = useState(null);
   const recordsPerPage = 5;
 
   const RANGED_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
   }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
-
   const USERS_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
   }/personal/expenses?user_id=${user?.user?.id}`;
@@ -75,7 +87,7 @@ const ExpenseDashboard = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["expenses", selectedRange],
+    queryKey: ["expenses", selectedRange, user?.user?.id],
     queryFn: async () => {
       const res = await fetch(
         selectedRange ? RANGED_EXPENSES_API_URL : USERS_EXPENSES_API_URL
@@ -84,53 +96,24 @@ const ExpenseDashboard = () => {
       const data = await res.json();
       return data.data;
     },
+    enabled: !!user?.user?.id, // Only fetch when user ID is available
+    refetchOnMount: false,
+    refetchOnWindowFocus: false, // Prevent refetch on window focus
+    keepPreviousData: true, // Keep previous data while fetching new data
   });
 
-  useEffect(() => {
-    refetch();
-  }, [selectedRange]);
-
-  // Dynamically generate years based on the data
-  const years = expenses.length
-    ? [
-        "All",
-        ...Array.from(
-          new Set(
-            expenses.map((expense) => new Date(expense.date).getFullYear())
-          )
-        ).sort((a, b) => a - b),
-      ]
-    : ["All"];
-  const months = [
-    "All",
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December",
-  ];
-
-  // Filter and sort expenses
-  useEffect(() => {
+  // Memoize the filtered and sorted expenses to prevent unnecessary re-computations
+  const filteredExpenses = useMemo(() => {
     let temp = [...expenses];
 
-    // Apply month filter
     if (filterMonth !== "All") {
-      const monthIndex = months.indexOf(filterMonth) - 1; // -1 because "All" is first
+      const monthIndex = months.indexOf(filterMonth) - 1;
       temp = temp.filter((expense) => {
         const expenseDate = new Date(expense.date);
         return expenseDate.getMonth() === monthIndex;
       });
     }
 
-    // Apply year filter
     if (filterYear !== "All") {
       temp = temp.filter((expense) => {
         const expenseDate = new Date(expense.date);
@@ -138,7 +121,6 @@ const ExpenseDashboard = () => {
       });
     }
 
-    // Apply search query (search on full dataset)
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       temp = temp.filter(
@@ -149,7 +131,6 @@ const ExpenseDashboard = () => {
       );
     }
 
-    // Apply sorting
     switch (sortOption) {
       case "amount-asc":
         temp.sort((a, b) => a.amount - b.amount);
@@ -163,13 +144,27 @@ const ExpenseDashboard = () => {
       case "date-oldest":
         temp.sort((a, b) => new Date(a.date) - new Date(b.date));
         break;
-      default:
-        break;
     }
 
-    setFilteredExpenses(temp);
-    setCurrentPage(1);
+    return temp;
   }, [expenses, filterMonth, filterYear, sortOption, searchQuery]);
+
+  // Reset current page when filteredExpenses changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filteredExpenses]);
+
+  // Dynamically generate years based on the data
+  const years = expenses.length
+    ? [
+        "All",
+        ...Array.from(
+          new Set(
+            expenses.map((expense) => new Date(expense.date).getFullYear())
+          )
+        ).sort((a, b) => a - b),
+      ]
+    : ["All"];
 
   // Categorised Calculation
   const categoryWiseIncome = calculateCategoryTotals(expenses);
@@ -254,14 +249,14 @@ const ExpenseDashboard = () => {
   return isLoading && isFetching ? (
     <LoadingSpinner />
   ) : (
-    <div className=" text-black p-6 rounded-lg">
+    <div className="text-black p-6 rounded-lg">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
         <TotalEstimateBlock
           props={{
             apiUrl: USERS_EXPENSES_API_URL,
-            filterOpen,
-            setFilterOpen,
+            filterOpen: false,
+            setFilterOpen: () => {},
             selectedRange,
             setSelectedRange,
             total: totalExpenses,
@@ -347,7 +342,7 @@ const ExpenseDashboard = () => {
           <AddExpensesModal props={{ user, refetch }} />
         </div>
 
-        {currentRecords?.length != 0 ? (
+        {currentRecords?.length !== 0 ? (
           <table className="min-w-full text-sm text-left text-gray-700">
             <thead className="bg-gray-100 uppercase text-xs text-gray-600">
               <tr className="text-center">
@@ -376,9 +371,9 @@ const ExpenseDashboard = () => {
                         size={16}
                         onClick={async () => {
                           setSelectedId(expense.id);
-                          document.getElementById(
-                            "updateExpenseModal"
-                          ).open = true;
+                          document
+                            .getElementById("updateExpenseModal")
+                            .showModal();
                         }}
                       />
                     </Button>

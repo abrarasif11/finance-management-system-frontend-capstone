@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fakeSavingsGoals } from "../constants/FakeGoals";
 import TopCards from "./TopCards";
 
-import GoalsTable from "./GoalsTable";
+import GoalsTable from "./GoalsTable/GoalsTable";
 import PieChart from "./PieChart";
 import { useUser } from "../../contexts/AuthContext";
 import BiYearlyGoalsBar from "./BiYearlyGoalsBar";
@@ -19,7 +19,7 @@ const SavingsGoalsDashboard = () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `https://api-financial-management-system.vercel.app/api/v1/personal/savings-goals?user_id=${user?.user?.id}`
+          `${import.meta.env.VITE_BASE_URL}/personal/savings-goals?user_id=${user?.user?.id}`
         );
 
         const data = await response.json();
@@ -61,12 +61,14 @@ const SavingsGoalsDashboard = () => {
         completedGoals={completedGoals}
         inProgressGoals={inProgressGoals}
       />
-      {/* <PieChart
-        completedGoals={completedGoals}
-        inProgressGoals={inProgressGoals}
-        canceledGoals={canceledGoals}
-      /> */}
-      <BiYearlyGoalsBar />
+      <div className="grid grid-cols-3">
+        <PieChart
+          completedGoals={completedGoals}
+          inProgressGoals={inProgressGoals}
+          canceledGoals={canceledGoals}
+        />
+        <BiYearlyGoalsBar />
+      </div>
       <GoalsTable goals={goals} />
     </div>
   );

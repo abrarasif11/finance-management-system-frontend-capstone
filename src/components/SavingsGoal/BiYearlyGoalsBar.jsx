@@ -71,7 +71,7 @@ for (let year = minYear; year <= maxYear; year++) {
 }
 
 const BiYearlyGoalsBar = () => {
-  const [selectedRange, setSelectedRange] = useState(filterOptions[2]);
+  const [selectedRange, setSelectedRange] = useState(filterOptions[0]);
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
@@ -114,8 +114,8 @@ const BiYearlyGoalsBar = () => {
     setChartData(months);
   };
 
-  return (
-    <div className="p-6 rounded-lg bg-white shadow-md">
+  return ( 
+    <div className="p-6 rounded-lg bg-white shadow-xl col-span-2">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-semibold">Goal Amounts (Last 6 Months)</h2>
         <select
@@ -134,10 +134,10 @@ const BiYearlyGoalsBar = () => {
         </select>
       </div>
 
-      <ResponsiveContainer width="100%" height={350}>
+      <ResponsiveContainer width="100%" height={300}>
         <BarChart
           data={chartData}
-          margin={{ top: 20, right: 20, left: 0, bottom: 5 }}
+          margin={{ top: 20, right: 20, left: 10, bottom: 5 }}
         >
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="month" />

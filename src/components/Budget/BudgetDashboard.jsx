@@ -46,7 +46,6 @@ const BudgetDashboard = () => {
 
   return (
     <div className="p-6">
-      {/* <BudgetFilters onFilterChange={handleFilterChange} typeFilter={typeFilter} /> */}
       <BudgetSummary budgets={filteredBudgets} />
       <BudgetTable budgets={filteredBudgets} />
     </div>
