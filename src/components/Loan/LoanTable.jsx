@@ -134,26 +134,8 @@ const LoanTable = ({ loans, onAddNew }) => {
     setSelectedLoanId(null);
   };
 
-  // Delete Function
-  const handleDelete = async (loanId) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/loans/${loanId}`,
-        { method: "DELETE" }
-      );
-      if (response.ok) {
-        toast.success("Loan deleted successfully");
-      } else {
-        toast.error("Failed to delete loan");
-      }
-    } catch (error) {
-      console.error("Error deleting loan:", error);
-      toast.error("Error deleting loan");
-    }
-  };
-
   const handleGenerateReport = () => {
-    generateReport("loans", filteredLoans, filterMonth, filterYear);
+    generateReport("loans", filteredLoans, filterMonth, filterYear, reportFormat);
   };
 
   return (
@@ -199,8 +181,6 @@ const LoanTable = ({ loans, onAddNew }) => {
           </thead>
           <LoanTableBody
             currentLoans={currentLoans}
-            handleOpen={handleOpen}
-            handleDelete={handleDelete}
           />
         </table>
         {/* Pagination */}
