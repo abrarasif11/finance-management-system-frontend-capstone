@@ -1,10 +1,15 @@
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import * as XLSX from "xlsx";
+import Papa from "papaparse";
 
-export const generateReport = (service, filteredData, filterMonth, filterYear) => {
-  const doc = new jsPDF({
-    orientation: "landscape", // Set to landscape mode
-  });
+export const generateReport = (
+  service,
+  filteredData,
+  filterMonth,
+  filterYear,
+  reportFormat
+) => {
   const currentDate = new Date().toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -15,7 +20,9 @@ export const generateReport = (service, filteredData, filterMonth, filterYear) =
   });
 
   // Dynamic report title based on filters and service
-  let reportTitle = `${service.charAt(0).toUpperCase() + service.slice(1)} Report`;
+  let reportTitle = `${
+    service.charAt(0).toUpperCase() + service.slice(1)
+  } Report`;
   if (filterMonth !== "All" && filterYear !== "All") {
     reportTitle = `Report of ${filterMonth} ${filterYear} - ${service}`;
   } else if (filterMonth !== "All") {
@@ -23,20 +30,6 @@ export const generateReport = (service, filteredData, filterMonth, filterYear) =
   } else if (filterYear !== "All") {
     reportTitle = `Report of ${filterYear} - ${service}`;
   }
-
-  // Header
-  doc.setFontSize(20);
-  doc.setTextColor(0, 0, 128); // Dark blue
-  doc.text("BudgetBuddy Financial Services", 14, 22);
-  doc.setFontSize(16);
-  doc.text(reportTitle, 14, 30);
-  doc.setFontSize(10);
-  doc.setTextColor(0, 0, 0); // Black
-  doc.text(`Generated on: ${currentDate}`, 14, 38); // e.g., "July 01, 2025, 11:10 PM +06"
-
-  // Add a line separator
-  doc.setDrawColor(0, 0, 0);
-  doc.line(14, 40, 276, 40); // Adjusted line length for landscape (A4 width is 297mm)
 
   // Define column headers and data mapping based on service
   let headers, dataMapper;
@@ -66,7 +59,9 @@ export const generateReport = (service, filteredData, filterMonth, filterYear) =
         Due: `${item.due.toLocaleString()} BDT`,
         "Interest Rate": `${item.interest_rate}%`,
         "Start Date": new Date(item.start_date).toLocaleDateString(),
-        "End Date": item.end_date ? new Date(item.end_date).toLocaleDateString() : "—",
+        "End Date": item.end_date
+          ? new Date(item.end_date).toLocaleDateString()
+          : "—",
         "Next Payment": new Date(item.next_payment_date).toLocaleDateString(),
         "Payment Frequency": item.payment_frequency,
         Status:
@@ -115,17 +110,33 @@ export const generateReport = (service, filteredData, filterMonth, filterYear) =
         "Target Amount": `${item.target_amount.toLocaleString()} BDT`,
         Saved: `${item.saved.toLocaleString()} BDT`,
         Remaining: `${(item.target_amount - item.saved).toLocaleString()} BDT`,
-        "Target Date": item.target_date ? new Date(item.target_date).toLocaleDateString() : "—",
+        "Target Date": item.target_date
+          ? new Date(item.target_date).toLocaleDateString()
+          : "—",
       });
       break;
     case "investments":
-      headers = ["Asset", "Amount", "Purchase Date", "Return Rate", "Notes"];
+      headers = [
+        "Title",
+        "Type",
+        "Institution",
+        "Initial Amount",
+        "Current Value",
+        "Start Date",
+        "End Date",
+        "Status",
+      ];
       dataMapper = (item) => ({
-        Asset: item.asset,
-        Amount: `${item.amount.toLocaleString()} BDT`,
-        "Purchase Date": new Date(item.purchase_date).toLocaleDateString(),
-        "Return Rate": `${item.return_rate}%`,
-        Notes: item.notes || "—",
+        Title: item.title,
+        Type: item.investment_type,
+        Institution: item.institution,
+        "Initial Amount": `${item.initial_amount.toLocaleString()} BDT`,
+        "Current Value": `${item.current_value.toLocaleString()} BDT`,
+        "Start Date": new Date(item.start_date).toLocaleDateString(),
+        "End Date": item.end_date
+          ? new Date(item.end_date).toLocaleDateString()
+          : "—",
+        Status: item.status,
       });
       break;
     default:
@@ -135,41 +146,108 @@ export const generateReport = (service, filteredData, filterMonth, filterYear) =
 
   // Table data
   const reportData = filteredData.map(dataMapper);
+  console.log(reportFormat)
+  // Generate report based on format
+  switch (reportFormat?.toLowerCase()) {
+    case "pdf":
+      const doc = new jsPDF({
+        orientation: "landscape",
+      });
 
-  // AutoTable configuration
-  autoTable(doc, {
-    startY: 50,
-    head: [headers],
-    body: reportData.map((row) => Object.values(row)),
-    theme: "grid", // Grid theme for borders
-    headStyles: {
-      fillColor: [0, 102, 204], // Blue header
-      textColor: [255, 255, 255], // White text
-      fontSize: 10,
-      fontStyle: "bold",
-    },
-    bodyStyles: {
-      fillColor: [245, 245, 245], // Light gray background
-      textColor: [0, 0, 0], // Black text
-      fontSize: 8,
-      lineWidth: 0.1,
-    },
-    alternateRowStyles: {
-      fillColor: [255, 255, 255], // White for alternate rows
-    },
-    margin: { top: 40, bottom: 20, left: 14, right: 14 }, // Adjusted margins for landscape
-    didDrawPage: (data) => {
-      // Footer
-      doc.setFontSize(8);
-      doc.text(
-        `Page ${data.pageNumber} of ${Math.ceil(reportData.length / 30)}`,
-        doc.internal.pageSize.width / 2,
-        doc.internal.pageSize.height - 10,
-        { align: "center" }
-      );
-    },
-  });
+      // Header
+      doc.setFontSize(20);
+      doc.setTextColor(0, 0, 128); // Dark blue
+      doc.text("BudgetBuddy Financial Services", 14, 22);
+      doc.setFontSize(16);
+      doc.text(reportTitle, 14, 30);
+      doc.setFontSize(10);
+      doc.setTextColor(0, 0, 0); // Black
+      doc.text(`Generated on: ${currentDate}`, 14, 38);
 
-  // Save the PDF
-  doc.save(`${service}_report.pdf`);
+      // Add a line separator
+      doc.setDrawColor(0, 0, 0);
+      doc.line(14, 40, 276, 40); // Adjusted line length for landscape (A4 width is 297mm)
+
+      // AutoTable configuration
+      autoTable(doc, {
+        startY: 50,
+        head: [headers],
+        body: reportData.map((row) => Object.values(row)),
+        theme: "grid",
+        headStyles: {
+          fillColor: [0, 102, 204],
+          textColor: [255, 255, 255],
+          fontSize: 10,
+          fontStyle: "bold",
+        },
+        bodyStyles: {
+          fillColor: [245, 245, 245],
+          textColor: [0, 0, 0],
+          fontSize: 8,
+          lineWidth: 0.1,
+        },
+        alternateRowStyles: {
+          fillColor: [255, 255, 255],
+        },
+        margin: { top: 40, bottom: 20, left: 14, right: 14 },
+        didDrawPage: (data) => {
+          doc.setFontSize(8);
+          doc.text(
+            `Page ${data.pageNumber} of ${Math.ceil(reportData.length / 30)}`,
+            doc.internal.pageSize.width / 2,
+            doc.internal.pageSize.height - 10,
+            { align: "center" }
+          );
+        },
+      });
+
+      doc.save(`${service}_report_${currentDate.replace(/[:/]/g, "-")}.pdf`);
+      break;
+
+    case "excel":
+      const worksheet = XLSX.utils.json_to_sheet(reportData);
+      const workbook = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(workbook, worksheet, "Sheet1");
+
+      // Add metadata
+      workbook.Props = {
+        Title: reportTitle,
+        Author: "BudgetBuddy",
+        CreatedDate: new Date(),
+      };
+
+      // Style headers
+      const headerRange = XLSX.utils.decode_range(worksheet["!ref"]);
+      for (let C = headerRange.s.c; C <= headerRange.e.c; ++C) {
+        const cellAddress = XLSX.utils.encode_cell({ r: 0, c: C });
+        if (!worksheet[cellAddress]) continue;
+        worksheet[cellAddress].s = {
+          font: { bold: true, color: { rgb: "FFFFFF" } },
+          fill: { fgColor: { rgb: "0066CC" } },
+        };
+      }
+
+      XLSX.writeFile(workbook, `${service}_report_${currentDate.replace(/[:/]/g, "-")}.xlsx`);
+      break;
+
+    case "csv":
+      const csvData = Papa.unparse(reportData, {
+        header: true,
+        quotes: true,
+        delimiter: ",",
+      });
+      const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const link = document.createElement("a");
+      const url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", `${service}_report_${currentDate.replace(/[:/]/g, "-")}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+      break;
+
+    default:
+      toast.error("Unsupported report format");
+  }
 };
