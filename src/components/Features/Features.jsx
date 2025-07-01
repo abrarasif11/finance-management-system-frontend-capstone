@@ -1,5 +1,5 @@
 import React from 'react'
-import { features } from "../constants/index";
+import { features } from "../../constants/items";
 const Features = () => {
   console.log(features)
   return (

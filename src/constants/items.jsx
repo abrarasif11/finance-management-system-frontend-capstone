@@ -6,8 +6,6 @@ import {
   Landmark,
   NotebookPen,
 } from "lucide-react";
-import LoanIcon from "../../assets/loan.png";
-import { PlugZap } from "lucide-react";
 
 export const navItems = [
   { label: "Pricing", href: "/pricing" },

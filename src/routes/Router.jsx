@@ -14,6 +14,7 @@ import Incomes from "../pages/Incomes";
 import Dashboard from "../pages/Dashboard";
 import SavingsGoals from "../pages/SavingsGoals";
 import Budget from "../pages/Budget";
+import Loan from "../pages/Loan";
 
 export const router = createBrowserRouter([
   {
@@ -77,6 +78,10 @@ export const router = createBrowserRouter([
       {
         path: "/dashboard/budgets",
         element: <Budget />,
+      },
+      {
+        path: "/dashboard/loans",
+        element: <Loan />,
       },
     ],
   },
