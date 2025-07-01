@@ -8,6 +8,7 @@ import UpdateEntryModal from "./UpdateEntryModal";
 import EntriesDrawer from "./EntriesDrawer";
 import { useUser } from "../../../contexts/AuthContext";
 import toast from "react-hot-toast";
+import Pagination from "../../../Shared/Pagination";
 
 const GoalsTable = ({ goals, onAddNew }) => {
   const { user } = useUser();
@@ -25,6 +26,8 @@ const GoalsTable = ({ goals, onAddNew }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredGoals, setFilteredGoals] = useState([]);
   const [reportFormat, setReportFormat] = useState("PDF");
+  const [currentPage, setCurrentPage] = useState(1);
+  const recordsPerPage = 5;
 
   // Dynamically generate years based on the data
   const years = goals.length
@@ -102,7 +105,16 @@ const GoalsTable = ({ goals, onAddNew }) => {
     }
 
     setFilteredGoals(temp);
+    setCurrentPage(1); // Reset to first page when filters change
   }, [goals, filterStatus, filterMonth, filterYear, sortOption, searchQuery]);
+
+  // Pagination logic
+  const indexOfLastRecord = currentPage * recordsPerPage;
+  const indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+  const currentGoals = filteredGoals.slice(indexOfFirstRecord, indexOfLastRecord);
+  const totalPages = Math.ceil(filteredGoals.length / recordsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Edit Modal Functions
   const handleOpen = (goal) => {
@@ -264,13 +276,16 @@ const GoalsTable = ({ goals, onAddNew }) => {
             </tr>
           </thead>
           <GoalsTableBody
-            filteredGoals={filteredGoals}
+            filteredGoals={currentGoals}
             handleOpen={handleOpen}
             handleDelete={handleDelete}
             handleAddEntryOpen={handleAddEntryOpen}
             handleOpenDrawer={handleOpenDrawer}
           />
         </table>
+        {/* Pagination */}
+        <Pagination props={{currentPage, setCurrentPage, totalPages}}/>
+        
       </div>
       <EditGoalModal
         isOpen={isOpen}

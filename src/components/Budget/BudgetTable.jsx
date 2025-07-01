@@ -37,7 +37,7 @@ const BudgetTable = ({
     user_id: parseInt(user?.user?.id),
   });
   const [editBudget, setEditBudget] = useState(null);
-  const rowsPerPage = 10;
+  const rowsPerPage = 5;
 
   // Generate list of years (current year and past 5 years)
   const currentYear = new Date().getFullYear();

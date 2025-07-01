@@ -1,5 +1,5 @@
 import React from 'react'
-import { checklistItems } from "../constants/index";
+import { checklistItems } from "../../constants/items";
 import { CheckCircle2 } from "lucide-react";
 import photo from "../../assets/premium_photo-1681487769650-a0c3fbaed85a.jpg";
 

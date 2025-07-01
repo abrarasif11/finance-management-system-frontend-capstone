@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "../../ui/Button";
 
-
 const GoalsTableFilter = ({
   filterStatus,
   setFilterStatus,
@@ -22,8 +21,7 @@ const GoalsTableFilter = ({
   years,
 }) => (
   <div className="flex justify-between items-center mb-4">
-    <h2 className="text-xl font-bold text-gray-800">Savings Goals</h2>
-    <div className="flex gap-3 items-center">
+    <div className="space-x-3">
       <select
         value={filterStatus}
         onChange={(e) => setFilterStatus(e.target.value)}
@@ -67,13 +65,15 @@ const GoalsTableFilter = ({
         <option value="date-newest">Newest Date</option>
         <option value="date-oldest">Oldest Date</option>
       </select>
-      <input
-        type="text"
-        placeholder="Search goals..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-        className="bg-white text-black border border-gray-400 p-2 rounded w-72 outline-none"
-      />
+    </div>
+    <input
+      type="text"
+      placeholder="Search goals..."
+      value={searchQuery}
+      onChange={(e) => setSearchQuery(e.target.value)}
+      className="bg-white text-black border border-gray-400 p-2 rounded w-72 outline-none"
+    />
+    <div className="space-x-3">
       <select
         value={reportFormat}
         onChange={(e) => setReportFormat(e.target.value)}
