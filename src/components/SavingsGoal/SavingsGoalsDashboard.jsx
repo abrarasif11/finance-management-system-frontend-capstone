@@ -1,6 +1,5 @@
 // src/components/Dashboard/SavingsGoalsDashboard.jsx
 import React, { useEffect, useState } from "react";
-import { fakeSavingsGoals } from "../constants/FakeGoals";
 import TopCards from "./TopCards";
 
 import GoalsTable from "./GoalsTable/GoalsTable";

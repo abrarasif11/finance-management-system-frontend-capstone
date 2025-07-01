@@ -73,8 +73,12 @@ const IncomeDashboard = () => {
   const [reportFormat, setReportFormat] = useState("PDF");
   const recordsPerPage = 5;
 
-  const RANGED_INCOMES_API_URL = `${import.meta.env.VITE_BASE_URL}/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
-  const USERS_INCOMES_API_URL = `${import.meta.env.VITE_BASE_URL}/personal/incomes?user_id=${user?.user?.id}`;
+  const RANGED_INCOMES_API_URL = `${
+    import.meta.env.VITE_BASE_URL
+  }/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
+  const USERS_INCOMES_API_URL = `${
+    import.meta.env.VITE_BASE_URL
+  }/personal/incomes?user_id=${user?.user?.id}`;
 
   const {
     data: incomes = [],
@@ -155,13 +159,10 @@ const IncomeDashboard = () => {
     ? [
         "All",
         ...Array.from(
-          new Set(
-            incomes.map((income) => new Date(income.date).getFullYear())
-          )
+          new Set(incomes.map((income) => new Date(income.date).getFullYear()))
         ).sort((a, b) => a - b),
       ]
     : ["All"];
-  
 
   // Categorised Calculation
   const categoryWiseIncome = calculateCategoryTotals(incomes);
@@ -364,7 +365,9 @@ const IncomeDashboard = () => {
                           size={16}
                           onClick={async () => {
                             setSelectedId(income.id);
-                            document.getElementById("updateIncomeModal").showModal();
+                            document
+                              .getElementById("updateIncomeModal")
+                              .showModal();
                           }}
                         />
                       </Button>
