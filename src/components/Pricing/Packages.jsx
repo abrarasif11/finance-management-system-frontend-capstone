@@ -1,6 +1,6 @@
 import React from "react";
 import { CircleCheck } from "lucide-react";
-const Package = ({ option, billingCycle }) => {
+const Packages = ({ option, billingCycle }) => {
   const { title, facilities, price, session_type } = option;
   const allFacilities = facilities.split(",");
 
@@ -74,4 +74,4 @@ const Package = ({ option, billingCycle }) => {
   );
 };
 
-export default Package;
+export default Packages;
