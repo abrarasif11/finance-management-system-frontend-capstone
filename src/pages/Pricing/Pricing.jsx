@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
-import Package from "../../components/Pricing/Package";
+import Packages from "../../components/Pricing/Packages";
 import LoadingSpinner from "../../components/ui/LoadingSpinner";
 import { useLoading } from "../../contexts/LoadingProvider";
 
@@ -67,7 +67,7 @@ const Pricing = () => {
             </div>
             <div className="flex flex-wrap items-stretch -mx-4">
               {options?.data?.map((option) => (
-                <Package
+                <Packages
                   key={option.id}
                   option={option}
                   billingCycle={billingCycle}
