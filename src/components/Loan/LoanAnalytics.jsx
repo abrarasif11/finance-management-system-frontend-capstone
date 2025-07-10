@@ -77,7 +77,7 @@ const LoanAnalytics = ({ loans }) => {
       <div className="flex items-center justify-between px-6 py-3 border-b border-gray-200">
         <p className="text-2xl text-shadow-lg text-black font-bold">Loans</p>
         <div className="flex items-center space-x-4">
-          <div className="flex flex-col md:flex-row gap-4 mb-4">
+          <div className="flex flex-col md:flex-row gap-4 mb-5">
             <div className="w-full md:w-1/2">
               <label className="block text-sm font-medium text-gray-700">
                 Filter by Year

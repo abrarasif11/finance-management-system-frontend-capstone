@@ -71,6 +71,7 @@ const IncomeDashboard = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [incomeToDelete, setIncomeToDelete] = useState(null);
   const [reportFormat, setReportFormat] = useState("PDF");
+  const [loading, setLoading] = useState(false);
   const recordsPerPage = 5;
 
   const RANGED_INCOMES_API_URL = `${
@@ -242,10 +243,44 @@ const IncomeDashboard = () => {
     }
   };
 
+  const getSuggestionsOnRecentLoans = async () => {
+    try {
+      setLoading(true);
+      // const res = await axios.post(
+      //   `${import.meta.env.VITE_SUGGESTION_API_URL}/loan/optimize-payments`,
+      //   loans
+      // );
+      // setLoanSuggestions(res?.data);
+      setIsOpen(true);
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return isLoading && isFetching ? (
     <LoadingSpinner />
   ) : (
     <div className="text-black p-6 rounded-lg">
+      <div className="flex justify-end mb-2">
+        {loading ? (
+          <button
+            className="flex items-center justify-center px-4 py-2 text-white uppercase bg-blue-400 rounded-full shadow-lg"
+            disabled
+          >
+            Getting Suggestions ...
+          </button>
+        ) : (
+          <button
+            className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
+            onClick={getSuggestionsOnRecentLoans}
+          >
+            {" "}
+            Get Suggestions
+          </button>
+        )}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
         <TotalEstimateBlock
