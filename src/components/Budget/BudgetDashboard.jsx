@@ -44,8 +44,13 @@ const BudgetDashboard = () => {
     }
   };
 
-  return (
+  
+
+  return loading ? (
+    <LoadingSpinner />
+  ) : (
     <div className="p-6">
+      
       <BudgetSummary budgets={filteredBudgets} />
       <BudgetTable budgets={filteredBudgets} />
     </div>
