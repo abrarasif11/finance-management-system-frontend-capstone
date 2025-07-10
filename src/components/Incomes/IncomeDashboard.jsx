@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -29,6 +29,9 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
+import axios from "axios";
+import GenericModal from "../ui/GenericModal";
+import IncomeSuggestions from "./IncomeSuggestions";
 
 // Register components
 ChartJS.register(
@@ -71,14 +74,17 @@ const IncomeDashboard = () => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [incomeToDelete, setIncomeToDelete] = useState(null);
   const [reportFormat, setReportFormat] = useState("PDF");
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [suggestions,setSuggestions] = useState([])
   const recordsPerPage = 5;
 
   const RANGED_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
+  }/personal/incomes/user/${user?.user?.id}?days=${selectedRange}`;
   const USERS_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}`;
+  }/personal/incomes/user/${user?.user?.id}`;
 
   const {
     data: incomes = [],
@@ -242,10 +248,45 @@ const IncomeDashboard = () => {
     }
   };
 
+  const getSuggestions = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_SUGGESTION_API_URL}/income/suggestions/`,
+        incomes
+      );
+      setSuggestions(res?.data?.suggestions);
+      setIsModalOpen(true);
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
   return isLoading && isFetching ? (
     <LoadingSpinner />
   ) : (
     <div className="text-black p-6 rounded-lg">
+      <div className="flex justify-end mb-2">
+        {loading ? (
+          <button
+            className="flex items-center justify-center px-4 py-2 text-white uppercase bg-blue-400 rounded-full shadow-lg"
+            disabled
+          >
+            Getting Suggestions ...
+          </button>
+        ) : (
+          <button
+            className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
+            onClick={getSuggestions}
+          >
+            {" "}
+            Get Suggestions
+          </button>
+        )}
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         {/* Total Estimates */}
         <TotalEstimateBlock
@@ -428,6 +469,11 @@ const IncomeDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Suggestion modal */}
+      <div>
+        <GenericModal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)} title={"Income Suggestions"}><IncomeSuggestions suggestions={suggestions}/></GenericModal>
+      </div>
     </div>
   );
 };

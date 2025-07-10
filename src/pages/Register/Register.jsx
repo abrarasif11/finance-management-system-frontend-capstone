@@ -88,7 +88,7 @@ const Register = () => {
                     <input
                       type="text"
                       id="first_name"
-                      class="block w-full py-3  text-gray-700 bg-white border rounded-lg px-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                      class="block w-full py-3  text-gray-700 bg-white border rounded-lg px-5 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="John"
                     />
                   </div>
@@ -102,7 +102,7 @@ const Register = () => {
                     <input
                       type="text"
                       id="last_name"
-                      class="block w-full py-3  text-gray-700 bg-white border rounded-lg px-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                      class="block w-full py-3  text-gray-700 bg-white border rounded-lg px-5 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="Kabir"
                     />
                   </div>
@@ -117,7 +117,7 @@ const Register = () => {
                     <input
                       type="email"
                       id="email"
-                      class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                      class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-5 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="john.kabir69@gamil.com"
                     />
                   </div>
@@ -131,7 +131,7 @@ const Register = () => {
                     <input
                       type="text"
                       id="phone_number"
-                      class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-5 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                      class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-5 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="8801*********"
                     />
                   </div>
@@ -146,7 +146,7 @@ const Register = () => {
                     <input
                       type="password"
                       id="password"
-                      class="block w-full px-5 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                      class="block w-full px-5 py-3 text-gray-700 bg-white border rounded-lg focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="********"
                     />
                   </div>
@@ -160,7 +160,7 @@ const Register = () => {
                     <input
                       type="password"
                       id="cpassword"
-                      class="block w-full px-5 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                      class="block w-full px-5 py-3 text-gray-700 bg-white border rounded-lg focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="********"
                     />
                   </div>
