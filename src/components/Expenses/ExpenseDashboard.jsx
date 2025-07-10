@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -17,7 +17,7 @@ import {
   splitKeysAndValues,
 } from "../../utils/categoryWiseAmounts";
 import { getTotalOfRecords } from "../../utils/totalAmount";
-import { CirclePlus, Edit, Pencil, Trash2 } from "lucide-react";
+import { Edit, Trash2 } from "lucide-react";
 import TotalEstimateBlock from "../../Shared/TotalEstimateBlock";
 import PieChart from "../../Shared/Infographics/PieChart";
 import { deleteRecord } from "../../utils/API_Operations/apiOperations";
@@ -29,6 +29,9 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
 import { Card } from "../ui/card";
+import GenericModal from "../ui/GenericModal";
+import ExpenseSuggestions from "./ExpenseSuggestions";
+import axios from "axios";
 
 // Register components
 ChartJS.register(
@@ -72,14 +75,16 @@ const ExpenseDashboard = () => {
   const [reportFormat, setReportFormat] = useState("PDF");
   const [selectedId, setSelectedId] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [suggestions,setSuggestions] = useState([])
   const recordsPerPage = 5;
 
   const RANGED_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/expenses?user_id=${user?.user?.id}&days=${selectedRange}`;
+  }/personal/expenses/user/${user?.user?.id}?days=${selectedRange}`;
   const USERS_EXPENSES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/expenses?user_id=${user?.user?.id}`;
+  }/personal/expenses/user/${user?.user?.id}`;
 
   const {
     data: expenses = [],
@@ -247,15 +252,15 @@ const ExpenseDashboard = () => {
     }
   };
 
-  const getSuggestionsOnRecentLoans = async () => {
+  const getSuggestions = async () => {
     try {
       setLoading(true);
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SUGGESTION_API_URL}/loan/optimize-payments`,
-      //   loans
-      // );
-      // setLoanSuggestions(res?.data);
-      setIsOpen(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_SUGGESTION_API_URL}/expense/suggestions/`,
+        expenses
+      );
+      setSuggestions(res?.data?.suggestions);
+      setIsModalOpen(true);
     } catch (e) {
       console.log(e.message);
     } finally {
@@ -278,7 +283,7 @@ const ExpenseDashboard = () => {
         ) : (
           <button
             className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
-            onClick={getSuggestionsOnRecentLoans}
+            onClick={getSuggestions}
           >
             {" "}
             Get Suggestions
@@ -467,6 +472,11 @@ const ExpenseDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Suggestion modal */}
+      <div>
+        <GenericModal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)} title={"Expense Suggestions"}><ExpenseSuggestions suggestions={suggestions}/></GenericModal>
+      </div>
     </div>
   );
 };

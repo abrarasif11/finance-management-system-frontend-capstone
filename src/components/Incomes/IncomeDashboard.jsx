@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   Chart as ChartJS,
   ArcElement,
@@ -29,6 +29,9 @@ import LoadingSpinner from "../ui/LoadingSpinner";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
+import axios from "axios";
+import GenericModal from "../ui/GenericModal";
+import IncomeSuggestions from "./IncomeSuggestions";
 
 // Register components
 ChartJS.register(
@@ -72,14 +75,16 @@ const IncomeDashboard = () => {
   const [incomeToDelete, setIncomeToDelete] = useState(null);
   const [reportFormat, setReportFormat] = useState("PDF");
   const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [suggestions,setSuggestions] = useState([])
   const recordsPerPage = 5;
 
   const RANGED_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}&days=${selectedRange}`;
+  }/personal/incomes/user/${user?.user?.id}?days=${selectedRange}`;
   const USERS_INCOMES_API_URL = `${
     import.meta.env.VITE_BASE_URL
-  }/personal/incomes?user_id=${user?.user?.id}`;
+  }/personal/incomes/user/${user?.user?.id}`;
 
   const {
     data: incomes = [],
@@ -243,21 +248,22 @@ const IncomeDashboard = () => {
     }
   };
 
-  const getSuggestionsOnRecentLoans = async () => {
+  const getSuggestions = async () => {
     try {
       setLoading(true);
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SUGGESTION_API_URL}/loan/optimize-payments`,
-      //   loans
-      // );
-      // setLoanSuggestions(res?.data);
-      setIsOpen(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_SUGGESTION_API_URL}/income/suggestions/`,
+        incomes
+      );
+      setSuggestions(res?.data?.suggestions);
+      setIsModalOpen(true);
     } catch (e) {
       console.log(e.message);
     } finally {
       setLoading(false);
     }
   };
+
 
   return isLoading && isFetching ? (
     <LoadingSpinner />
@@ -274,7 +280,7 @@ const IncomeDashboard = () => {
         ) : (
           <button
             className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
-            onClick={getSuggestionsOnRecentLoans}
+            onClick={getSuggestions}
           >
             {" "}
             Get Suggestions
@@ -463,6 +469,11 @@ const IncomeDashboard = () => {
           </div>
         </div>
       )}
+
+      {/* Suggestion modal */}
+      <div>
+        <GenericModal isOpen={isModalOpen} onClose={()=>setIsModalOpen(false)} title={"Income Suggestions"}><IncomeSuggestions suggestions={suggestions}/></GenericModal>
+      </div>
     </div>
   );
 };
