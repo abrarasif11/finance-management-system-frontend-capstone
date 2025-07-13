@@ -23,7 +23,7 @@ const AddGoalModal = ({ isAddModalOpen, handleAddNewClose, onAddNew }) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/personal/savings-goals`,
+        `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -77,7 +77,7 @@ const AddGoalModal = ({ isAddModalOpen, handleAddNewClose, onAddNew }) => {
             name="current_amount"
             value={newGoalData.current_amount}
             onChange={handleAddInputChange}
-            placeholder="Enter target amount"
+            placeholder="Enter current amount"
             className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
           />
           <input
@@ -95,7 +95,7 @@ const AddGoalModal = ({ isAddModalOpen, handleAddNewClose, onAddNew }) => {
             <input
               type="date"
               name="start_date"
-              value={newGoalData.start_date}
+              value={newGoalData.start_date || new Date().toISOString().split("T")[0]}
               onChange={handleAddInputChange}
               className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
             />

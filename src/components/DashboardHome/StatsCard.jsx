@@ -4,29 +4,29 @@ import { useUser } from "../../contexts/AuthContext";
 import { getTotalOfRecords } from "../../utils/totalAmount";
 
 const StatsCards = ({ props }) => {
-  const { totalExpenses, totalIncomes } = props;
-  const savingsRate = totalIncomes
-    ? ((totalIncomes - totalExpenses) / totalIncomes) * 100
+  const { averageExpense, averageIncome } = props;
+  const savingsRate = averageIncome
+    ? ((averageIncome - averageExpense) / averageIncome) * 100
     : 0;
-  const netBalance = totalIncomes - totalExpenses;
+  const netBalance = averageIncome - averageExpense;
   const stats = [
     {
-      label: "Total Income",
-      value: `৳${totalIncomes.toFixed(2)}`,
+      label: "Average Monthly Income",
+      value: `৳${averageIncome}`,
       color: "bg-green-500",
     },
     {
-      label: "Total Expenses",
-      value: `৳${totalExpenses.toFixed(2)}`,
+      label: "Average Monthly Expenses",
+      value: `৳${averageExpense}`,
       color: "bg-red-500",
     },
     {
-      label: "Net Balance",
-      value: `৳${netBalance.toFixed(2)}`,
+      label: "Average Net Balance",
+      value: `৳${netBalance}`,
       color: "bg-blue-500",
     },
     {
-      label: "Savings Rate",
+      label: "Average Savings Rate",
       value: `${savingsRate.toFixed(2)}%`,
       color: "bg-yellow-500",
     },

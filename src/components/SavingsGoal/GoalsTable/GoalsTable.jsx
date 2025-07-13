@@ -9,6 +9,7 @@ import EntriesDrawer from "./EntriesDrawer";
 import { useUser } from "../../../contexts/AuthContext";
 import toast from "react-hot-toast";
 import Pagination from "../../../Shared/Pagination";
+import DeletionConfirmationModal from "../../ui/DeletionConfirmationModal";
 
 const GoalsTable = ({ goals, onAddNew }) => {
   const { user } = useUser();
@@ -18,7 +19,6 @@ const GoalsTable = ({ goals, onAddNew }) => {
   const [isAddEntryModalOpen, setIsAddEntryModalOpen] = useState(false);
   const [selectedGoal, setSelectedGoal] = useState(null);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-  const [isUpdateEntryModalOpen, setIsUpdateEntryModalOpen] = useState(false);
   const [filterStatus, setFilterStatus] = useState("All");
   const [filterMonth, setFilterMonth] = useState("All");
   const [filterYear, setFilterYear] = useState("All");
@@ -125,24 +125,6 @@ const GoalsTable = ({ goals, onAddNew }) => {
   const handleClose = () => {
     setIsOpen(false);
     setSelectedGoalId(null);
-  };
-
-  // Delete Function
-  const handleDelete = async (goalId) => {
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/${goalId}`,
-        { method: "DELETE" }
-      );
-      if (response.ok) {
-        toast.success("Goal deleted successfully");
-      } else {
-        toast.error("Failed to delete goal");
-      }
-    } catch (error) {
-      console.error("Error deleting goal:", error);
-      toast.error("Error deleting goal");
-    }
   };
 
   // Add Modal Functions
@@ -278,15 +260,14 @@ const GoalsTable = ({ goals, onAddNew }) => {
           <GoalsTableBody
             filteredGoals={currentGoals}
             handleOpen={handleOpen}
-            handleDelete={handleDelete}
             handleAddEntryOpen={handleAddEntryOpen}
             handleOpenDrawer={handleOpenDrawer}
           />
         </table>
         {/* Pagination */}
         <Pagination props={{currentPage, setCurrentPage, totalPages}}/>
-        
       </div>
+
       <EditGoalModal
         isOpen={isOpen}
         handleClose={handleClose}
@@ -294,11 +275,13 @@ const GoalsTable = ({ goals, onAddNew }) => {
         user={user}
         onAddNew={onAddNew}
       />
+
       <AddGoalModal
         isAddModalOpen={isAddModalOpen}
         handleAddNewClose={handleAddNewClose}
         onAddNew={onAddNew}
       />
+
       <AddEntryModal
         isAddEntryModalOpen={isAddEntryModalOpen}
         handleAddEntryClose={handleAddEntryClose}
@@ -306,12 +289,7 @@ const GoalsTable = ({ goals, onAddNew }) => {
         user={user}
         onAddNew={onAddNew}
       />
-      <UpdateEntryModal
-        isUpdateEntryModalOpen={isUpdateEntryModalOpen}
-        handleCloseUpdateEntryModal={handleCloseUpdateEntryModal}
-        selectedGoal={selectedGoal}
-        onAddNew={onAddNew}
-      />
+      
       <EntriesDrawer
         isDrawerOpen={isDrawerOpen}
         handleCloseDrawer={handleCloseDrawer}
@@ -319,6 +297,8 @@ const GoalsTable = ({ goals, onAddNew }) => {
         handleOpenUpdateEntryModal={handleOpenUpdateEntryModal}
         onAddNew={onAddNew}
       />
+
+     
     </div>
   );
 };
