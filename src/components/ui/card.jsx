@@ -8,7 +8,7 @@ export const CardHeader = ({ children, className }) => (
 );
 
 export const CardTitle = ({ children, className }) => (
-  <h2 className={`text-lg ${className}`}>{children}</h2>
+  <h2 className={`text-xl font-bold text-gray-800 ${className}`}>{children}</h2>
 );
 
 export const CardContent = ({ children, className }) => (

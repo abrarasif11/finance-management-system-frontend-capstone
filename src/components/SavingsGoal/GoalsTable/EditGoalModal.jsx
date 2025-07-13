@@ -9,11 +9,12 @@ const EditGoalModal = ({ isOpen, handleClose, selectedGoalId, user, onAddNew }) 
       const fetchGoalData = async () => {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/${selectedGoalId}?user_id=${user?.user?.id}`
+            `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/${selectedGoalId}`
           );
           if (response.ok) {
             const data = await response.json();
-            setEditGoalData(data.goal || {});
+            
+            setEditGoalData(data || {});
           } else {
             toast.error("Failed to fetch goal data");
           }
@@ -45,7 +46,6 @@ const EditGoalModal = ({ isOpen, handleClose, selectedGoalId, user, onAddNew }) 
       if (response.status === 200) {
         toast.success("Goal updated successfully");
         handleClose();
-        onAddNew();
       } else {
         toast.error("Failed to update goal");
       }
@@ -104,7 +104,7 @@ const EditGoalModal = ({ isOpen, handleClose, selectedGoalId, user, onAddNew }) 
             <input
               type="date"
               name="start_date"
-              value={editGoalData.start_date || ""}
+              value={editGoalData.start_date?.split(" "[0]) || ""}
               onChange={handleInputChange}
               className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
             />
@@ -114,7 +114,7 @@ const EditGoalModal = ({ isOpen, handleClose, selectedGoalId, user, onAddNew }) 
             <input
               type="date"
               name="end_date"
-              value={editGoalData.end_date || ""}
+              value={editGoalData.end_date?.split(" "[0]) || ""}
               onChange={handleInputChange}
               className="w-full mt-1 p-2 border rounded text-black bg-white focus:ring focus:ring-blue-300"
             />

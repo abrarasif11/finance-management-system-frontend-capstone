@@ -1,30 +1,29 @@
-// src/components/Dashboard/SavingsGoalsDashboard.jsx
 import React, { useEffect, useState } from "react";
 import TopCards from "./TopCards";
-
 import GoalsTable from "./GoalsTable/GoalsTable";
 import PieChart from "./PieChart";
 import { useUser } from "../../contexts/AuthContext";
 import BiYearlyGoalsBar from "./BiYearlyGoalsBar";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import SavingsSuggestionsDrawer from "./SavingsSuggestionsDrawer";
 
 const SavingsGoalsDashboard = () => {
   const { user } = useUser();
   const [goals, setGoals] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     const fetchGoals = async () => {
       try {
         setLoading(true);
         const response = await fetch(
-          `${import.meta.env.VITE_BASE_URL}/personal/savings-goals?user_id=${
+          `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/user/${
             user?.user?.id
           }`
         );
-
         const data = await response.json();
-        setGoals(data.data);
+        setGoals(data.data || []);
       } catch (error) {
         console.error("Error fetching goals:", error);
       } finally {
@@ -35,7 +34,17 @@ const SavingsGoalsDashboard = () => {
     fetchGoals();
   }, [user?.user?.id]);
 
-  // Loading Component
+  const getSuggestionsOnRecentLoans = async () => {
+    try {
+      setLoading(true);
+      setIsOpen(true); // Open the drawer
+    } catch (e) {
+      console.log(e.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   if (loading) {
     return (
       <div>
@@ -55,25 +64,7 @@ const SavingsGoalsDashboard = () => {
     (goal) => goal.status === "Canceled"
   ).length;
 
-  const getSuggestionsOnRecentLoans = async () => {
-    try {
-      setLoading(true);
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SUGGESTION_API_URL}/loan/optimize-payments`,
-      //   loans
-      // );
-      // setLoanSuggestions(res?.data);
-      setIsOpen(true);
-    } catch (e) {
-      console.log(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return loading ? (
-    <LoadingSpinner />
-  ) : (
+  return (
     <div>
       <div className="flex justify-end mb-2">
         {loading ? (
@@ -88,7 +79,6 @@ const SavingsGoalsDashboard = () => {
             className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
             onClick={getSuggestionsOnRecentLoans}
           >
-            {" "}
             Get Suggestions
           </button>
         )}
@@ -109,6 +99,12 @@ const SavingsGoalsDashboard = () => {
         </div>
         <GoalsTable goals={goals} />
       </div>
+      <SavingsSuggestionsDrawer
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        userId={user?.user?.id}
+        goals={goals}
+      />
     </div>
   );
 };

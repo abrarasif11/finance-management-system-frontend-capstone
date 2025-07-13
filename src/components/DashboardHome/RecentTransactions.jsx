@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import Pagination from "../../Shared/Pagination";
 import { Button } from "../ui/Button";
+import { Card } from "../ui/card";
 
 const RecentTransactions = ({ props }) => {
   const { transactions } = props;
@@ -26,9 +27,9 @@ const RecentTransactions = ({ props }) => {
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-6">
+    <Card className={"mb-6"}>
       <h2 className="text-xl font-bold text-gray-800 mb-4">
-        Recent Transactions
+        Recent Incomes & Expenses
       </h2>
       <table className="min-w-full text-sm text-left text-gray-700">
         <thead className="bg-gray-100 uppercase text-xs text-gray-600">
@@ -38,7 +39,6 @@ const RecentTransactions = ({ props }) => {
             <th className="px-4 py-3">Amount</th>
             <th className="px-4 py-3">Category</th>
             <th className="px-4 py-3">Date</th>
-            <th className="px-4 py-3">Action</th>
           </tr>
         </thead>
         <tbody>
@@ -71,7 +71,7 @@ const RecentTransactions = ({ props }) => {
 
       {/* Pagination Controls */}
       <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
-    </div>
+    </Card>
   );
 };
 
