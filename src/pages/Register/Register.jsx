@@ -59,14 +59,14 @@ const Register = () => {
   return (
     <div className="relative">
       <img
-        src="/src/assets/photo-1642388813992-f12b04ba3db0.jpeg"
+        src="https://res.cloudinary.com/dqvsc6e7e/image/upload/v1752398483/finance-management-system/photo-1642388813992-f12b04ba3db0_ut97q4.jpg"
         className="absolute inset-0 object-cover w-full h-full"
         alt=""
       />
       <div className="relative bg-gray-900 bg-opacity-75">
-        <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-xl md:px-24 lg:px-8 lg:py-20">
+        <div className="px-4 py-16 mx-auto sm:max-w-xl md:max-w-full lg:max-w-screen-3xl md:px-24 lg:px-8 lg:py-20">
           <div className="flex flex-col items-center justify-between xl:flex-row">
-            <div className="w-full max-w-xl mb-12 xl:mb-0 xl:pr-16 xl:w-7/12">
+            <div className="w-full max-w-2xl mb-12 xl:mb-0 xl:pr-16 ">
               <h2 className="max-w-lg mb-6 font-poppins text-3xl font-bold tracking-tight text-green-500 sm:text-4xl sm:leading-none">
                 <span className="text-white">FMS</span>
                 <br />
@@ -74,11 +74,12 @@ const Register = () => {
                 For New Account{" "}
               </h2>
             </div>
-            <div className="w-full font-poppins max-w-xl xl:px-8 xl:w-5/12">
+            <div className="w-full font-poppins max-w-2xl xl:px-8 xl:w-5/12">
               <div className="bg-white text-black rounded shadow-2xl p-7 sm:p-10">
                 <form onSubmit={handleSubmit}>
                   <h3 className="text-4xl font-semibold mb-5">Register Here</h3>
-                  <div className="mb-1  sm:mb-2">
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="mb-1  sm:mb-2">
                     <label
                       htmlFor="first_name"
                       // className="inline-block mr-[315px] mb-2 font-medium"
@@ -105,6 +106,7 @@ const Register = () => {
                       class="block w-full py-3  text-gray-700 bg-white border rounded-lg px-5 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                       placeholder="Kabir"
                     />
+                  </div>
                   </div>
 
                   <div className="mb-1  sm:mb-2">

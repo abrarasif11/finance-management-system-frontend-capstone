@@ -33,7 +33,7 @@ const Login = () => {
   return (
     <div className="relative">
       <img
-        src="/src/assets/photo-1642388813992-f12b04ba3db0.jpeg"
+        src="https://res.cloudinary.com/dqvsc6e7e/image/upload/v1752398483/finance-management-system/photo-1642388813992-f12b04ba3db0_ut97q4.jpg"
         className="absolute inset-0 object-cover w-full h-full"
         alt=""
       />
