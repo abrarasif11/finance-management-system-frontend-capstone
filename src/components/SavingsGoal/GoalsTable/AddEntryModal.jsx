@@ -12,17 +12,19 @@ const AddEntryModal = ({
     entry_date: new Date().toISOString().split("T")[0],
   });
 
+
   const handleAddEntryInputChange = (e) => {
     const { name, value } = e.target;
     setNewEntryData({ ...newEntryData, [name]: value });
   };
+
   const handleAddEntrySubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/goal-entry/${
+        `${import.meta.env.VITE_BASE_URL}/personal/savings-goals/${
           selectedGoal?.id
-        }`,
+        }/goal-entry`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
