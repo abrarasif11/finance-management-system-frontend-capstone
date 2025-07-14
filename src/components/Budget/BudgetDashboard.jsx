@@ -15,9 +15,7 @@ const BudgetDashboard = () => {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `${import.meta.env.VITE_BASE_URL}/personal/budgets?user_id=${
-        user?.user?.id
-      }&type=`
+      `${import.meta.env.VITE_BASE_URL}/personal/budgets/user/${user?.user?.id}`
     )
       .then((res) => res.json())
       .then((data) => {
@@ -44,13 +42,10 @@ const BudgetDashboard = () => {
     }
   };
 
-  
-
   return loading ? (
     <LoadingSpinner />
   ) : (
-    <div className="p-6">
-      
+    <div>
       <BudgetSummary budgets={filteredBudgets} />
       <BudgetTable budgets={filteredBudgets} />
     </div>
