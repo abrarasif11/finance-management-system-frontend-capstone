@@ -15,9 +15,9 @@ const BudgetDashboard = () => {
   useEffect(() => {
     setLoading(true);
     fetch(
-      `${import.meta.env.VITE_BASE_URL}/personal/budgets?user_id=${
+      `${import.meta.env.VITE_BASE_URL}/personal/budgets/user/${
         user?.user?.id
-      }&type=`
+      }`
     )
       .then((res) => res.json())
       .then((data) => {
