@@ -8,7 +8,7 @@ const Button = ({
 }) => {
   const base = "px-2 py-1 rounded text-sm font-medium transition";
   const variants = {
-    default: "bg-green-600 text-white hover:bg-blue-700 hover:cursor-pointer",
+    default: "bg-green-500 text-white hover:bg-green-700 hover:cursor-pointer",
     outline: "bg-white border border-gray-300 text-gray-800 hover:bg-gray-200 hover:cursor-pointer",
     destructive: "bg-red-500 text-white hover:bg-red-600 hover:cursor-pointer",
   };

@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import React, { useContext } from "react";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useState } from "react";
-import { navItems } from "../../components/constants/index";
+import { navItems } from "../../constants/items";
 import { Menu, X } from "lucide-react";
 import { CircleUser } from "lucide-react";
 const Header = () => {

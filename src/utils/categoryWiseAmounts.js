@@ -29,7 +29,7 @@ const months = [
   "July", "August", "September", "October", "November", "December"
 ];
 export const getCurrentMonthRecords = (records) => {
-  const currentMonth = new Date().getMonth() + 1;
+  const currentMonth = new Date().getMonth();
   const currentYear = new Date().getFullYear();
 
   const data = records.filter((record) => {
@@ -37,7 +37,7 @@ export const getCurrentMonthRecords = (records) => {
     const recordDate = new Date(date);
     
     return (
-      recordDate.getMonth() + 1 === currentMonth &&
+      recordDate.getMonth() === currentMonth &&
       recordDate.getFullYear() === currentYear
     );
   });

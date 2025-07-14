@@ -4,23 +4,32 @@ import { useUser } from "../../contexts/AuthContext";
 import { getTotalOfRecords } from "../../utils/totalAmount";
 
 const StatsCards = ({ props }) => {
-  const { totalExpenses, totalIncomes } = props;
-  const savingsRate = totalIncomes
-  ? ((totalIncomes - totalExpenses) / totalIncomes) * 100
-  : 0;
+  const { averageExpense, averageIncome } = props;
+  const savingsRate = averageIncome
+    ? ((averageIncome - averageExpense) / averageIncome) * 100
+    : 0;
+  const netBalance = averageIncome - averageExpense;
   const stats = [
-    { label: "Total Income", value: `৳${totalIncomes}`, color: "bg-green-500" },
     {
-      label: "Total Expenses",
-      value: `৳${totalExpenses}`,
+      label: "Average Monthly Income",
+      value: `৳${averageIncome}`,
+      color: "bg-green-500",
+    },
+    {
+      label: "Average Monthly Expenses",
+      value: `৳${averageExpense}`,
       color: "bg-red-500",
     },
     {
-      label: "Net Balance",
-      value: `৳${totalIncomes - totalExpenses}`,
+      label: "Average Net Balance",
+      value: `৳${netBalance}`,
       color: "bg-blue-500",
     },
-    { label: "Savings Rate", value: `${savingsRate.toFixed(2)}%`, color: "bg-yellow-500" },
+    {
+      label: "Average Savings Rate",
+      value: `${savingsRate.toFixed(2)}%`,
+      color: "bg-yellow-500",
+    },
   ];
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">

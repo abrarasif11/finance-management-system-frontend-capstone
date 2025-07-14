@@ -24,6 +24,14 @@ const DashboardLayout = () => {
       title: "Budget",
       to: "/dashboard/budgets",
     },
+    {
+      title: "Loan",
+      to: "/dashboard/loans",
+    },
+    {
+      title: "Investments",
+      to: "/dashboard/investments",
+    },
   ];
   return (
     <div>

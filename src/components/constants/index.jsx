@@ -2,7 +2,6 @@ import { Calculator, CircleDollarSign, HandCoins, Landmark } from "lucide-react"
 import LoanIcon from '../../assets/money-bag.png';
 
 
-
 export const navItems = [
     { label: "Pricing", href: "/pricing" },
     { label: "Services", href: "services" },
