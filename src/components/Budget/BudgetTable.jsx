@@ -8,13 +8,11 @@ import { useUser } from "../../contexts/AuthContext";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
+import SubBudgetDrawer from "./SubBudgetDrawer";
 
 const BudgetTable = ({
   budgets,
-  onAddNew,
-  onUpdate,
   onDelete,
-  onAddSubEvent,
 }) => {
   const { user } = useUser();
   const [filterType, setFilterType] = useState("All");
@@ -26,6 +24,7 @@ const BudgetTable = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showSubBudgetModal, setShowSubBudgetModal] = useState(false);
   const [reportFormat, setReportFormat] = useState("PDF");
   const [newBudget, setNewBudget] = useState({
     title: "",
@@ -37,9 +36,16 @@ const BudgetTable = ({
     user_id: parseInt(user?.user?.id),
   });
   const [editBudget, setEditBudget] = useState(null);
+  const [newSubBudget, setNewSubBudget] = useState({
+    title: "",
+    amount: "",
+    date: "",
+    budget_id: null,
+  });
+  const [selectedBudget, setSelectedBudget] = useState(null);
+  const [loading, setLoading] = useState(false);
   const rowsPerPage = 5;
 
-  // Generate list of years (current year and past 5 years)
   const currentYear = new Date().getFullYear();
   const years = ["All", ...Array.from({ length: 6 }, (_, i) => currentYear - i)];
   const months = [
@@ -61,21 +67,18 @@ const BudgetTable = ({
   useEffect(() => {
     let temp = [...budgets];
 
-    // Apply type filter
     if (filterType !== "All") {
       temp = temp.filter((budget) => budget.type === filterType);
     }
 
-    // Apply month filter
     if (filterMonth !== "All") {
-      const monthIndex = months.indexOf(filterMonth) - 1; // -1 because "All" is first
+      const monthIndex = months.indexOf(filterMonth) - 1;
       temp = temp.filter((budget) => {
         const startDate = new Date(budget.start_date);
         return startDate.getMonth() === monthIndex;
       });
     }
 
-    // Apply year filter
     if (filterYear !== "All") {
       temp = temp.filter((budget) => {
         const startDate = new Date(budget.start_date);
@@ -83,7 +86,6 @@ const BudgetTable = ({
       });
     }
 
-    // Apply search query
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       temp = temp.filter(
@@ -91,11 +93,10 @@ const BudgetTable = ({
           budget.title.toLowerCase().includes(query) ||
           budget.type.toLowerCase().includes(query) ||
           budget.start_date.toLowerCase().includes(query) ||
-          budget.end_date.toLowerCase().includes(query)
+          budget.end_date?.toLowerCase().includes(query) || ""
       );
     }
 
-    // Apply sorting
     switch (sortOption) {
       case "amount-asc":
         temp.sort((a, b) => a.total_amount - b.total_amount);
@@ -122,40 +123,115 @@ const BudgetTable = ({
   const currentRows = filteredBudgets.slice(indexOfFirstRow, indexOfLastRow);
   const totalPages = Math.ceil(filteredBudgets.length / rowsPerPage);
 
-  // Handlers
   const handleAddNewBudget = async () => {
+  try {
+    setLoading(true);
+    const res = await axios.post(
+      `${import.meta.env.VITE_BASE_URL}/personal/budgets`,
+      {
+        title: newBudget.title,
+        total_amount: newBudget.total_amount,
+        remaining: newBudget.remaining,
+        type: newBudget.type,
+        start_date: newBudget.start_date,
+        end_date: newBudget.end_date || null, // Ensure end_date is sent, even if empty
+        user_id: parseInt(user?.user?.id),
+      }
+    );
+    if (res.status === 201) {
+      toast.success("New Budget Added Successfully!");
+      
+      setShowAddModal(false);
+      setNewBudget({
+        title: "",
+        total_amount: "",
+        remaining: "",
+        type: "Monthly",
+        start_date: "",
+        end_date: "",
+        user_id: parseInt(user?.user?.id),
+      });
+    } else {
+      toast.error("Failed to add new budget!");
+    }
+  } catch (error) {
+    toast.error(`Error adding budget!`);
+  } finally {
+    setLoading(false);
+  }
+};
+
+  const handleEditBudget = async () => {
+    if (!editBudget?.id) return;
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_BASE_URL}/personal/budgets`,
-        newBudget
+      setLoading(true);
+      const res = await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/personal/budgets/${editBudget.id}`,
+        editBudget
       );
-      if (res.status === 201) {
-        toast.success("New Budget Entered!");
+      if (res.status === 200) {
+        toast.success("Budget Updated Successfully!");
+        setShowEditModal(false);
+        setEditBudget(null);
       } else {
-        toast.error("Failed to add new budget!");
+        toast.error("Failed to update budget!");
       }
     } catch (error) {
-      toast.error("Failed to add new budget!");
-      console.log(error.message);
+      toast.error(`Error updating budget!`);
+    } finally {
+      setLoading(false);
     }
   };
 
-  const handleEditBudget = () => {
-    onUpdate(editBudget);
-    setShowEditModal(false);
-    setEditBudget(null);
+  const handleDeleteBudget = async (budget) => {
+    if (!budget?.id) return;
+    try {
+      setLoading(true);
+      const res = await axios.delete(
+        `${import.meta.env.VITE_BASE_URL}/personal/budgets/${budget.id}`
+      );
+      if (res.status === 200) {
+        toast.success("Budget Deleted Successfully!");
+      } else {
+        toast.error("Failed to delete budget!");
+      }
+    } catch (error) {
+      toast.error(`Error deleting budget!`);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleDeleteBudget = (budget) => {
-    if (confirm(`Are you sure you want to delete '${budget.title}'?`)) {
-      onDelete(budget);
+  const handleAddSubBudget = async () => {
+    if (!newSubBudget.budget_id) return;
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/personal/budgets/${newSubBudget.budget_id}/sub-events`,
+        {
+          title: newSubBudget.title,
+          amount: parseFloat(newSubBudget.amount),
+          date: newSubBudget.date,
+          created_at: new Date().toISOString(),
+        }
+      );
+      if (res.status === 201) {
+        toast.success("Sub-Budget Added Successfully!");
+        const updatedBudget = { ...budgets.find(b => b.id === newSubBudget.budget_id), remaining: (budgets.find(b => b.id === newSubBudget.budget_id).remaining - parseFloat(newSubBudget.amount)) };
+        setShowSubBudgetModal(false);
+        setNewSubBudget({ title: "", amount: "", date: "", budget_id: null });
+      } else {
+        toast.error("Failed to add sub-budget!");
+      }
+    } catch (error) {
+      toast.error(`Error adding sub-budget!`);
+    } finally {
+      setLoading(false);
     }
   };
 
   const generateReport = () => {
-    // Debug log to verify filtered data
     console.log("Filtered Budgets for Report:", filteredBudgets);
-
     const reportData = filteredBudgets.map((budget) => ({
       Title: budget.title,
       Total: budget.total_amount,
@@ -165,7 +241,7 @@ const BudgetTable = ({
       }%`,
       Type: budget.type,
       "Start Date": budget.start_date.split(" ")[0],
-      "End Date": budget.end_date.split(" ")[0],
+      "End Date": budget.end_date?.split(" ")[0] || "",
       Status:
         budget.total_amount === budget.remaining
           ? "Assigned"
@@ -234,9 +310,7 @@ const BudgetTable = ({
 
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
-      {/* Top Bar */}
       <div className="flex justify-between items-center mb-2">
-        {/* Left: Filter + Sort */}
         <div className="flex gap-3">
           <select
             value={filterType}
@@ -280,8 +354,6 @@ const BudgetTable = ({
             <option value="date-oldest">Oldest Date</option>
           </select>
         </div>
-
-        {/* Middle: Search */}
         <div>
           <input
             type="text"
@@ -291,8 +363,6 @@ const BudgetTable = ({
             className="bg-white text-black border border-gray-400 p-2 rounded w-72 outline-none"
           />
         </div>
-
-        {/* Right: Add Button + Report Generation */}
         <div className="flex gap-2">
           <select
             value={reportFormat}
@@ -317,8 +387,6 @@ const BudgetTable = ({
           </button>
         </div>
       </div>
-
-      {/* Table */}
       <div className="overflow-x-auto">
         <table className="min-w-full text-sm text-left text-gray-700">
           <thead className="bg-gray-100 uppercase text-xs text-gray-600">
@@ -341,7 +409,11 @@ const BudgetTable = ({
                   budget.total_amount) *
                 100;
               return (
-                <tr key={budget.id} className="border-b hover:bg-gray-50">
+                <tr
+                  key={budget.id}
+                  className="border-b hover:bg-gray-50 cursor-pointer"
+                  onClick={() => setSelectedBudget(budget)}
+                >
                   <td className="px-4 py-3">{budget.title}</td>
                   <td className="px-4 py-3">{budget.total_amount}</td>
                   <td className="px-4 py-3">{budget.remaining}</td>
@@ -360,7 +432,7 @@ const BudgetTable = ({
                   <td className="px-4 py-3">
                     {budget.start_date.split(" ")[0]}
                   </td>
-                  <td className="px-4 py-3">{budget.end_date.split(" ")[0]}</td>
+                  <td className="px-4 py-3">{budget.end_date?.split(" ")[0] || ""}</td>
                   <td className="px-4 py-3">
                     <span
                       className={`inline-block px-2 py-1 rounded text-xs font-semibold text-white ${
@@ -381,14 +453,19 @@ const BudgetTable = ({
                   <td className="py-2 px-4 space-x-2 flex">
                     <Button
                       variant="outline"
-                      onClick={() => onAddSubEvent(budget)}
                       title="Add New Entry"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setNewSubBudget({ ...newSubBudget, budget_id: budget.id });
+                        setShowSubBudgetModal(true);
+                      }}
                     >
                       <Plus size={18} />
                     </Button>
                     <Button
                       variant="outline"
-                      onClick={() => {
+                      onClick={(e) => {
+                        e.stopPropagation();
                         setEditBudget({ ...budget });
                         setShowEditModal(true);
                       }}
@@ -397,7 +474,10 @@ const BudgetTable = ({
                     </Button>
                     <Button
                       variant="destructive"
-                      onClick={() => handleDeleteBudget(budget)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleDeleteBudget(budget);
+                      }}
                     >
                       <Trash2 size={18} />
                     </Button>
@@ -408,11 +488,7 @@ const BudgetTable = ({
           </tbody>
         </table>
       </div>
-
-      {/* Pagination */}
       <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
-
-      {/* Add Modal */}
       {showAddModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md w-1/2 space-y-4">
@@ -434,7 +510,7 @@ const BudgetTable = ({
               onChange={(e) =>
                 setNewBudget({
                   ...newBudget,
-                  total_amount: parseFloat(e.target.value),
+                  total_amount: parseFloat(e.target.value) || 0,
                 })
               }
             />
@@ -446,7 +522,7 @@ const BudgetTable = ({
               onChange={(e) =>
                 setNewBudget({
                   ...newBudget,
-                  remaining: parseFloat(e.target.value),
+                  remaining: parseFloat(e.target.value) || 0,
                 })
               }
             />
@@ -472,7 +548,7 @@ const BudgetTable = ({
               <input
                 type="date"
                 className="w-full block text-black bg-white border border-gray-400 outline-none input"
-                value={newBudget.end_date}
+                value={newBudget.end_date || ""}
                 onChange={(e) =>
                   setNewBudget({ ...newBudget, end_date: e.target.value })
                 }
@@ -482,20 +558,20 @@ const BudgetTable = ({
               <Button variant="outline" onClick={() => setShowAddModal(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleAddNewBudget}>Add</Button>
+              <Button onClick={handleAddNewBudget} disabled={loading}>
+                {loading ? "Adding..." : "Add"}
+              </Button>
             </div>
           </div>
         </div>
       )}
-
-      {/* Edit Modal */}
       {showEditModal && editBudget && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md w-96 space-y-4">
             <h2 className="text-lg font-semibold">Edit Budget</h2>
             <input
               type="text"
-              className="input"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
               value={editBudget.title}
               onChange={(e) =>
                 setEditBudget({ ...editBudget, title: e.target.value })
@@ -503,19 +579,30 @@ const BudgetTable = ({
             />
             <input
               type="number"
-              className="input"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
               value={editBudget.total_amount}
               onChange={(e) =>
                 setEditBudget({
                   ...editBudget,
-                  total_amount: parseFloat(e.target.value),
+                  total_amount: parseFloat(e.target.value) || 0,
+                })
+              }
+            />
+            <input
+              type="number"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={editBudget.remaining}
+              onChange={(e) =>
+                setEditBudget({
+                  ...editBudget,
+                  remaining: parseFloat(e.target.value) || 0,
                 })
               }
             />
             <input
               type="date"
-              className="input"
-              value={editBudget.end_date}
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={editBudget.end_date || ""}
               onChange={(e) =>
                 setEditBudget({ ...editBudget, end_date: e.target.value })
               }
@@ -524,11 +611,62 @@ const BudgetTable = ({
               <Button variant="outline" onClick={() => setShowEditModal(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleEditBudget}>Update</Button>
+              <Button onClick={handleEditBudget} disabled={loading}>
+                {loading ? "Updating..." : "Update"}
+              </Button>
             </div>
           </div>
         </div>
       )}
+      {showSubBudgetModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-md w-1/2 space-y-4">
+            <h2 className="text-black text-lg font-semibold">Add Sub-Budget</h2>
+            <input
+              type="text"
+              placeholder="Title"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={newSubBudget.title}
+              onChange={(e) =>
+                setNewSubBudget({ ...newSubBudget, title: e.target.value })
+              }
+            />
+            <input
+              type="number"
+              placeholder="Amount"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={newSubBudget.amount}
+              onChange={(e) =>
+                setNewSubBudget({
+                  ...newSubBudget,
+                  amount: parseFloat(e.target.value) || 0,
+                })
+              }
+            />
+            <input
+              type="date"
+              className="w-full block text-black bg-white border border-gray-400 outline-none input"
+              value={newSubBudget.date}
+              onChange={(e) =>
+                setNewSubBudget({ ...newSubBudget, date: e.target.value })
+              }
+            />
+            <div className="flex justify-end gap-2">
+              <Button variant="outline" onClick={() => setShowSubBudgetModal(false)}>
+                Cancel
+              </Button>
+              <Button onClick={handleAddSubBudget} disabled={loading}>
+                {loading ? "Adding..." : "Add"}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+      <SubBudgetDrawer
+        isOpen={!!selectedBudget}
+        onClose={() => setSelectedBudget(null)}
+        budget={selectedBudget}
+      />
     </div>
   );
 };
