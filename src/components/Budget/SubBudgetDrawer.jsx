@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { Button } from "../ui/Button";
 
-const SubBudgetDrawer = ({ isOpen, onClose, budget}) => {
+const SubBudgetDrawer = ({ isOpen, onClose, budget }) => {
   const [subBudgets, setSubBudgets] = useState([]);
   const [newSubBudget, setNewSubBudget] = useState({
     title: "",
@@ -23,7 +23,7 @@ const SubBudgetDrawer = ({ isOpen, onClose, budget}) => {
       const year = new Date(sub.date).getFullYear();
       years.add(year);
     });
-    years.add(new Date().getFullYear()); // Include current year
+    years.add(new Date().getFullYear()); // Include current year (2025 as of 09:29 PM +06, July 14, 2025)
     return ["All", ...Array.from(years).sort((a, b) => b - a)];
   };
 
@@ -46,7 +46,7 @@ const SubBudgetDrawer = ({ isOpen, onClose, budget}) => {
 
   useEffect(() => {
     if (isOpen && budget) {
-      setSubBudgets(budget?.subEvents || []);
+      setSubBudgets(budget.subEvents || []); // Initial population
       setNewSubBudget({ ...newSubBudget, budget_id: budget.id });
     }
   }, [isOpen, budget]);
@@ -57,17 +57,17 @@ const SubBudgetDrawer = ({ isOpen, onClose, budget}) => {
       const monthIndex = months.indexOf(filterMonth) - 1;
       temp = temp.filter((sub) => {
         const subDate = new Date(sub.date);
-        return subDate.getMonth() === monthIndex;
+        return !isNaN(subDate) && subDate.getMonth() === monthIndex;
       });
     }
     if (filterYear !== "All") {
       temp = temp.filter((sub) => {
         const subDate = new Date(sub.date);
-        return subDate.getFullYear() === parseInt(filterYear);
+        return !isNaN(subDate) && subDate.getFullYear() === parseInt(filterYear);
       });
     }
     setSubBudgets(temp);
-  }, [filterMonth, filterYear, budget?.subEvents || []]);
+  }, [filterMonth, filterYear]); // Only depend on filters
 
   const handleDeleteSubBudget = async (subId) => {
     if (!subId) return;

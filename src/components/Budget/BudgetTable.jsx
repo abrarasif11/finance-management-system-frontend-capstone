@@ -12,8 +12,6 @@ import SubBudgetDrawer from "./SubBudgetDrawer";
 
 const BudgetTable = ({
   budgets,
-  onAddNew,
-  onUpdate,
   onDelete,
 }) => {
   const { user } = useUser();
@@ -142,7 +140,7 @@ const BudgetTable = ({
     );
     if (res.status === 201) {
       toast.success("New Budget Added Successfully!");
-      onAddNew(res.data);
+      
       setShowAddModal(false);
       setNewBudget({
         title: "",
@@ -173,14 +171,13 @@ const BudgetTable = ({
       );
       if (res.status === 200) {
         toast.success("Budget Updated Successfully!");
-        onUpdate(res.data);
         setShowEditModal(false);
         setEditBudget(null);
       } else {
         toast.error("Failed to update budget!");
       }
     } catch (error) {
-      toast.error(`Error updating budget: ${error.response?.data?.message || error.message}`);
+      toast.error(`Error updating budget!`);
     } finally {
       setLoading(false);
     }
@@ -195,12 +192,11 @@ const BudgetTable = ({
       );
       if (res.status === 200) {
         toast.success("Budget Deleted Successfully!");
-        onDelete(budget.id);
       } else {
         toast.error("Failed to delete budget!");
       }
     } catch (error) {
-      toast.error(`Error deleting budget: ${error.response?.data?.message || error.message}`);
+      toast.error(`Error deleting budget!`);
     } finally {
       setLoading(false);
     }
@@ -222,14 +218,13 @@ const BudgetTable = ({
       if (res.status === 201) {
         toast.success("Sub-Budget Added Successfully!");
         const updatedBudget = { ...budgets.find(b => b.id === newSubBudget.budget_id), remaining: (budgets.find(b => b.id === newSubBudget.budget_id).remaining - parseFloat(newSubBudget.amount)) };
-        onUpdate(updatedBudget);
         setShowSubBudgetModal(false);
         setNewSubBudget({ title: "", amount: "", date: "", budget_id: null });
       } else {
         toast.error("Failed to add sub-budget!");
       }
     } catch (error) {
-      toast.error(`Error adding sub-budget: ${error.response?.data?.message || error.message}`);
+      toast.error(`Error adding sub-budget!`);
     } finally {
       setLoading(false);
     }
@@ -671,7 +666,6 @@ const BudgetTable = ({
         isOpen={!!selectedBudget}
         onClose={() => setSelectedBudget(null)}
         budget={selectedBudget}
-        onUpdate={onUpdate}
       />
     </div>
   );

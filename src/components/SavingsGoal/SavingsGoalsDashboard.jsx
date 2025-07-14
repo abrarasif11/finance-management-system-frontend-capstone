@@ -34,17 +34,6 @@ const SavingsGoalsDashboard = () => {
     fetchGoals();
   }, [user?.user?.id]);
 
-  const getSuggestionsOnRecentLoans = async () => {
-    try {
-      setLoading(true);
-      setIsOpen(true); // Open the drawer
-    } catch (e) {
-      console.log(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   if (loading) {
     return (
       <div>
@@ -65,46 +54,22 @@ const SavingsGoalsDashboard = () => {
   ).length;
 
   return (
-    <div>
-      <div className="flex justify-end mb-2">
-        {loading ? (
-          <button
-            className="flex items-center justify-center px-4 py-2 text-white uppercase bg-blue-400 rounded-full shadow-lg"
-            disabled
-          >
-            Getting Suggestions ...
-          </button>
-        ) : (
-          <button
-            className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
-            onClick={getSuggestionsOnRecentLoans}
-          >
-            Get Suggestions
-          </button>
-        )}
-      </div>
-      <div className="grid gap-6">
-        <TopCards
-          totalGoals={totalGoals}
+    <div className="space-y-4">
+      <TopCards
+        goals={goals}
+        totalGoals={totalGoals}
+        completedGoals={completedGoals}
+        inProgressGoals={inProgressGoals}
+      />
+      <div className="grid grid-cols-3 gap-3">
+        <PieChart
           completedGoals={completedGoals}
           inProgressGoals={inProgressGoals}
+          canceledGoals={canceledGoals}
         />
-        <div className="grid grid-cols-3">
-          <PieChart
-            completedGoals={completedGoals}
-            inProgressGoals={inProgressGoals}
-            canceledGoals={canceledGoals}
-          />
-          <BiYearlyGoalsBar />
-        </div>
-        <GoalsTable goals={goals} />
+        <BiYearlyGoalsBar />
       </div>
-      <SavingsSuggestionsDrawer
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        userId={user?.user?.id}
-        goals={goals}
-      />
+      <GoalsTable goals={goals} />
     </div>
   );
 };
