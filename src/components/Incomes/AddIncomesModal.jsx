@@ -1,19 +1,21 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 const AddIncomesModal = ({ props }) => {
   const { user, refetch } = props;
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
   const formRef = useRef();
-
+  
   const submitHandler = async (data) => {
     try {
+      setLoading(true);
       if (!data) return;
       data.user_id = user?.user?.id;
       const res = await axios.post(
@@ -32,6 +34,8 @@ const AddIncomesModal = ({ props }) => {
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -150,12 +154,22 @@ const AddIncomesModal = ({ props }) => {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-green-400 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
-          >
-            Add Income
-          </button>
+          {loading ? (
+            <button
+              type="submit"
+              className="w-full bg-green-200 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+              disabled
+            >
+              Adding Income...
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-green-400 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+            >
+              Add Income
+            </button>
+          )}
         </form>
       </div>
 

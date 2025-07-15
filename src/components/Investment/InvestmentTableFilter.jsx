@@ -15,7 +15,7 @@ const InvestmentTableFilter = ({
   setReportFormat,
   generateReport,
   handleAddNewOpen,
-  statuses = ["All", "Active", "Closed"],
+  statuses = ["All", "Active","Matured", "Closed"],
   months = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December",
