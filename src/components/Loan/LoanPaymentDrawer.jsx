@@ -13,8 +13,6 @@ const LoanPaymentDrawer = ({ isOpen, onClose, loan }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [paymentToDelete, setPaymentToDelete] = useState(null);
 
-  console.log(payments);
-
   // Generate list of years from payment dates and current year
   const getYears = () => {
     const years = new Set();
