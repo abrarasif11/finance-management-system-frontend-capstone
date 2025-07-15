@@ -3,12 +3,12 @@ import { useUser } from "../../contexts/AuthContext";
 import GenericModal from "../ui/GenericModal";
 import axios from "axios";
 import LoadingSpinner from "../ui/LoadingSpinner";
+import toast from "react-hot-toast";
 
 const BudgetSuggestionModal = ({ isOpen, onClose, budgets }) => {
   const { user } = useUser();
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log(user);
 
   useEffect(() => {
     if (isOpen && user?.user?.id) {
@@ -26,7 +26,7 @@ const BudgetSuggestionModal = ({ isOpen, onClose, budgets }) => {
       console.log("API Response:", res.data); // Log the raw response
       setSuggestions(res?.data);
     } catch (e) {
-      console.log("Error:", e.message);
+      toast.error("Error getting suggestion!")
     } finally {
       setLoading(false);
     }

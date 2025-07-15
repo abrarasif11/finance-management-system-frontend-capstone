@@ -17,7 +17,7 @@ const BudgetSummary = ({ budgets }) => {
 
   // Generate unique years from budgets
   const years = Array.from(
-    new Set(budgets.map((budget) => new Date(budget.start_date).getFullYear()))
+    new Set(budgets?.map((budget) => new Date(budget.start_date).getFullYear()))
   ).sort((a, b) => a - b);
 
   // List of months

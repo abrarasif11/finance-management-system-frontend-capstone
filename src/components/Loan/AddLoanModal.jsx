@@ -13,11 +13,7 @@ const schema = yup.object().shape({
     .number()
     .positive("Principal amount must be greater than zero")
     .required("Please enter the principal amount"),
-  total_paid: yup
-    .number()
-    .positive("Total paid must be greater than zero")
-    .nullable()
-    .transform((value) => (isNaN(value) ? null : value)),
+
   interest_rate: yup
     .number()
     .min(0, "Interest rate cannot be negative")
