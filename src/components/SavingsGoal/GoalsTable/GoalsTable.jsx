@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import * as XLSX from "xlsx"; // Import XLSX for Excel export
+import jsPDF from "jspdf"; // Import jsPDF for PDF generation
+import autoTable from "jspdf-autotable"; // Import autoTable for table rendering in PDF
 import GoalsTableFilter from "./GoalsTableFilter";
 import GoalsTableBody from "./GoalsTableBody";
 import EditGoalModal from "./EditGoalModal";
@@ -152,6 +155,7 @@ const GoalsTable = ({ goals, onAddNew }) => {
   };
 
   // Update Entry Modal Functions
+  const [isUpdateEntryModalOpen, setIsUpdateEntryModalOpen] = useState(false);
   const handleOpenUpdateEntryModal = () => setIsUpdateEntryModalOpen(true);
   const handleCloseUpdateEntryModal = () => setIsUpdateEntryModalOpen(false);
 
@@ -221,7 +225,7 @@ const GoalsTable = ({ goals, onAddNew }) => {
       document.body.removeChild(link);
     }
   };
-  
+
   return (
     <div className="bg-white rounded-xl shadow-md p-6">
       <GoalsTableFilter
@@ -265,7 +269,7 @@ const GoalsTable = ({ goals, onAddNew }) => {
           />
         </table>
         {/* Pagination */}
-        <Pagination props={{currentPage, setCurrentPage, totalPages}}/>
+        <Pagination props={{ currentPage, setCurrentPage, totalPages }} />
       </div>
 
       <EditGoalModal
@@ -289,7 +293,7 @@ const GoalsTable = ({ goals, onAddNew }) => {
         user={user}
         onAddNew={onAddNew}
       />
-      
+
       <EntriesDrawer
         isDrawerOpen={isDrawerOpen}
         handleCloseDrawer={handleCloseDrawer}
@@ -298,7 +302,12 @@ const GoalsTable = ({ goals, onAddNew }) => {
         onAddNew={onAddNew}
       />
 
-     
+      <UpdateEntryModal
+        isUpdateEntryModalOpen={isUpdateEntryModalOpen}
+        handleCloseUpdateEntryModal={handleCloseUpdateEntryModal}
+        selectedGoal={selectedGoal}
+        onAddNew={onAddNew}
+      />
     </div>
   );
 };

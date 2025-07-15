@@ -60,7 +60,7 @@ const TotalEstimateBlock = ({ props }) => {
       </div>
 
       <div className="flex flex-col items-center justify-center pt-20">
-        <p className="text-6xl font-medium">{total}</p>
+        <p className="text-6xl font-medium">{total?.toFixed(2)}</p>
         <p className="text-4xl font-light my-2">BDT</p>
       </div>
 
