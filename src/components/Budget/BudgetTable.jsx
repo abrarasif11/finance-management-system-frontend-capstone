@@ -124,42 +124,41 @@ const BudgetTable = ({
   const totalPages = Math.ceil(filteredBudgets.length / rowsPerPage);
 
   const handleAddNewBudget = async () => {
-  try {
-    setLoading(true);
-    const res = await axios.post(
-      `${import.meta.env.VITE_BASE_URL}/personal/budgets`,
-      {
-        title: newBudget.title,
-        total_amount: newBudget.total_amount,
-        remaining: newBudget.remaining,
-        type: newBudget.type,
-        start_date: newBudget.start_date,
-        end_date: newBudget.end_date || null, // Ensure end_date is sent, even if empty
-        user_id: parseInt(user?.user?.id),
+    try {
+      setLoading(true);
+      const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/personal/budgets`,
+        {
+          title: newBudget.title,
+          total_amount: newBudget.total_amount,
+          remaining: newBudget.remaining,
+          type: newBudget.type,
+          start_date: newBudget.start_date,
+          end_date: newBudget.end_date || null,
+          user_id: parseInt(user?.user?.id),
+        }
+      );
+      if (res.status === 201) {
+        toast.success("New Budget Added Successfully!");
+        setShowAddModal(false);
+        setNewBudget({
+          title: "",
+          total_amount: "",
+          remaining: "",
+          type: "Monthly",
+          start_date: "",
+          end_date: "",
+          user_id: parseInt(user?.user?.id),
+        });
+      } else {
+        toast.error("Failed to add new budget!");
       }
-    );
-    if (res.status === 201) {
-      toast.success("New Budget Added Successfully!");
-      
-      setShowAddModal(false);
-      setNewBudget({
-        title: "",
-        total_amount: "",
-        remaining: "",
-        type: "Monthly",
-        start_date: "",
-        end_date: "",
-        user_id: parseInt(user?.user?.id),
-      });
-    } else {
-      toast.error("Failed to add new budget!");
+    } catch (error) {
+      toast.error(`Error adding budget!`);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    toast.error(`Error adding budget!`);
-  } finally {
-    setLoading(false);
-  }
-};
+  };
 
   const handleEditBudget = async () => {
     if (!editBudget?.id) return;
@@ -493,6 +492,7 @@ const BudgetTable = ({
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md w-1/2 space-y-4">
             <h2 className="text-black text-lg font-semibold">Add New Budget</h2>
+            <label className="block text-sm font-medium text-gray-700">Title</label>
             <input
               type="text"
               placeholder="Title"
@@ -502,6 +502,7 @@ const BudgetTable = ({
                 setNewBudget({ ...newBudget, title: e.target.value })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Total Amount</label>
             <input
               type="number"
               placeholder="Total Amount"
@@ -514,6 +515,7 @@ const BudgetTable = ({
                 })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Remaining</label>
             <input
               type="number"
               placeholder="Remaining"
@@ -526,6 +528,7 @@ const BudgetTable = ({
                 })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Type</label>
             <select
               value={newBudget.type}
               className="w-full block text-black bg-white border border-gray-400 outline-none input"
@@ -537,22 +540,28 @@ const BudgetTable = ({
               <option>Annually</option>
             </select>
             <div className="w-full flex items-center justify-between gap-4">
-              <input
-                type="date"
-                className="w-full block text-black bg-white border border-gray-400 outline-none input"
-                value={newBudget.start_date}
-                onChange={(e) =>
-                  setNewBudget({ ...newBudget, start_date: e.target.value })
-                }
-              />
-              <input
-                type="date"
-                className="w-full block text-black bg-white border border-gray-400 outline-none input"
-                value={newBudget.end_date || ""}
-                onChange={(e) =>
-                  setNewBudget({ ...newBudget, end_date: e.target.value })
-                }
-              />
+              <div>
+                <label className="block text-sm font-medium text-gray-700">Start Date</label>
+                <input
+                  type="date"
+                  className="w-full block text-black bg-white border border-gray-400 outline-none input"
+                  value={newBudget.start_date}
+                  onChange={(e) =>
+                    setNewBudget({ ...newBudget, start_date: e.target.value })
+                  }
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">End Date</label>
+                <input
+                  type="date"
+                  className="w-full block text-black bg-white border border-gray-400 outline-none input"
+                  value={newBudget.end_date || ""}
+                  onChange={(e) =>
+                    setNewBudget({ ...newBudget, end_date: e.target.value })
+                  }
+                />
+              </div>
             </div>
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={() => setShowAddModal(false)}>
@@ -568,7 +577,8 @@ const BudgetTable = ({
       {showEditModal && editBudget && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md w-96 space-y-4">
-            <h2 className="text-lg font-semibold">Edit Budget</h2>
+            <h2 className="text-lg font-semibold text-black">Edit Budget</h2>
+            <label className="block text-sm font-medium text-gray-700">Title</label>
             <input
               type="text"
               className="w-full block text-black bg-white border border-gray-400 outline-none input"
@@ -577,6 +587,7 @@ const BudgetTable = ({
                 setEditBudget({ ...editBudget, title: e.target.value })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Total Amount</label>
             <input
               type="number"
               className="w-full block text-black bg-white border border-gray-400 outline-none input"
@@ -588,6 +599,7 @@ const BudgetTable = ({
                 })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Remaining</label>
             <input
               type="number"
               className="w-full block text-black bg-white border border-gray-400 outline-none input"
@@ -599,6 +611,7 @@ const BudgetTable = ({
                 })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">End Date</label>
             <input
               type="date"
               className="w-full block text-black bg-white border border-gray-400 outline-none input"
@@ -622,6 +635,7 @@ const BudgetTable = ({
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-md w-1/2 space-y-4">
             <h2 className="text-black text-lg font-semibold">Add Sub-Budget</h2>
+            <label className="block text-sm font-medium text-gray-700">Title</label>
             <input
               type="text"
               placeholder="Title"
@@ -631,6 +645,7 @@ const BudgetTable = ({
                 setNewSubBudget({ ...newSubBudget, title: e.target.value })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Amount</label>
             <input
               type="number"
               placeholder="Amount"
@@ -643,6 +658,7 @@ const BudgetTable = ({
                 })
               }
             />
+            <label className="block text-sm font-medium text-gray-700">Date</label>
             <input
               type="date"
               className="w-full block text-black bg-white border border-gray-400 outline-none input"

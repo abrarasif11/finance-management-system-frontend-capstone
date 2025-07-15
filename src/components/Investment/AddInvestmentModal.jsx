@@ -59,13 +59,14 @@ const AddInvestmentModal = ({ isOpen, onClose, onAddSuccess }) => {
 
   useEffect(() => {
     if (isOpen) {
+      const currentDateTime = new Date().toISOString().slice(0, 16); // Format: "2025-07-16T01:39"
       reset({
         title: "",
         investment_type: "MutualFund",
         institution: "",
         initial_amount: "",
         current_value: "",
-        start_date: "",
+        start_date: currentDateTime,
         end_date: "",
         status: "Active",
         user_id: user?.user?.id || "",
@@ -109,7 +110,7 @@ const AddInvestmentModal = ({ isOpen, onClose, onAddSuccess }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-xl">
+      <div className="bg-white rounded-lg shadow-lg p-6 w-full max-w-2xl">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-2xl font-semibold text-gray-800">
             Add New Investment
@@ -120,7 +121,7 @@ const AddInvestmentModal = ({ isOpen, onClose, onAddSuccess }) => {
         </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="space-y-4 w-full max-w-xl h-full max-h-[70vh] overflow-y-auto"
+          className="space-y-4 w-full max-w-2xl h-full max-h-[70vh] overflow-y-auto"
         >
           <div>
             <label className="block text-sm font-medium text-gray-700">
@@ -203,7 +204,25 @@ const AddInvestmentModal = ({ isOpen, onClose, onAddSuccess }) => {
               </p>
             )}
           </div>
-          <div className="flex justify-between">
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Status *
+            </label>
+            <select
+              {...register("status")}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 dark:bg-white text-black border"
+            >
+              <option value="Active">Active</option>
+              <option value="Matured">Matured</option>
+              <option value="Closed">Closed</option>
+            </select>
+            {errors.status && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.status.message}
+              </p>
+            )}
+          </div>
+          <div className="flex justify-between gap-1">
             <div>
               <label className="block text-sm font-medium text-gray-700">
                 Start Date *
@@ -230,24 +249,7 @@ const AddInvestmentModal = ({ isOpen, onClose, onAddSuccess }) => {
               />
             </div>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Status *
-            </label>
-            <select
-              {...register("status")}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm py-1 px-2 dark:bg-white text-black border"
-            >
-              <option value="Active">Active</option>
-              <option value="Matured">Matured</option>
-              <option value="Closed">Closed</option>
-            </select>
-            {errors.status && (
-              <p className="text-red-500 text-xs mt-1">
-                {errors.status.message}
-              </p>
-            )}
-          </div>
+
           <div className="flex justify-end space-x-4 mt-6">
             <Button
               type="button"

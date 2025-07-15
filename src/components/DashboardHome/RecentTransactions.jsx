@@ -43,7 +43,10 @@ const RecentTransactions = ({ props }) => {
         </thead>
         <tbody>
           {currentRecords.map((trx) => (
-            <tr key={trx.id} className="border-t text-center border-b hover:bg-gray-50">
+            <tr
+              key={trx.id}
+              className="border-t text-center border-b hover:bg-gray-50"
+            >
               <td
                 className={`p-2 ${
                   (trx.source && "text-green-500") ||
@@ -56,14 +59,6 @@ const RecentTransactions = ({ props }) => {
               <td className="p-2">৳{trx.amount}</td>
               <td className="p-2">{trx.category}</td>
               <td className="p-2">{trx.date}</td>
-              <td>
-                    <Button variant="outline" className="mx-1">
-                      <Edit size={16} />
-                    </Button>
-                    <Button variant="destructive">
-                      <Trash2 size={16} />
-                    </Button>
-                  </td>
             </tr>
           ))}
         </tbody>
@@ -76,4 +71,3 @@ const RecentTransactions = ({ props }) => {
 };
 
 export default RecentTransactions;
-  
