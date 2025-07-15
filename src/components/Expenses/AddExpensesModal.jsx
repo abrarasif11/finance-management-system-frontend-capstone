@@ -1,10 +1,11 @@
 import axios from "axios";
-import React, { useRef } from "react";
-import { useForm } from "react-hook-form";
+import React, { useRef, useState } from "react";
+import { set, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 
 const AddExpensesModal = ({ props }) => {
   const { user, refetch } = props;
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -15,6 +16,7 @@ const AddExpensesModal = ({ props }) => {
   const submitHandler = async (data) => {
     try {
       if (!data) return;
+      setLoading(true);
       data.user_id = user?.user?.id;
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/personal/expenses`,
@@ -31,7 +33,9 @@ const AddExpensesModal = ({ props }) => {
         refetch();
       }
     } catch (error) {
-      console.log(error);
+      toast.error("Failed to add expense");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,12 +133,22 @@ const AddExpensesModal = ({ props }) => {
           </div>
 
           {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
-          >
-            Add Expense
-          </button>
+          {loading ? (
+            <button
+              type="submit"
+              className="w-full bg-green-200 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+              disabled
+            >
+              Adding Expense....
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="w-full bg-green-500 hover:bg-green-600 text-white p-3 rounded-md font-medium hover:bg-hoversec transition"
+            >
+              Add Expense
+            </button>
+          )}
         </form>
       </div>
 

@@ -11,7 +11,7 @@ const InvestmentAnalytics = ({ investments }) => {
 
   const years = Array.from(
     new Set(
-      investments.map((investment) =>
+      investments?.map((investment) =>
         new Date(investment.start_date).getFullYear()
       )
     )

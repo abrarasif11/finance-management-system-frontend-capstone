@@ -1,8 +1,9 @@
 import { key } from "localforage";
 import React from "react";
-import { json, Link } from "react-router-dom";
+import { json, Link, useNavigate } from "react-router-dom";
 
 const Register = () => {
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
     const form = event.target;
@@ -35,25 +36,10 @@ const Register = () => {
         body: JSON.stringify(user),
       }
     ).then((res) => res.json()).catch(error =>(console.log(error)));
-    console.log(response);
+    
     const regiUser = JSON.stringify(response.user);
     localStorage.setItem("user", regiUser);
-
-    //     createUser(email, password)
-    //         .then(result => {
-    //             const user = result.user;
-    //             console.log(user);
-    //             setError('');
-    //             form.reset();
-    //             handleUpdateUserProfile(name, email, password);
-
-    //             handleEmailVerification();
-    //             toast.warning("Please verify your email before login", { autoClose: 800 });
-    //         })
-    //         .catch(error => {
-    //             console.error(error)
-    //             setError(error.message)
-    //         });
+    navigate("/dashboard/analytics");
   };
 
   return (

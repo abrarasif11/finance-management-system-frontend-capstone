@@ -17,7 +17,7 @@ const DashboardLayout = () => {
       to: "/dashboard/incomes",
     },
     {
-      title: "SavingsGoals",
+      title: "Savings",
       to: "/dashboard/saving-goals",
     },
     {
