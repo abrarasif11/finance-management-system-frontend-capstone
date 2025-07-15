@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Target, CheckCircle, Clock } from "lucide-react";
 import { useUser } from "../../contexts/AuthContext";
 import SavingsSuggestionsDrawer from "./SavingsSuggestionsDrawer";
+import axios from "axios";
 
 const TopCards = ({ totalGoals, completedGoals, inProgressGoals, goals }) => {
   const { user } = useUser();
@@ -53,22 +54,21 @@ const TopCards = ({ totalGoals, completedGoals, inProgressGoals, goals }) => {
     (goal) => goal.remaining > 0
   ).length;
 
-  const getSuggestionsOnRecentLoans = async () => {
-    try {
-      setLoading(true);
-      // Placeholder for API call - adjust URL and data as needed
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SUGGESTION_API_URL}/goals/optimize`,
-      //   filteredGoals
-      // );
-      // // Update suggestions state if needed
-      // setIsOpen(true);
-    } catch (e) {
-      console.log(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  // const getSuggestionsOnRecentLoans = async () => {
+  //   try {
+  //     setLoading(true);
+  //     // Placeholder for API call - adjust URL and data as needed
+  //     const res = await axios.post(
+  //       `${import.meta.env.VITE_SUGGESTION_API_URL}/savings/suggestions/`,
+  //       goals
+  //     );
+  //     setIsOpen(true);
+  //   } catch (e) {
+  //     console.log(e.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const cardData = [
     {
@@ -153,7 +153,7 @@ const TopCards = ({ totalGoals, completedGoals, inProgressGoals, goals }) => {
             ) : (
               <button
                 className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
-                onClick={getSuggestionsOnRecentLoans}
+                onClick={()=>setIsOpen(true)}
               >
                 Get Suggestions
               </button>
@@ -174,8 +174,12 @@ const TopCards = ({ totalGoals, completedGoals, inProgressGoals, goals }) => {
                 <card.icon className={`w-6 h-6 ${card.iconColor}`} />
               </div>
               <div>
-                <p className="text-sm font-medium text-gray-600">{card.label}</p>
-                <p className="text-2xl font-semibold text-gray-900">{card.value}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  {card.label}
+                </p>
+                <p className="text-2xl font-semibold text-gray-900">
+                  {card.value}
+                </p>
               </div>
             </div>
           </div>

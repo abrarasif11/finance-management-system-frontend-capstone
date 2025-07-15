@@ -46,7 +46,7 @@ const BudgetDashboard = () => {
     <LoadingSpinner />
   ) : (
     <div>
-      <BudgetSummary budgets={filteredBudgets} />
+      <BudgetSummary budgets={budgets} />
       <BudgetTable budgets={filteredBudgets} />
     </div>
   );

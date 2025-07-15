@@ -1,11 +1,20 @@
-import { Edit, Plus, Trash } from "lucide-react";
 import React, { useState } from "react";
 import { Button } from "../ui/Button";
 import toast from "react-hot-toast";
+import DeletionConfirmationModal from "../ui/DeletionConfirmationModal";
+import UpdateLoanModal from "./UpdateLoanModal";
+import AddPaymentModal from "./AddPaymentModal";
+import LoanPaymentDrawer from "./LoanPaymentDrawer";
+import { Edit, Plus, Trash } from "lucide-react";
 
-const LoanTableBody = ({ currentLoans, handleOpen }) => {
+const LoanTableBody = ({ currentLoans, handleOpen, }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [loanToDelete, setLoanToDelete] = useState(null);
+  const [updateModalOpen, setUpdateModalOpen] = useState(false);
+  const [selectedLoan, setSelectedLoan] = useState(null);
+  const [paymentModalOpen, setPaymentModalOpen] = useState(false);
+  const [paymentDrawerOpen, setPaymentDrawerOpen] = useState(false);
+
   // Delete Function
   const handleDelete = async (loanId) => {
     try {
@@ -15,6 +24,7 @@ const LoanTableBody = ({ currentLoans, handleOpen }) => {
       );
       if (response.ok) {
         toast.success("Loan deleted successfully");
+        // Refresh data
         setDeleteModalOpen(false);
       } else {
         console.log(response);
@@ -37,6 +47,26 @@ const LoanTableBody = ({ currentLoans, handleOpen }) => {
     setDeleteModalOpen(false);
     setLoanToDelete(null);
   };
+
+  // Handle Edit click
+  const handleEdit = (loan) => {
+    console.log(loan)
+    setSelectedLoan(loan);
+    setUpdateModalOpen(true);
+  };
+
+  // Handle Add Payment click
+  const handleAddPayment = (loan) => {
+    setSelectedLoan(loan);
+    setPaymentModalOpen(true);
+  };
+
+  // Handle Row Click to open payment drawer
+  const handleRowClick = (loan) => {
+    setSelectedLoan(loan);
+    setPaymentDrawerOpen(true);
+  };
+
   return (
     <>
       <tbody>
@@ -45,7 +75,11 @@ const LoanTableBody = ({ currentLoans, handleOpen }) => {
             .slice()
             .reverse()
             .map((loan) => (
-              <tr key={loan.id} className="border-b hover:bg-gray-50">
+              <tr
+                key={loan.id}
+                className="border-b hover:bg-gray-50 cursor-pointer"
+                onClick={() => handleRowClick(loan)}
+              >
                 <td className="px-4 py-3">{loan.loan_type}</td>
                 <td className="px-4 py-3">{loan.lender_name}</td>
                 <td className="px-4 py-3">
@@ -78,20 +112,32 @@ const LoanTableBody = ({ currentLoans, handleOpen }) => {
                       : "Active"
                     : "Paid"}
                 </td>
-
                 <td className="flex gap-2 px-4 py-3">
                   <Button
                     variant="outline"
                     className="text-green-500 hover:text-green-700"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click
+                      handleAddPayment(loan);
+                    }}
                   >
                     <Plus size={18} />
                   </Button>
-                  <Button variant="outline" onClick={() => handleOpen(loan)}>
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click
+                      handleEdit(loan);
+                    }}
+                  >
                     <Edit size={18} />
                   </Button>
                   <Button
                     variant="destructive"
-                    onClick={() => handleOpenDelete(loan.id)}
+                    onClick={(e) => {
+                      e.stopPropagation(); // Prevent row click
+                      handleOpenDelete(loan.id);
+                    }}
                     className="text-red-500 hover:text-red-700"
                   >
                     <Trash size={18} />
@@ -107,37 +153,28 @@ const LoanTableBody = ({ currentLoans, handleOpen }) => {
           </tr>
         )}
       </tbody>
-      {deleteModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">
-              Confirm Deletion
-            </h2>
-            <p className="text-gray-600 mb-6">
-              Are you sure you want to delete the Loan titled{" "}
-              {currentLoans.find((inv) => inv.id === loanToDelete)
-                ?.title || "this Loan"}
-              ? This action cannot be undone.
-            </p>
-            <div className="flex justify-end space-x-4">
-              <Button
-                variant="outline"
-                onClick={handleCloseDelete}
-                className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="destructive"
-                onClick={() => handleDelete(loanToDelete)}
-                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
-              >
-                Confirm
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      <DeletionConfirmationModal
+        isOpen={deleteModalOpen}
+        onClose={handleCloseDelete}
+        onConfirm={() => handleDelete(loanToDelete)}
+        itemName="this loan"
+      />
+      <UpdateLoanModal
+        isOpen={updateModalOpen}
+        onClose={() => setUpdateModalOpen(false)}
+        loan={selectedLoan}
+        
+      />
+      <AddPaymentModal
+        isOpen={paymentModalOpen}
+        onClose={() => setPaymentModalOpen(false)}
+        loanId={selectedLoan?.id}
+      />
+      <LoanPaymentDrawer
+        isOpen={paymentDrawerOpen}
+        onClose={() => setPaymentDrawerOpen(false)}
+        loan={selectedLoan}
+      />
     </>
   );
 };

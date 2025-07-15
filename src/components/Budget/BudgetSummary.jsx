@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { DollarSign, AlertCircle, CheckCircle } from "lucide-react";
 import { useLoading } from "../../contexts/LoadingProvider";
+import axios from "axios";
+import GenericModal from "../ui/GenericModal";
+import BudgetSuggestionModal from "./BudgetSuggestionModal";
 
 const BudgetSummary = ({ budgets }) => {
   const currentDate = new Date("2025-07-14T21:47:00+06:00"); // Current date and time
@@ -14,7 +17,7 @@ const BudgetSummary = ({ budgets }) => {
 
   // Generate unique years from budgets
   const years = Array.from(
-    new Set(budgets.map((budget) => new Date(budget.start_date).getFullYear()))
+    new Set(budgets?.map((budget) => new Date(budget.start_date).getFullYear()))
   ).sort((a, b) => a - b);
 
   // List of months
@@ -58,23 +61,6 @@ const BudgetSummary = ({ budgets }) => {
   const totalCompleted = filteredBudgets.filter(
     (budget) => budget.remaining <= 0
   ).length;
-
-  const getSuggestionsOnRecentLoans = async () => {
-    try {
-      setLoading(true);
-      // Placeholder for API call - adjust URL and data as needed
-      // const res = await axios.post(
-      //   `${import.meta.env.VITE_SUGGESTION_API_URL}/budget/optimize`,
-      //   filteredBudgets
-      // );
-      // setLoanSuggestions(res?.data); // Adjust state if needed
-      setIsOpen(true);
-    } catch (e) {
-      console.log(e.message);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   return (
     <div className="bg-white rounded-lg shadow-md mb-3">
@@ -129,7 +115,7 @@ const BudgetSummary = ({ budgets }) => {
             ) : (
               <button
                 className="px-4 py-2 text-white uppercase bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg"
-                onClick={getSuggestionsOnRecentLoans}
+                onClick={() => setIsOpen(true)}
               >
                 Get Suggestions
               </button>
@@ -162,7 +148,9 @@ const BudgetSummary = ({ budgets }) => {
               <AlertCircle className="w-6 h-6 text-red-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Remaining</p>
+              <p className="text-sm font-medium text-gray-600">
+                Total Remaining
+              </p>
               <p className="text-2xl font-semibold text-gray-900">
                 ৳{totalRemaining.toLocaleString()}
               </p>
@@ -177,7 +165,9 @@ const BudgetSummary = ({ budgets }) => {
               <CheckCircle className="w-6 h-6 text-green-600" />
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-600">Total Completed</p>
+              <p className="text-sm font-medium text-gray-600">
+                Total Completed
+              </p>
               <p className="text-2xl font-semibold text-gray-900">
                 {totalCompleted}
               </p>
@@ -185,8 +175,12 @@ const BudgetSummary = ({ budgets }) => {
           </div>
         </div>
       </div>
-
-      
+      {/* Suggestions Modal */}
+      <BudgetSuggestionModal
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+        budgets={budgets}
+      />
     </div>
   );
 };
