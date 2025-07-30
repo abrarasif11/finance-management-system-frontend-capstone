@@ -6,12 +6,12 @@ const Banner1 = () => {
     <div className="flex flex-col items-center mt-6 lg:mt-20">
       <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
         Track, Save and
-        <span className="bg-green-500 font-semibold to-green-800 text-transparent bg-clip-text">
+        <span className="bg-gradient-to-r from-green-500 to-teal-600 text-transparent bg-clip-text">
           {" "}
           Plan Your Finance!
         </span>
       </h1>
-      <p className="mt-10 text-lg text-center text-white max-w-4xl">
+      <p className="mt-10 text-sm mx-5 md:mx-0 md:text-lg text-center text-white max-w-4xl">
         Your Ultimate Smart Finance Companion for Effortless Budgeting, Smarter
         Spending, and Long Term Financial Growth. Take Control of Your Finances,
         Track Expenses Seamlessly, Save Smarter and Achieve Your Financial Goals
