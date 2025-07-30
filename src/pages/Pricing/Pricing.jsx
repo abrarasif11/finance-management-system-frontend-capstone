@@ -37,7 +37,7 @@ const Pricing = () => {
             <div className="max-w-2xl mx-auto mb-8 text-center">
               <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
                 Choose Your
-                <span className="bg-green-500 font-semibold to-green-800 text-transparent bg-clip-text">
+                <span className="bg-gradient-to-r from-green-500 to-teal-600 text-transparent bg-clip-text">
                   {" "}
                   Best Plan
                 </span>
