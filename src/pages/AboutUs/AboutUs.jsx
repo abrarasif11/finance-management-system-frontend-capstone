@@ -2,20 +2,25 @@ import React from "react";
 
 const AboutUs = () => {
   return (
-    <div className="flex flex-col items-center mt-6 lg:mt-20">
+    <div className="flex flex-col items-center mt-4 lg:mt-10">
       {/* Offer */}
       <section className=" text-white">
         <div className="container max-w-xl p-6 py-12 mx-auto space-y-24 lg:px-8 lg:max-w-7xl">
           <div>
-            <h2 className="text-3xl font-bold tracking-tight text-center sm:text-5xl text-white">
-              Our Mission
-            </h2>
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
+              Our
+              <span className="bg-gradient-to-r from-green-500 to-teal-600 text-transparent bg-clip-text">
+                {" "}
+                Mission
+              </span>
+            </h1>
             <p className="max-w-3xl mx-auto mt-4 text-xl text-center text-white">
               To make financial literacy accessible by equipping individuals
               with intelligent, data-driven tools that help them make better
               financial decisions, save efficiently and invest wisely.
             </p>
           </div>
+
           <div className="grid lg:gap-8 lg:grid-cols-2 lg:items-center">
             <div>
               <h3 className="text-2xl font-bold tracking-tight sm:text-3xl text-green-500">
@@ -42,7 +47,7 @@ const AboutUs = () => {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h4 className="text-lg font-medium leading-6 text-white">
+                    <h4 className="text-lg font-medium  leading-6 text-white">
                       Enhance Financial Awareness
                     </h4>
                     <p className="mt-2 text-gray-500">
@@ -71,7 +76,7 @@ const AboutUs = () => {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h4 className="text-lg font-medium leading-6 text-white">
+                    <h4 className="text-lg font-medium text-green-500 leading-6 text-white">
                       Provide AI-Driven Budgeting
                     </h4>
                     <p className="mt-2 text-gray-500">
@@ -100,7 +105,7 @@ const AboutUs = () => {
                     </div>
                   </div>
                   <div className="ml-4">
-                    <h4 className="text-lg font-medium leading-6 text-white">
+                    <h4 className="text-lg font-medium text-green-500 leading-6 text-white">
                       Predict Future Financial Trends
                     </h4>
                     <p className="mt-2 text-gray-500">
@@ -113,9 +118,9 @@ const AboutUs = () => {
             </div>
             <div aria-hidden="true" className="mt-10 lg:mt-0">
               <img
-                src="https://source.unsplash.com/random/360x480"
+                src="src/assets/Men_invest_and_have_made_a_profit_generated.jpg"
                 alt=""
-                className="mx-auto rounded-lg shadow-lg bg-gray-500"
+                className="mx-auto rounded-lg bg-gray-500 border-green-700 hover:shadow-2xl hover:shadow-green-500"
               />
             </div>
           </div>
@@ -144,7 +149,7 @@ const AboutUs = () => {
                     </div>
 
                     <div className="ml-4">
-                      <h4 className="text-lg font-medium leading-6 text-white">
+                      <h4 className="text-lg font-medium text-green-500 leading-6 text-white">
                         Enable Goal
                       </h4>
                       <p className="mt-2 text-gray-500">
@@ -173,7 +178,7 @@ const AboutUs = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <h4 className="text-lg font-medium leading-6 text-white">
+                      <h4 className="text-lg font-medium text-green-500 leading-6 text-white">
                         Encourage Smart Saving & Investments
                       </h4>
                       <p className="mt-2 text-gray-500">
@@ -202,7 +207,7 @@ const AboutUs = () => {
                       </div>
                     </div>
                     <div className="ml-4">
-                      <h4 className="text-lg font-medium leading-6 text-white">
+                      <h4 className="text-lg font-medium text-green-500 leading-6 text-white">
                         Improve Financial Security
                       </h4>
                       <p className="mt-2 text-gray-500">
@@ -215,9 +220,9 @@ const AboutUs = () => {
               </div>
               <div className="mt-10 lg:mt-0 lg:col-start-1 lg:row-start-1">
                 <img
-                  src="https://source.unsplash.com/random/361x481"
+                  src="src/assets/vecteezy_financial-analysis-data-on-investment-business-results-and_4474438-1.jpg"
                   alt=""
-                  className="mx-auto rounded-lg shadow-lg bg-gray-500"
+                  className="mx-auto rounded-lg bg-gray-500 border-green-700 hover:shadow-lg hover:shadow-green-500"
                 />
               </div>
             </div>
@@ -225,14 +230,18 @@ const AboutUs = () => {
         </div>
       </section>
       {/* choose */}
-      <div className="dark:bg-gray-100 dark:text-gray-800">
+      <div className="">
         <div className="px-4 py-16 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-extrabold sm:text-4xl">
-              Why Choose Us?
-            </h2>
+            <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
+              Why
+              <span className="bg-gradient-to-r from-green-500 to-teal-600 text-transparent bg-clip-text">
+                {" "}
+                Choose Us!
+              </span>
+            </h1>
           </div>
-          <dl className="mt-12 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-3 lg:gap-x-8">
+          <dl className="mt-12 space-y-10 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:gap-y-12 lg:grid-cols-2 lg:gap-x-8">
             <div className="flex">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -250,7 +259,7 @@ const AboutUs = () => {
                 ></path>
               </svg>
               <div className="ml-3">
-                <dt className="text-lg font-medium">
+                <dt className="text-lg font-medium text-green-500 text-green-500">
                   User-Friendly Interface –{" "}
                 </dt>
                 <dd className="mt-2 text-gray-600">
@@ -276,7 +285,7 @@ const AboutUs = () => {
                 ></path>
               </svg>
               <div className="ml-3">
-                <dt className="text-lg font-medium">
+                <dt className="text-lg font-medium text-green-500">
                   Smart Insights & Analytics –{" "}
                 </dt>
                 <dd className="mt-2 text-gray-600">
@@ -301,7 +310,9 @@ const AboutUs = () => {
                 ></path>
               </svg>
               <div className="ml-3">
-                <dt className="text-lg font-medium">Secure & Reliable – </dt>
+                <dt className="text-lg font-medium text-green-500">
+                  Secure & Reliable –{" "}
+                </dt>
                 <dd className="mt-2 text-gray-600">
                   Your financial data is protected with industry-leading
                   security.
@@ -325,7 +336,7 @@ const AboutUs = () => {
                 ></path>
               </svg>
               <div className="ml-3">
-                <dt className="text-lg font-medium">
+                <dt className="text-lg font-medium text-green-500">
                   Customizable Solutions –{" "}
                 </dt>
                 <dd className="mt-2 text-gray-600">
@@ -337,11 +348,15 @@ const AboutUs = () => {
         </div>
       </div>
       {/* contact */}
-      <div className="text-center">
+      <div className="text-center py-16">
         <div className="items-center">
-          <h2 className="text-3xl font-extrabold sm:text-4xl">
-            Join Us Today!
-          </h2>
+          <h1 className="text-2xl md:text-4xl lg:text-5xl font-semibold  text-center tracking-wide">
+            Join Us
+            <span className="bg-gradient-to-r from-green-500 to-teal-600 text-transparent bg-clip-text">
+              {" "}
+              Today!
+            </span>
+          </h1>
           <p className="pt-2 mt-5 pb-4">
             Sign up now and start managing your money smarter!
           </p>
